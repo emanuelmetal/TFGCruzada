@@ -20,15 +20,24 @@ class PedidosEstados(models.Model):
 
 class TipoMedioPago(models.Model):
 
+    class Meta:
+        db_table = 'TipoMedioPago'
+
     nombre = models.CharField(max_length=50)
 
 
 class Rol(models.Model):
 
+    class Meta:
+        db_table = 'Rol'
+
     descripcion = models.CharField(max_length=100)
 
 
 class Sucursal(models.Model):
+
+    class Meta:
+        db_table = 'Sucursal'
 
     descripcion = models.CharField(max_length=100)
     direccion = models.CharField(max_length=255)
@@ -36,6 +45,9 @@ class Sucursal(models.Model):
 
 
 class Personas(models.Model):
+
+    class Meta:
+        db_table = 'Personas'
 
     nombre = models.CharField(max_length=50)
     apellido = models.CharField(max_length=50)
@@ -49,6 +61,10 @@ class Personas(models.Model):
 
 
 class MediosDePago(models.Model):
+
+    class Meta:
+        db_table = 'MediosDePago'
+
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=100)
     recargo = models.DecimalField(decimal_places=2, max_digits=3)
@@ -56,6 +72,10 @@ class MediosDePago(models.Model):
 
 
 class Promociones(models.Model):
+
+    class Meta:
+        db_table = 'Promociones'
+
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=100)
     vigencia_desde = models.DateTimeField()
