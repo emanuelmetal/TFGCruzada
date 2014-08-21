@@ -33,4 +33,4 @@ def home(request):
         'message_title': 'Sistema Cruzada',
         'message_body': 'La app arrancó a seguir trabajando'
     }
-    return render(request, '404.html', context)
+    return render(request, 'supervisor.html', context)
