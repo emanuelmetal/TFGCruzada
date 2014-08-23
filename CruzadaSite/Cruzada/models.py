@@ -1,3 +1,4 @@
+#coding: utf8
 from django.db import models
 
 
@@ -81,3 +82,85 @@ class Promociones(models.Model):
     vigencia_desde = models.DateTimeField()
     vigencia_hasta = models.DateField()
     descuento = models.DecimalField(max_digits=2,decimal_places=2)
+
+
+class ServicioAlmacen(models.Model):
+
+    class Meta:
+        db_table = 'ServicioAlmacen'
+
+    descripcion = models.CharField(max_length=100)
+
+
+class Almacenes(models.Model):
+
+    class Meta:
+        db_table = 'Almacenes'
+
+    sucursal = models.OneToOneField(Sucursal, primary_key=True)
+    servicio = models.ForeignKey(ServicioAlmacen)
+    fecha_alta = models.DateTimeField(auto_now_add=True)
+    fecha_baja = models.DateTimeField()
+    uri_stock = models.CharField(max_length=255)
+
+
+class Talle(models.Model):
+
+    class Meta:
+        db_table = 'Talle'
+
+    descripcion = models.CharField(max_length=100)
+
+
+class Colores(models.Model):
+
+    class Meta:
+        db_table = 'Colores'
+
+    descripcion = models.CharField(max_length=100)
+
+
+class Articulos(models.Model):
+
+    class Meta:
+        db_table = 'Articulos'
+
+    codigo = models.CharField(max_length=45)
+    talle = models.ForeignKey(Talle)
+    color = models.ForeignKey(Colores)
+    precio = models.DecimalField(max_digits=10, decimal_places=2)
+
+
+class Pedidos(models.Model):
+
+    class Meta:
+        db_table = 'Pedidos'
+
+    nro_pedido = models.CharField(max_length=45, unique=True)
+    suc_origen = models.ForeignKey(Sucursal)
+    suc_destino = models.ForeignKey(Sucursal)
+    fecha_pedido = models.DateTimeField(auto_now_add=True)
+    fecha_proceso = models.DateTimeField()
+    fecha_entrega = models.DateTimeField()
+    fecha_recepcion = models.DateTimeField()
+    observaciones = models.TextField()
+    estado = models.ForeignKey(PedidosEstados)
+    uri_detalle = models.CharField(max_length=255)
+
+
+#Categoria Listo
+#Personas Listo
+#Sucursal Listo
+#PedidosEstados Listo
+#MediosdePago Listo
+#TipoMedioPago Listo
+#Rol Listo
+#Pedidos
+#Almacenes Listo
+#ServicioAlmacen Listo
+#Transacciones
+#TransaccionRen
+#Promociones Listo
+#Talle Listo
+#Artículos Listo
+#Colores Listo
