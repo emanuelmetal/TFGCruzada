@@ -10,6 +10,8 @@ class Categoria(models.Model):
 
     descripcion = models.CharField(max_length=100)
 
+    def __unicode__(self):
+        return self.descripcion
 
 class PedidosEstados(models.Model):
 
@@ -18,6 +20,8 @@ class PedidosEstados(models.Model):
 
     descripcion = models.CharField(max_length=100)
 
+    def __unicode__(self):
+        return self.descripcion
 
 class TipoMedioPago(models.Model):
 
@@ -26,6 +30,9 @@ class TipoMedioPago(models.Model):
 
     nombre = models.CharField(max_length=50)
 
+    def __unicode__(self):
+        return self.nombre
+
 
 class Rol(models.Model):
 
@@ -33,6 +40,9 @@ class Rol(models.Model):
         db_table = 'Rol'
 
     descripcion = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return self.descripcion
 
 
 class Sucursal(models.Model):
@@ -91,6 +101,9 @@ class ServicioAlmacen(models.Model):
 
     descripcion = models.CharField(max_length=100)
 
+    def __unicode__(self):
+        return self.descripcion
+
 
 class Almacenes(models.Model):
 
@@ -111,6 +124,8 @@ class Talle(models.Model):
 
     descripcion = models.CharField(max_length=100)
 
+    def __unicode__(self):
+        return self.descripcion
 
 class Colores(models.Model):
 
@@ -118,6 +133,9 @@ class Colores(models.Model):
         db_table = 'Colores'
 
     descripcion = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return self.descripcion
 
 
 class Articulos(models.Model):
@@ -137,8 +155,8 @@ class Pedidos(models.Model):
         db_table = 'Pedidos'
 
     nro_pedido = models.CharField(max_length=45, unique=True)
-    suc_origen = models.ForeignKey(Sucursal)
-    suc_destino = models.ForeignKey(Sucursal)
+    suc_origen = models.ForeignKey(Sucursal, related_name='suc_origen')
+    suc_destino = models.ForeignKey(Sucursal, related_name='suc_destino')
     fecha_pedido = models.DateTimeField(auto_now_add=True)
     fecha_proceso = models.DateTimeField()
     fecha_entrega = models.DateTimeField()
@@ -146,6 +164,33 @@ class Pedidos(models.Model):
     observaciones = models.TextField()
     estado = models.ForeignKey(PedidosEstados)
     uri_detalle = models.CharField(max_length=255)
+
+
+class Transacciones(models.Model):
+
+    class Meta:
+        db_table = 'Transacciones'
+
+    # numero = models.AutoField(unique=True)
+    fecha = models.DateTimeField(auto_now_add=True)
+    vendedor = models.ForeignKey(Personas, related_name='vendedor')
+    forma_pago = models.ForeignKey(MediosDePago)
+    cliente = models.ForeignKey(Personas, related_name='cliente')
+    promocion = models.ForeignKey(Promociones)
+    tipo = models.CharField(max_length=45)
+
+
+class TransaccionesRen(models.Model):
+
+    class Meta:
+        db_table = 'TransaccionesRen'
+
+    articulo = models.ForeignKey(Articulos)
+    cantidad = models.IntegerField()
+    precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
+    accion = models.CharField(max_length=45)
+    cabecera = models.ForeignKey(Transacciones)
+
 
 
 #Categoria Listo

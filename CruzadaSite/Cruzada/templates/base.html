@@ -16,7 +16,6 @@
     <link href="{{ STATIC_URL }}css/icons/icons.min.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/plugins.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}plugins/bootstrap-loading/lada.min.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/style.css" rel="stylesheet">
     <!-- END  MANDATORY STYLE -->
 
@@ -29,7 +28,9 @@
 
 
 </head>
-<body>
+{% block body %}
+
+{% endblock body %}
 <!-- BEGIN TOP MENU -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container-fluid">
@@ -112,7 +113,7 @@
     <script src="{{ STATIC_URL }}plugins/mcustom-scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="{{ STATIC_URL }}plugins/mmenu/js/jquery.mmenu.min.all.js"></script>
     <script src="{{ STATIC_URL }}plugins/nprogress/nprogress.js"></script>
-{#    <script src="{{ STATIC_URL }}plugins/charts-sparkline/sparkline.min.js"></script>#}
+    <script src="{{ STATIC_URL }}plugins/charts-sparkline/sparkline.min.js"></script>
     <script src="{{ STATIC_URL }}plugins/breakpoints/breakpoints.js"></script>
     <script src="{{ STATIC_URL }}plugins/numerator/jquery-numerator.js"></script>
     <script src="{{ STATIC_URL }}plugins/jquery.cookie.min.js" type="text/javascript"></script>
