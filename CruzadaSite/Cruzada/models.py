@@ -143,6 +143,7 @@ class Articulos(models.Model):
     class Meta:
         db_table = 'Articulos'
 
+    descripcion = models.CharField(max_length=100)
     codigo = models.CharField(max_length=45)
     talle = models.ForeignKey(Talle)
     color = models.ForeignKey(Colores)
@@ -200,11 +201,11 @@ class TransaccionesRen(models.Model):
 #MediosdePago Listo
 #TipoMedioPago Listo
 #Rol Listo
-#Pedidos
+#Pedidos Listo
 #Almacenes Listo
 #ServicioAlmacen Listo
-#Transacciones
-#TransaccionRen
+#Transacciones Listo
+#TransaccionRen Listo
 #Promociones Listo
 #Talle Listo
 #Artículos Listo

@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
 from django.core.urlresolvers import reverse
+from Cruzada.models import *
 
 
 # Create your views here.
@@ -29,8 +30,10 @@ def login_user(request):
 
 @login_required(login_url='/login/')
 def home(request):
+    lista_articulos = Articulos.objects.all()
     context = {
         'message_title': 'Sistema Cruzada',
-        'message_body': 'La app arrancó a seguir trabajando'
+        'message_body': 'La app arrancó a seguir trabajando',
+        'lista_articulos': lista_articulos
     }
     return render(request, 'productos.html', context)
