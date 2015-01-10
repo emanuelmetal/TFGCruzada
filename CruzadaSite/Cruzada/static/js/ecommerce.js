@@ -130,24 +130,28 @@ $(function () {
 
     if($('body').data('page') == 'products'){
         
-        var opt = {};
-  
-         // Tools: export to Excel, CSV, PDF & Print
-        opt.sDom = "<'row m-t-10'<'col-md-6'f><'col-md-6'T>r>t<'row'<'col-md-6'><'col-md-6 align-right'p>>",
-        opt.oLanguage = { "sSearch": "" } ,
-        opt.iDisplayLength = 15,
+//        var opt = {};
+//
+//         // Tools: export to Excel, CSV, PDF & Print
+//        opt.sDom = "<'row m-t-10'<'col-md-6'f><'col-md-6'T>r>t<'row'<'col-md-6'><'col-md-6 align-right'p>>",
+//        opt.oLanguage = { "sSearch": "" } ,
+//        opt.iDisplayLength = 15,
+//
+//        opt.oTableTools = {
+//            "sSwfPath": "assets/plugins/datatables/swf/copy_csv_xls_pdf.swf",
+//            "aButtons": ["csv", "xls", "pdf", "print"]
+//        };
+//        opt.aoColumnDefs = [
+//              { 'bSortable': false, 'aTargets': [ 6,7,8,9 ] }
+//           ];
+//
 
-        opt.oTableTools = {
-            "sSwfPath": "assets/plugins/datatables/swf/copy_csv_xls_pdf.swf",
-            "aButtons": ["csv", "xls", "pdf", "print"]
-        };
-        opt.aoColumnDefs = [
-              { 'bSortable': false, 'aTargets': [ 6,7,8,9 ] }
-           ];
-        
-
-        var oTable = $('#products-table').dataTable(opt);
-        oTable.fnDraw();
+        var oTable = $('#products-table').dataTable({
+            "language": {
+            "url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+        }
+        });
+        //oTable.fnDraw();
 
         /* Add a placeholder to searh input */
         $('.dataTables_filter input').attr("placeholder", "Search a product...");
