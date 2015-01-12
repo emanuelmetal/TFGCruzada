@@ -22,10 +22,7 @@
                         <ul id="myTab" class="nav nav-tabs">
                             <li class="active"><a href="#order_resume" data-toggle="tab">Resumen</a></li>
                             <li><a href="#productos" data-toggle="tab">Productos</a></li>
-                            <li><a href="#cliente" data-toggle="tab">Cliente</a></li>
-                            <li><a href="#forma_pago" data-toggle="tab">Forma de Pago
-                                <span class="m-l-10 badge badge-primary">3</span></a>
-                            </li>
+                            <li><a href="#entrega" data-toggle="tab">Entrega</a></li>
                         </ul>
                         <div id="myTabContent" class="tab-content">
                             <div class="tab-pane fade active in" id="order_resume">
@@ -161,11 +158,19 @@
                             <div class="tab-pane fade" id="productos">
                                 <div class="row p-20">
                                     <div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
 
                                         </div>
-                                        <div class="col-md-6">
-
+                                        <div class="col-md-8">
+                                            <div class="input-group transparent">
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+                                                </div>
+                                                <input type="text" class="form-control" placeholder="Ingrese el Artículo...">
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-default" type="button"><i class="fa fa-plus"></i> Agregar</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -299,12 +304,34 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="cliente">
+                            <div class="tab-pane fade" id="entrega">
+                                <div class="row p-20">
+                                    <div class="col-md-6">
+                                        <div class="input-group transparent">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-default" type="button" id="nuevoCliente" data-toggle="modal" data-target="#modal-cliente">
+                                                    <i class="fa fa-user"></i> Nuevo</button>
+                                            </div>
+                                            <input type="text" class="form-control" placeholder="Ingrese Cliente...">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="input-group transparent">
+                                            <input type="text" class="form-control" placeholder="Ingrese Medio de Pago...">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row p-20">
                                     <div class="col-md-12">
                                         <form class="form-horizontal">
                                             <div class="col-md-6">
-                                                <h3 class="m-t-0 m-b-20">Customer info</h3>
+                                                <h3 class="m-t-0 m-b-20">Información del cliente: </h3>
                                                 <div class="form-group">
                                                     <div class="col-sm-4">Customer Name:
                                                     </div>
@@ -356,7 +383,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <h3 class="m-t-0 m-b-20">Shipping info</h3>
+                                                <h3 class="m-t-0 m-b-20">Forma de Pago</h3>
                                                 <div class="form-group">
                                                     <div class="col-sm-4">Delivery Address Name:
                                                     </div>
@@ -411,134 +438,29 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="forma_pago">
-                                <div class="row p-20">
-                                    <div class="col-md-12">
-                                        <table class="table table-tools table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th style="min-width:70px"><strong>ID</strong>
-                                                    <th><strong>Purchase Date</strong>
-                                                    </th>
-                                                    <th><strong>Reference</strong>
-                                                    </th>
-                                                    <th><strong>Client</strong>
-                                                    </th>
-                                                    <th><strong>Amount</strong>
-                                                    </th>
-                                                    <th><strong>Items</strong>
-                                                    </th>
-                                                    <th><strong>Delivery date</strong>
-                                                    </th>
-                                                    <th><strong>Destination</strong>
-                                                    </th>
-                                                    <th class="text-center"><strong>Status</strong>
-                                                    </th>
-                                                    <th class="text-center"><strong>Actions</strong>
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>03/11/2013</td>
-                                                    <td>SV 456 878 647</td>
-                                                    <td>John Miller</td>
-                                                    <td>$125.20</td>
-                                                    <td>5</td>
-                                                    <td>02/10/2013</td>
-                                                    <td>New York</td>
-                                                    <td class="text-center">
-                                                        <span class="label label-success w-300">Shipped</span>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <a href="ecommerce_order_view.html" class="view btn btn-sm btn-default"><i class="fa fa-search"></i> View</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>02/11/2013</td>
-                                                    <td>BG 588 735 457</td>
-                                                    <td>John Miller</td>
-                                                    <td>$352.55</td>
-                                                    <td>12</td>
-                                                    <td>01/10/2013</td>
-                                                    <td>Chicago</td>
-                                                    <td class="text-center">
-                                                        <span class="label label-success w-300">Shipped</span>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <a href="ecommerce_order_view.html" class="view btn btn-sm btn-default"><i class="fa fa-search"></i> View</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>04/09/2013</td>
-                                                    <td>YT 124 856 565</td>
-                                                    <td>John Miller</td>
-                                                    <td>$121.00</td>
-                                                    <td>6</td>
-                                                    <td>28/09/2013</td>
-                                                    <td>Los Angeles</td>
-                                                    <td class="text-center">
-                                                        <span class="label label-success w-300">Shipped</span>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <a href="ecommerce_order_view.html" class="view btn btn-sm btn-default"><i class="fa fa-search"></i> View</a>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="row p-20">
-                                    <div class="col-md-12">
-                                        <div class="col-md-6 col-md-offset-6">
-                                            <div class="well">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <i class="glyph-icon flaticon-shopping102 f-80"></i>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="row align-right m-b-10">
-                                                            <div class="col-md-8">
-                                                                 Total Amount Orders:
-                                                            </div>
-                                                            <div class="col-md-3 w-600">
-                                                                 $728.55
-                                                            </div>
-                                                        </div>
-                                                        <div class="row align-right m-b-10">
-                                                            <div class="col-md-8">
-                                                                 Taxe:
-                                                            </div>
-                                                            <div class="col-md-3 w-600">
-                                                                 $145.71
-                                                            </div>
-                                                        </div>
-                                                        <div class="row align-right m-b-10">
-                                                            <div class="col-md-8">
-                                                                 Total Paid:
-                                                            </div>
-                                                            <div class="col-md-3 w-600">
-                                                                 $728.55
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    {% include 'includes/clienteModal.html' %}
 {% endblock content %}
 
 
 {% block pageLevelScripts %}
+<script src="{{ STATIC_URL }}plugins/parsley/i18n/es.js"></script>
+<script src="{{ STATIC_URL }}plugins/parsley/parsley.min.js"></script>
+<script src="{{ STATIC_URL }}plugins/parsley/parsley.extend.js"></script>
+<script>
+window.ParsleyValidator.setLocale('es');
+$(function(){
+    $("#cliente").submit(function(e){
+        e.preventDefault();
+{#        if (true === $(this).parsley().isValid()) { // if form validation is successful#}
+{#            submitForm();#}
+{#        }#}
+    });
 
+});
+</script>
 {% endblock pageLevelScripts %}
