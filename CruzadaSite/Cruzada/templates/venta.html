@@ -1,15 +1,12 @@
 {% extends 'base.html' %}
 
 {% block pageLevelStyle   %}
-<link href="{{ STATIC_URL }}css/colors/color-red.css" rel="stylesheet">
-<link rel="stylesheet" href="{{ STATIC_URL }}plugins/magnific/magnific-popup.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}plugins/datatables/dataTables.css">
-<link rel="stylesheet" href="{{ STATIC_URL }}plugins/datatables/dataTables.tableTools.css">
+    <link href="{{ STATIC_URL }}css/colors/color-red.css" rel="stylesheet">
 {% endblock pageLevelStyle %}
 
 {% block body %}
 <body>
-{% endblock %}
+{% endblock body %}
 
 {% block content %}
         <div id="main-content">
@@ -23,10 +20,10 @@
                 <div class="col-md-12">
                     <div class="tabcordion">
                         <ul id="myTab" class="nav nav-tabs">
-                            <li class="active"><a href="#order_resume" data-toggle="tab">Overview</a></li>
-                            <li><a href="#order_details" data-toggle="tab">Items Details</a></li>
-                            <li><a href="#customer_details" data-toggle="tab">Customer Details</a></li>
-                            <li><a href="#order_history" data-toggle="tab">Past Orders
+                            <li class="active"><a href="#order_resume" data-toggle="tab">Resumen</a></li>
+                            <li><a href="#productos" data-toggle="tab">Productos</a></li>
+                            <li><a href="#cliente" data-toggle="tab">Cliente</a></li>
+                            <li><a href="#forma_pago" data-toggle="tab">Forma de Pago
                                 <span class="m-l-10 badge badge-primary">3</span></a>
                             </li>
                         </ul>
@@ -161,7 +158,17 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="order_details">
+                            <div class="tab-pane fade" id="productos">
+                                <div class="row p-20">
+                                    <div>
+                                        <div class="col-md-6">
+
+                                        </div>
+                                        <div class="col-md-6">
+
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row p-20">
                                     <div class="col-md-12">
                                         <table id="products-table" class="table">
@@ -292,7 +299,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="customer_details">
+                            <div class="tab-pane fade" id="cliente">
                                 <div class="row p-20">
                                     <div class="col-md-12">
                                         <form class="form-horizontal">
@@ -404,7 +411,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="order_history">
+                            <div class="tab-pane fade" id="forma_pago">
                                 <div class="row p-20">
                                     <div class="col-md-12">
                                         <table class="table table-tools table-hover">

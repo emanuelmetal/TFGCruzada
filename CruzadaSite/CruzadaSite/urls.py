@@ -11,4 +11,6 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^login/$', 'Cruzada.views.login_user', name='login'),
     url(r'^home/$', 'Cruzada.views.home', name='home'),
+    url(r'^pedido_detalle/$', 'Cruzada.views.pedido_detalle', name='pedido_detalle'),
+    url(r'^venta/$', 'Cruzada.views.venta', name='venta'),
 )

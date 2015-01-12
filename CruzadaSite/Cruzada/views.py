@@ -37,3 +37,13 @@ def home(request):
         'lista_articulos': lista_articulos
     }
     return render(request, 'productos.html', context)
+
+
+@login_required(login_url='/login/')
+def pedido_detalle(request):
+    return render(request, 'pedido_detalle.html')
+
+
+@login_required(login_url='/login/')
+def venta(request):
+    return render(request,'venta.html')
