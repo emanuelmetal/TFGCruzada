@@ -30,13 +30,25 @@ def login_user(request):
 
 @login_required(login_url='/login/')
 def home(request):
+
+    context = {
+        'home': True
+    }
+
+    return render(request, 'home.html', context)
+
+
+@login_required(login_url='/login/')
+def articulos(request):
     lista_articulos = Articulos.objects.all()
     context = {
+        'articulos': True,
+        'b_lista_articulos': True,
         'message_title': 'Sistema Cruzada',
         'message_body': 'La app arrancó a seguir trabajando',
         'lista_articulos': lista_articulos
     }
-    return render(request, 'productos.html', context)
+    return render(request, 'articulos.html', context)
 
 
 @login_required(login_url='/login/')
@@ -46,4 +58,8 @@ def pedido_detalle(request):
 
 @login_required(login_url='/login/')
 def venta(request):
-    return render(request,'venta.html')
+    context = {
+        'ventas': True,
+        'nueva_venta': True
+    }
+    return render(request,'venta.html', context)

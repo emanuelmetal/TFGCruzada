@@ -2,6 +2,7 @@
 
 {% block pageLevelStyle   %}
     <link href="{{ STATIC_URL }}css/colors/color-red.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ STATIC_URL }}plugins/datatables/dataTables.css">
 {% endblock pageLevelStyle %}
 
 {% block body %}
@@ -21,7 +22,7 @@
                     <div class="tabcordion">
                         <ul id="myTab" class="nav nav-tabs">
                             <li class="active"><a href="#order_resume" data-toggle="tab">Resumen</a></li>
-                            <li><a href="#productos" data-toggle="tab">Productos</a></li>
+                            <li><a href="#articulos" data-toggle="tab">Artículos</a></li>
                             <li><a href="#entrega" data-toggle="tab">Entrega</a></li>
                         </ul>
                         <div id="myTabContent" class="tab-content">
@@ -155,7 +156,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="productos">
+                            <div class="tab-pane fade" id="articulos">
                                 <div class="row p-20">
                                     <div>
                                         <div class="col-md-4">
@@ -164,7 +165,8 @@
                                         <div class="col-md-8">
                                             <div class="input-group transparent">
                                                 <div class="input-group-btn">
-                                                    <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+                                                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#modal-online">
+                                                        <i class="fa fa-search"></i></button>
                                                 </div>
                                                 <input type="text" class="form-control" placeholder="Ingrese el Artículo...">
                                                 <div class="input-group-btn">
@@ -210,7 +212,11 @@
                                                     <td>2</td>
                                                     <td>$50.40</td>
                                                     <td>10,80</td>
-                                                    <td>$61.20 </td>
+                                                    <td class="color-success">
+                                                        <div class="progress">
+                                                            <div class="progress-bar progress-bar-success" data-aria-valuetransitiongoal="75">2654</div>
+                                                        </div>
+                                                    </td>
                                                     <td class="text-center">
                                                         <span class="label label-success w-300">Available</span>
                                                     </td>
@@ -444,13 +450,19 @@
             </div>
         </div>
     {% include 'includes/clienteModal.html' %}
+    {% include 'includes/busquedaOnlineModal.html' %}
 {% endblock content %}
 
 
 {% block pageLevelScripts %}
+<script src="{{ STATIC_URL }}plugins/bootstrap-progressbar/bootstrap-progressbar.js"></script>
+<script src="{{ STATIC_URL }}plugins/datatables/dynamic/jquery.dataTables.min.js"></script>
+<script src="{{ STATIC_URL }}plugins/datatables/dataTables.bootstrap.js"></script>
+<script src="{{ STATIC_URL }}plugins/datatables/dataTables.tableTools.js"></script>
 <script src="{{ STATIC_URL }}plugins/parsley/i18n/es.js"></script>
 <script src="{{ STATIC_URL }}plugins/parsley/parsley.min.js"></script>
 <script src="{{ STATIC_URL }}plugins/parsley/parsley.extend.js"></script>
+
 <script>
 window.ParsleyValidator.setLocale('es');
 $(function(){

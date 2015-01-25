@@ -13,4 +13,5 @@ urlpatterns = patterns('',
     url(r'^home/$', 'Cruzada.views.home', name='home'),
     url(r'^pedido_detalle/$', 'Cruzada.views.pedido_detalle', name='pedido_detalle'),
     url(r'^venta/$', 'Cruzada.views.venta', name='venta'),
+    url(r'^lista_articulos/$', 'Cruzada.views.articulos', name='lista_articulos'),
 )
