@@ -6,7 +6,7 @@
 {% endblock pageLevelStyle %}
 
 {% block body %}
-<body>
+<body data-page="forms">
 {% endblock body %}
 
 {% block content %}
@@ -181,72 +181,27 @@
                                         <table id="products-table" class="table">
                                             <thead>
                                                 <tr>
-                                                    <th style="min-width:70px"><strong>ID</strong>
-                                                    <th><strong>Product</strong>
-                                                    </th>
-                                                    <th><strong>Reference</strong>
-                                                    </th>
-                                                    <th><strong>Category</strong>
-                                                    </th>
-                                                    <th><strong>Price</strong>
-                                                    </th>
-                                                    <th><strong>Quantity</strong>
-                                                    </th>
-                                                    <th><strong>Amount before Taxe</strong>
-                                                    </th>
-                                                    <th><strong>Taxe Amount</strong>
-                                                    </th>
-                                                    <th><strong>Total</strong>
-                                                    </th>
-                                                    <th class="text-center"><strong>Status</strong>
-                                                    </th>
+                                                    <th style="min-width:70px"><strong>Codigo</strong>
+                                                    <th><strong>Artículo</strong></th>
+                                                    <th><strong>Talle</strong></th>
+                                                    <th><strong>Color</strong></th>
+                                                    <th><strong>Precio</strong></th>
+                                                    <th><strong>Cantidad</strong></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>1</td>
-                                                    <td><a href="ecommerce_product_view.html" data-rel="tooltip" title="Edit Product">Product 1</a></td>
-                                                    <td>SV 456 878 647</td>
-                                                    <td>Men / Shoes</td>
+                                                    <td>000001</td>
+                                                    <td>Remera</td>
+                                                    <td>Medium</td>
+                                                    <td>Verde</td>
                                                     <td>$25.20</td>
-                                                    <td>2</td>
-                                                    <td>$50.40</td>
-                                                    <td>10,80</td>
-                                                    <td class="color-success">
-                                                        <div class="progress">
-                                                            <div class="progress-bar progress-bar-success" data-aria-valuetransitiongoal="75">2654</div>
-                                                        </div>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <span class="label label-success w-300">Available</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td><a href="ecommerce_product_view.html" data-rel="tooltip" title="Edit Product">Product 2</a></td>
-                                                    <td>HY 658 878 995</td>
-                                                    <td>Women / Underwear</td>
-                                                    <td>$30.40</td>
-                                                    <td>1</td>
-                                                    <td>$30.40</td>
-                                                    <td>3,40</td>
-                                                    <td>$33.80 </td>
-                                                    <td class="text-center">
-                                                        <span class="label label-danger w-300">Unavailable (15 days)</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td><a href="ecommerce_product_view.html" data-rel="tooltip" title="Edit Product">Product 3</a></td>
-                                                    <td>KI 662 554 770</td>
-                                                    <td>Children / Socks</td>
-                                                    <td>$5.20</td>
-                                                    <td>1</td>
-                                                    <td>$5.20</td>
-                                                    <td>0.52</td>
-                                                    <td>$5.72 </td>
-                                                    <td class="text-center">
-                                                        <span class="label label-success w-300">Available</span>
+                                                    <td>
+                                                        <select class="form-control">
+                                                            <option>1</option>
+                                                            <option>2</option>
+                                                            <option>3</option>
+                                                        </select>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -455,6 +410,13 @@
 
 
 {% block pageLevelScripts %}
+{#<script src="{{ STATIC_URL }}plugins/datetimepicker/jquery.datetimepicker.js"></script>#}
+<script src="{{ STATIC_URL }}plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+{#<script src="{{ STATIC_URL }}plugins/pickadate/picker.js"></script>#}
+{#<script src="{{ STATIC_URL }}plugins/pickadate/picker.date.js"></script>#}
+{#<script src="{{ STATIC_URL }}plugins/pickadate/picker.time.js"></script>#}
+<script src="{{ STATIC_URL }}plugins/bootstrap-switch/bootstrap-switch.js"></script>
+
 <script src="{{ STATIC_URL }}plugins/bootstrap-progressbar/bootstrap-progressbar.js"></script>
 <script src="{{ STATIC_URL }}plugins/datatables/dynamic/jquery.dataTables.min.js"></script>
 <script src="{{ STATIC_URL }}plugins/datatables/dataTables.bootstrap.js"></script>
