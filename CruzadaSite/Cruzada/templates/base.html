@@ -124,12 +124,36 @@
                             {% endif %}
                                 <a href="{% url 'lista_articulos' %}"><span class="sidebar-text">Lista Artículos</span></a>
                             </li>
-                            {% if nuevo_articulo %}
+{#                            {% if nuevo_articulo %}#}
+{#                            <li class="current">#}
+{#                            {% else %}#}
+{#                            <li>#}
+{#                            {% endif %}#}
+{#                                <a href="#"><span class="sidebar-text">Nuevo Artículo</span></a>#}
+{#                            </li>#}
+                        </ul>
+                    </li>
+                    {% if pedidos %}
+                    <li class="active current hasSub">
+                    {% else %}
+                    <li>
+                    {% endif %}
+                        <a href="#"><i class="fa fa-envelope"></i><span class="sidebar-text">Pedidos</span>
+                        <span class="fa arrow"></span></a>
+                        <ul class="submenu collapse">
+                            {% if b_lista_pedidos %}
                             <li class="current">
                             {% else %}
                             <li>
                             {% endif %}
-                                <a href="#"><span class="sidebar-text">Nuevo Artículo</span></a>
+                                <a href="{% url 'lista_pedidos' %}"><span class="sidebar-text">Lista de Pedidos</span></a>
+                            </li>
+                            {% if nuevo_pedido %}
+                            <li class="current">
+                            {% else %}
+                            <li>
+                            {% endif %}
+                                <a href="#"><span class="sidebar-text">Nuevo Pedido</span></a>
                             </li>
                         </ul>
                     </li>

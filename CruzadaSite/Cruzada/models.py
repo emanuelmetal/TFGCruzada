@@ -13,15 +13,18 @@ class Categoria(models.Model):
     def __unicode__(self):
         return self.descripcion
 
+
 class PedidosEstados(models.Model):
 
     class Meta:
         db_table = 'PedidosEstados'
 
+    nombre = models.CharField(max_length=20)
     descripcion = models.CharField(max_length=100)
 
     def __unicode__(self):
         return self.descripcion
+
 
 class TipoMedioPago(models.Model):
 

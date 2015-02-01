@@ -63,3 +63,14 @@ def venta(request):
         'nueva_venta': True
     }
     return render(request,'venta.html', context)
+
+
+@login_required(login_url='/login/')
+def pedidos(request):
+    lista_articulos = Articulos.objects.all()
+    context = {
+        'pedidos': True,
+        'b_lista_pedidos': True,
+        'lista_pedidos': lista_articulos
+    }
+    return render(request, 'pedidos.html', context)
