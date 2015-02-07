@@ -17,8 +17,10 @@ def login_user(request):
             password = request.POST['password']
             user = authenticate(username=username, password=password)
             if user is not None:
-                django_login(request,user)
+                django_login(request, user)
                 response_data = {}
+                persona = Personas.objects.filter(user=user.id).values('nombre', 'apellido', 'sucursal', 'rol')[0]
+                request.session["persona"] = persona #"persona"
                 if request.REQUEST.get('next'):
                     response_data['redirect'] = request.REQUEST.get('next')
                 else:
@@ -41,6 +43,11 @@ def home(request):
 @login_required(login_url='/login/')
 def articulos(request):
     lista_articulos = Articulos.objects.all()
+
+    for articulo in lista_articulos:
+        pass
+
+
     context = {
         'articulos': True,
         'b_lista_articulos': True,
@@ -62,7 +69,7 @@ def venta(request):
         'ventas': True,
         'nueva_venta': True
     }
-    return render(request,'venta.html', context)
+    return render(request, 'venta.html', context)
 
 
 @login_required(login_url='/login/')

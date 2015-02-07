@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block pageLevelStyle   %}
-<link href="{{ STATIC_URL }}css/colors/color-red.css" rel="stylesheet">
+
 <link rel="stylesheet" href="{{ STATIC_URL }}plugins/magnific/magnific-popup.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}plugins/datatables/dataTables.css">
 <link rel="stylesheet" href="{{ STATIC_URL }}plugins/datatables/dataTables.tableTools.css">
@@ -15,517 +15,167 @@
         <div id="main-content">
             <div class="page-title">
                 <i class="icon-custom-left"></i>
-                <h3><img class="m-r-20" src="{{ STATIC_URL }}img/various/invoice.png" alt="invoice"><strong>Order n° 547 578 528</strong>
+                <h3><strong>Pedido n° 547 578 528</strong>
                     <small>May 18, 2014 10:21</small></h3>
                 <br>
             </div>
             <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Detalles</h3>
+                        </div>
+                        <div class="panel-body">
+                            <form class="form-horizontal p-20">
+                                <div class="form-group">
+                                    <div class="col-sm-4">
+                                        Nro de Pedido:
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <strong>000235</strong>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-4">
+                                        Sucursal Origen:
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <strong>Planeta</strong>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-4">
+                                        Sucursal Destino:
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <strong>Gran Vía</strong>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-4">
+                                        Estado:
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <strong>En Proceso</strong>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-4">
+                                        Observaciones:
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <strong>Client address and shipping address are different</strong>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Movimientos</h3>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Fecha Movimiento</th>
+                                        <th>Usuario</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Mark</td>
+                                        <td>Otto</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Jacob</td>
+                                        <td>Thornton</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Larry</td>
+                                        <td>the Bird</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Steve</td>
+                                        <td>Mac Queen</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-12">
-                    <div class="tabcordion">
-                        <ul id="myTab" class="nav nav-tabs">
-                            <li class="active"><a href="#order_resume" data-toggle="tab">Overview</a></li>
-                            <li><a href="#order_details" data-toggle="tab">Items Details</a></li>
-                            <li><a href="#customer_details" data-toggle="tab">Customer Details</a></li>
-                            <li><a href="#order_history" data-toggle="tab">Past Orders
-                                <span class="m-l-10 badge badge-primary">3</span></a>
-                            </li>
-                        </ul>
-                        <div id="myTabContent" class="tab-content">
-                            <div class="tab-pane fade active in" id="order_resume">
-                                <div class="row p-20">
-                                    <div class="col-md-6">
-                                        <h3 class="m-t-0 m-b-20">Global infos</h3>
-                                        <form class="form-horizontal p-20">
-                                            <div class="form-group">
-                                                <div class="col-sm-2">Order Number:
-                                                </div>
-                                                <div class="col-sm-7">
-                                                    <strong>547 578 528</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2">Date:
-                                                </div>
-                                                <div class="col-sm-7">
-                                                    <strong>May 18, 2014 10:21</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2">Client Name:
-                                                </div>
-                                                <div class="col-sm-7">
-                                                    <strong><a href="#" data-rel="tooltip" title="Edit customer">John Miller</a></strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2">Total Amount:
-                                                </div>
-                                                <div class="col-sm-7">
-                                                    <strong>$152.00</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2">VAT (20%):
-                                                </div>
-                                                <div class="col-sm-7">
-                                                    <strong>$30.40</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2">Item Numbers:
-                                                </div>
-                                                <div class="col-sm-7">
-                                                    <strong>4</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2">Delivery Date:
-                                                </div>
-                                                <div class="col-sm-7">
-                                                    <strong>May 25, 2014</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2">Destination:
-                                                </div>
-                                                <div class="col-sm-7">
-                                                    <strong>Miami (USA)</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2">Actual Status:
-                                                </div>
-                                                <div class="col-sm-7">
-                                                    <strong>Waiting shipment</strong>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h3 class="m-t-0 m-b-20">Other infos</h3>
-                                        <form class="form-horizontal p-20">
-                                            <div class="form-group">
-                                                <div class="col-sm-4">
-                                                    Shipping Address:
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <strong>72, Perk Avenue, New York, USA</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-4">
-                                                    Shipping method:
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <strong>Road</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-4">
-                                                    Payment Method:
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <strong>Credit Card</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-4">
-                                                    Items:
-                                                </div>
-                                                <div class="col-sm-8 c-red">
-                                                    <strong><i class="fa fa-exclamation-triangle"></i> 1 Item is unavailable (15 days)</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-4">
-                                                    Client:
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <strong>3 past orders (hight trust level)</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-4">
-                                                    Other info:
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <strong>Client address and shipping address are different</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group m-t-60">
-                                                <div class="col-sm-8 col-sm-offset-4">
-                                                    <a class="btn btn-block btn-primary" href="#">See Invoice</a>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
+                    <div class="panel-body">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Artículos</h3>
                             </div>
-                            <div class="tab-pane fade" id="order_details">
-                                <div class="row p-20">
-                                    <div class="col-md-12">
-                                        <table id="products-table" class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th style="min-width:70px"><strong>ID</strong>
-                                                    <th><strong>Product</strong>
-                                                    </th>
-                                                    <th><strong>Reference</strong>
-                                                    </th>
-                                                    <th><strong>Category</strong>
-                                                    </th>
-                                                    <th><strong>Price</strong>
-                                                    </th>
-                                                    <th><strong>Quantity</strong>
-                                                    </th>
-                                                    <th><strong>Amount before Taxe</strong>
-                                                    </th>
-                                                    <th><strong>Taxe Amount</strong>
-                                                    </th>
-                                                    <th><strong>Total</strong>
-                                                    </th>
-                                                    <th class="text-center"><strong>Status</strong>
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td><a href="ecommerce_product_view.html" data-rel="tooltip" title="Edit Product">Product 1</a></td>
-                                                    <td>SV 456 878 647</td>
-                                                    <td>Men / Shoes</td>
-                                                    <td>$25.20</td>
-                                                    <td>2</td>
-                                                    <td>$50.40</td>
-                                                    <td>10,80</td>
-                                                    <td>$61.20 </td>
-                                                    <td class="text-center">
-                                                        <span class="label label-success w-300">Available</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td><a href="ecommerce_product_view.html" data-rel="tooltip" title="Edit Product">Product 2</a></td>
-                                                    <td>HY 658 878 995</td>
-                                                    <td>Women / Underwear</td>
-                                                    <td>$30.40</td>
-                                                    <td>1</td>
-                                                    <td>$30.40</td>
-                                                    <td>3,40</td>
-                                                    <td>$33.80 </td>
-                                                    <td class="text-center">
-                                                        <span class="label label-danger w-300">Unavailable (15 days)</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td><a href="ecommerce_product_view.html" data-rel="tooltip" title="Edit Product">Product 3</a></td>
-                                                    <td>KI 662 554 770</td>
-                                                    <td>Children / Socks</td>
-                                                    <td>$5.20</td>
-                                                    <td>1</td>
-                                                    <td>$5.20</td>
-                                                    <td>0.52</td>
-                                                    <td>$5.72 </td>
-                                                    <td class="text-center">
-                                                        <span class="label label-success w-300">Available</span>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="row p-20">
-                                    <div class="col-md-12">
-                                        <div class="col-md-6 col-md-offset-6">
-                                            <div class="well">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <i class="glyph-icon flaticon-shopping80 f-80"></i>
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 col-xs-12 table-responsive">
+                                    <table id="articulos-table" class="table table-tools table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th style="min-width:70px"><strong>Codigo</strong>
+                                                <th><strong>Artículo</strong>
+                                                </th>
+                                                <th><strong>Talle</strong>
+                                                </th>
+                                                <th><strong>Color</strong>
+                                                </th>
+                                                <th><strong>Precio</strong>
+                                                </th>
+                                                <th><strong>Date added</strong>
+                                                </th>
+                                                <th style="width:10%;text-align:center"><strong>Stock</strong>
+                                                </th>
+                                                <th class="text-center"><strong>Sales</strong>
+                                                </th>
+                                                <th class="text-center"><strong>Status</strong>
+                                                </th>
+                                                <th class="text-center"><strong>Actions</strong>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for articulo in lista_articulos %}
+                                            <tr>
+                                                <td>{{ articulo.codigo }}</td>
+                                                <td>{{ articulo.descripcion }}</td>
+                                                <td>{{ articulo.talle }}</td>
+                                                <td>{{ articulo.color }}</td>
+                                                <td><strong>{{ articulo.precio }}</strong></td>
+                                                <td>02/03/2013</td>
+                                                <td class="color-success">
+                                                    <div class="progress">
+                                                        <div class="progress-bar progress-bar-success" data-aria-valuetransitiongoal="75">2654</div>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <div class="row align-right m-b-10">
-                                                            <div class="col-md-8">
-                                                                 Total before Taxe:
-                                                            </div>
-                                                            <div class="col-md-3 w-600">
-                                                                 $86
-                                                            </div>
-                                                        </div>
-                                                        <div class="row align-right m-b-10">
-                                                            <div class="col-md-8">
-                                                                 Taxe:
-                                                            </div>
-                                                            <div class="col-md-3 w-600">
-                                                                 $17.20
-                                                            </div>
-                                                        </div>
-                                                        <div class="row align-right m-b-10">
-                                                            <div class="col-md-8">
-                                                                 Shipping:
-                                                            </div>
-                                                            <div class="col-md-3 w-600">
-                                                                 $19.95
-                                                            </div>
-                                                        </div>
-                                                        <div class="row align-right m-b-10">
-                                                            <div class="col-md-8">
-                                                                 Grand Total:
-                                                            </div>
-                                                            <div class="col-md-3 w-600">
-                                                                 $123.15
-                                                            </div>
-                                                        </div>
-                                                        <div class="row align-right m-b-10">
-                                                            <div class="col-md-8">
-                                                                 Total Paid:
-                                                            </div>
-                                                            <div class="col-md-3 w-600">
-                                                                 $123.15
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="customer_details">
-                                <div class="row p-20">
-                                    <div class="col-md-12">
-                                        <form class="form-horizontal">
-                                            <div class="col-md-6">
-                                                <h3 class="m-t-0 m-b-20">Customer info</h3>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Customer Name:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong><a href="#" data-rel="tooltip" title="Edit customer">John Miller</a></strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Address:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>152, 33 Street</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">City:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>New York</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Country:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>USA</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Phone Number:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>868 584 547</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Email:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>jmiller@outlook.com</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Past Orders:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>3</strong>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <h3 class="m-t-0 m-b-20">Shipping info</h3>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Delivery Address Name:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>Amanda Brown</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Address:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>72, Perk Avenue</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">City:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>New York</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Country:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>USA</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Phone Number:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>665 754 325</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Fax Number:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>665 754 998</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Email:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>abown@gmail.com</strong>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="order_history">
-                                <div class="row p-20">
-                                    <div class="col-md-12">
-                                        <table class="table table-tools table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th style="min-width:70px"><strong>ID</strong>
-                                                    <th><strong>Purchase Date</strong>
-                                                    </th>
-                                                    <th><strong>Reference</strong>
-                                                    </th>
-                                                    <th><strong>Client</strong>
-                                                    </th>
-                                                    <th><strong>Amount</strong>
-                                                    </th>
-                                                    <th><strong>Items</strong>
-                                                    </th>
-                                                    <th><strong>Delivery date</strong>
-                                                    </th>
-                                                    <th><strong>Destination</strong>
-                                                    </th>
-                                                    <th class="text-center"><strong>Status</strong>
-                                                    </th>
-                                                    <th class="text-center"><strong>Actions</strong>
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>03/11/2013</td>
-                                                    <td>SV 456 878 647</td>
-                                                    <td>John Miller</td>
-                                                    <td>$125.20</td>
-                                                    <td>5</td>
-                                                    <td>02/10/2013</td>
-                                                    <td>New York</td>
-                                                    <td class="text-center">
-                                                        <span class="label label-success w-300">Shipped</span>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <a href="ecommerce_order_view.html" class="view btn btn-sm btn-default"><i class="fa fa-search"></i> View</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>02/11/2013</td>
-                                                    <td>BG 588 735 457</td>
-                                                    <td>John Miller</td>
-                                                    <td>$352.55</td>
-                                                    <td>12</td>
-                                                    <td>01/10/2013</td>
-                                                    <td>Chicago</td>
-                                                    <td class="text-center">
-                                                        <span class="label label-success w-300">Shipped</span>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <a href="ecommerce_order_view.html" class="view btn btn-sm btn-default"><i class="fa fa-search"></i> View</a>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>04/09/2013</td>
-                                                    <td>YT 124 856 565</td>
-                                                    <td>John Miller</td>
-                                                    <td>$121.00</td>
-                                                    <td>6</td>
-                                                    <td>28/09/2013</td>
-                                                    <td>Los Angeles</td>
-                                                    <td class="text-center">
-                                                        <span class="label label-success w-300">Shipped</span>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <a href="ecommerce_order_view.html" class="view btn btn-sm btn-default"><i class="fa fa-search"></i> View</a>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="row p-20">
-                                    <div class="col-md-12">
-                                        <div class="col-md-6 col-md-offset-6">
-                                            <div class="well">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <i class="glyph-icon flaticon-shopping102 f-80"></i>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="row align-right m-b-10">
-                                                            <div class="col-md-8">
-                                                                 Total Amount Orders:
-                                                            </div>
-                                                            <div class="col-md-3 w-600">
-                                                                 $728.55
-                                                            </div>
-                                                        </div>
-                                                        <div class="row align-right m-b-10">
-                                                            <div class="col-md-8">
-                                                                 Taxe:
-                                                            </div>
-                                                            <div class="col-md-3 w-600">
-                                                                 $145.71
-                                                            </div>
-                                                        </div>
-                                                        <div class="row align-right m-b-10">
-                                                            <div class="col-md-8">
-                                                                 Total Paid:
-                                                            </div>
-                                                            <div class="col-md-3 w-600">
-                                                                 $728.55
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="sparkline" data-sparkline-color="#7BB2B4"
+                                                    data-sparkline-value="[13,14,16,15,4,14,20,14,12,16,11,17,19,16]"></div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="label label-success w-300">Online</span>
+                                                </td>
+                                                <td class="text-center ">
+                                                    <a href="ecommerce_product_view.html" class="edit btn btn-sm btn-default"><i class="fa fa-pencil"></i> Edit</a>
+                                                    <a href="#" class="delete btn btn-sm btn-default"><i class="fa fa-times-circle"></i> Remove</a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -533,5 +183,19 @@
 
 
 {% block pageLevelScripts %}
+    <script src="{{ STATIC_URL }}plugins/datatables/dynamic/jquery.dataTables.min.js"></script>
+    <script src="{{ STATIC_URL }}plugins/datatables/dataTables.bootstrap.js"></script>
+    <script src="{{ STATIC_URL }}plugins/datatables/dataTables.tableTools.js"></script>
+    <script src="{{ STATIC_URL }}plugins/datatables/table.editable.js"></script>
+<script>
+        var articulosTable = $('#articulos-table').dataTable({
+            "language": {
+            "url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+        }
+        });
+        //oTable.fnDraw();
 
+        /* Add a placeholder to searh input */
+        $('.dataTables_filter input').attr("placeholder", "Search a product...");
+</script>
 {% endblock pageLevelScripts %}

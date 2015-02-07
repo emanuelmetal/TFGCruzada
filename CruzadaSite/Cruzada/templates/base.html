@@ -17,6 +17,15 @@
     <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/plugins.min.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/style.min.css" rel="stylesheet">
+    {% if request.session.persona.sucursal == 1 %}
+    <link href="{{ STATIC_URL }}css/colors/color-dark.css" rel="stylesheet">
+    {% elif request.session.persona.sucursal == 2  %}
+    <link href="{{ STATIC_URL }}css/colors/color-blue.css" rel="stylesheet">
+    {% elif request.session.persona.sucursal == 3  %}
+    <link href="{{ STATIC_URL }}css/colors/color-green.css" rel="stylesheet">
+    {% else %}
+    <link href="{{ STATIC_URL }}css/colors/color-red.css" rel="stylesheet">
+    {% endif %}
     <!-- END  MANDATORY STYLE -->
 
         <!-- BEGIN PAGE LEVEL STYLE -->

@@ -1,6 +1,6 @@
 #coding: utf8
 from django.db import models
-
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Categoria(models.Model):
@@ -72,6 +72,7 @@ class Personas(models.Model):
     categoria = models.ForeignKey(Categoria)
     sucursal = models.ForeignKey(Sucursal)
     rol = models.ForeignKey(Rol)
+    user = models.ForeignKey(User)
 
 
 class MediosDePago(models.Model):
@@ -130,6 +131,7 @@ class Talle(models.Model):
     def __unicode__(self):
         return self.descripcion
 
+
 class Colores(models.Model):
 
     class Meta:
@@ -168,6 +170,10 @@ class Pedidos(models.Model):
     observaciones = models.TextField()
     estado = models.ForeignKey(PedidosEstados)
     uri_detalle = models.CharField(max_length=255)
+    usuario_pedido = models.ForeignKey(Personas, related_name='usuario_pedido')
+    usuario_proceso = models.ForeignKey(Personas, related_name='usuario_proceso')
+    usuario_entrega = models.ForeignKey(Personas, related_name='usuario_entrega')
+    usuario_recepcion = models.ForeignKey(Personas, related_name='usuario_recepcion')
 
 
 class Transacciones(models.Model):
