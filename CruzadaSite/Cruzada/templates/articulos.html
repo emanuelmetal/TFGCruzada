@@ -28,54 +28,47 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12 table-responsive">
-                                <table id="articulos-table" class="table table-tools table-hover">
+                                <table id="articulos-table" class="table table-tools table-hover order-column">
                                     <thead>
                                         <tr>
-                                            <th style="min-width:70px"><strong>Codigo</strong>
-                                            <th><strong>Artículo</strong>
+                                            <th style="min-width:70px"><strong>Codigo</strong></th>
+                                            <th class="dt-center"><strong>Artículo</strong>
                                             </th>
-                                            <th><strong>Talle</strong>
+                                            <th class="dt-center"><strong>Talle</strong>
                                             </th>
-                                            <th><strong>Color</strong>
+                                            <th class="dt-center"><strong>Color</strong>
                                             </th>
-                                            <th><strong>Precio</strong>
+                                            <th class="dt-center"><strong>Precio</strong>
                                             </th>
-                                            <th><strong>Date added</strong>
+                                            <th class="dt-center"><strong>Stock</strong>
                                             </th>
-                                            <th style="width:10%;text-align:center"><strong>Stock</strong>
+                                            <th class="dt-center"><strong>Ventas</strong>
                                             </th>
-                                            <th class="text-center"><strong>Sales</strong>
-                                            </th>
-                                            <th class="text-center"><strong>Status</strong>
-                                            </th>
-                                            <th class="text-center"><strong>Actions</strong>
+                                            <th class="dt-center"><strong>Acciones</strong>
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody >
                                         {% for articulo in lista_articulos %}
                                         <tr>
-                                            <td>{{ articulo.codigo }}</td>
-                                            <td>{{ articulo.descripcion }}</td>
-                                            <td>{{ articulo.talle }}</td>
-                                            <td>{{ articulo.color }}</td>
-                                            <td><strong>{{ articulo.precio }}</strong></td>
-                                            <td>02/03/2013</td>
-                                            <td class="color-success">
-                                                <div class="progress">
-                                                    <div class="progress-bar progress-bar-success" data-aria-valuetransitiongoal="75">2654</div>
-                                                </div>
-                                            </td>
+                                            <td class="dt-center">{{ articulo.codigo }}</td>
+                                            <td class="dt-center">{{ articulo.descripcion|safe }}</td>
+                                            <td class="dt-center">{{ articulo.talle }}</td>
+                                            <td class="dt-center">{{ articulo.color }}</td>
+                                            <td class="dt-center"><strong>{{ articulo.precio }}</strong></td>
+{#                                            <td class="color-success">#}
+{#                                                <div class="progress">#}
+{#                                                    <div class="progress-bar progress-bar-success" data-aria-valuetransitiongoal="75">{{ articulo.stock }}</div>#}
+{#                                                </div>#}
+{#                                            </td>#}
+                                            <td class="dt-center"><strong>{{ articulo.stock }}</strong></td>
                                             <td class="text-center">
                                                 <div class="sparkline" data-sparkline-color="#7BB2B4"
-                                                data-sparkline-value="[13,14,16,15,4,14,20,14,12,16,11,17,19,16]"></div>
-                                            </td>
-                                            <td class="text-center">
-                                                <span class="label label-success w-300">Online</span>
+                                                data-sparkline-value="[13,14,16,15,4,14,20,14,12]"></div>
                                             </td>
                                             <td class="text-center ">
                                                 <a href="ecommerce_product_view.html" class="edit btn btn-sm btn-default"><i class="fa fa-pencil"></i> Edit</a>
-                                                <a href="#" class="delete btn btn-sm btn-default"><i class="fa fa-times-circle"></i> Remove</a>
+{#                                                <a href="#" class="delete btn btn-sm btn-default"><i class="fa fa-times-circle"></i> Remove</a>#}
                                             </td>
                                         </tr>
                                         {% endfor %}

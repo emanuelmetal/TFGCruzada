@@ -58,6 +58,19 @@ class Sucursal(models.Model):
     nro_interno = models.IntegerField(max_length=10)
 
 
+class PersonasManager(models.Manager):
+    def get_logged_persona(self, user_id):
+        persona = self.get(user=user_id)
+        result = {}
+        result["nombre"] = persona.nombre
+        result["apellido"] = persona.apellido
+        result["rol"] = persona.rol.descripcion
+        result["uri_stock"] = persona.sucursal.almacenes.uri_stock
+        result["sucursal_id"] = persona.sucursal.id
+        result["sucursal_nombre"] = persona.sucursal.descripcion
+        return result
+
+
 class Personas(models.Model):
 
     class Meta:
@@ -73,6 +86,8 @@ class Personas(models.Model):
     sucursal = models.ForeignKey(Sucursal)
     rol = models.ForeignKey(Rol)
     user = models.ForeignKey(User)
+
+    objects = PersonasManager()
 
 
 class MediosDePago(models.Model):

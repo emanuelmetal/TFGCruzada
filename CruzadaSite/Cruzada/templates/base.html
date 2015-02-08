@@ -17,11 +17,11 @@
     <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/plugins.min.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/style.min.css" rel="stylesheet">
-    {% if request.session.persona.sucursal == 1 %}
+    {% if request.session.persona.sucursal_id == 1 %}
     <link href="{{ STATIC_URL }}css/colors/color-dark.css" rel="stylesheet">
-    {% elif request.session.persona.sucursal == 2  %}
+    {% elif request.session.persona.sucursal_id == 2  %}
     <link href="{{ STATIC_URL }}css/colors/color-blue.css" rel="stylesheet">
-    {% elif request.session.persona.sucursal == 3  %}
+    {% elif request.session.persona.sucursal_id == 3  %}
     <link href="{{ STATIC_URL }}css/colors/color-green.css" rel="stylesheet">
     {% else %}
     <link href="{{ STATIC_URL }}css/colors/color-red.css" rel="stylesheet">
@@ -195,6 +195,7 @@
     <script src="{{ STATIC_URL }}plugins/breakpoints/breakpoints.js"></script>
     <script src="{{ STATIC_URL }}plugins/numerator/jquery-numerator.js"></script>
     <script src="{{ STATIC_URL }}plugins/jquery.cookie.min.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}plugins/bootstrap3-typeahead.min.js" type="text/javascript"></script>
 
 
     <!-- END MANDATORY SCRIPTS -->

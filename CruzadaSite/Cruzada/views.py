@@ -6,7 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
 from django.core.urlresolvers import reverse
 from Cruzada.models import *
-
+from django.core.serializers.json import DjangoJSONEncoder
+import stock_dal
 
 # Create your views here.
 def login_user(request):
@@ -19,8 +20,7 @@ def login_user(request):
             if user is not None:
                 django_login(request, user)
                 response_data = {}
-                persona = Personas.objects.filter(user=user.id).values('nombre', 'apellido', 'sucursal', 'rol')[0]
-                request.session["persona"] = persona #"persona"
+                request.session["persona"] = Personas.objects.get_logged_persona(user.id) #"persona"
                 if request.REQUEST.get('next'):
                     response_data['redirect'] = request.REQUEST.get('next')
                 else:
@@ -42,11 +42,8 @@ def home(request):
 
 @login_required(login_url='/login/')
 def articulos(request):
-    lista_articulos = Articulos.objects.all()
 
-    for articulo in lista_articulos:
-        pass
-
+    result, lista_articulos, message = stock_dal.get_stock_sucursal(request.session["persona"]["uri_stock"])
 
     context = {
         'articulos': True,
@@ -81,3 +78,17 @@ def pedidos(request):
         'lista_pedidos': lista_articulos
     }
     return render(request, 'pedidos.html', context)
+
+
+""" AJAX VIEWS  """
+
+
+def venta_articulos(request):
+    if request.method == 'GET':
+        if request.is_ajax:
+            if 'keyword' in request.GET:
+                keyword = request.GET["keyword"]
+                result, articulos, message = stock_dal.get_stock_ajax(request.session["persona"]["uri_stock"], keyword)
+                response = json.dumps({"articulos": articulos}, cls=DjangoJSONEncoder)
+                return HttpResponse(response, content_type="application/json")
+    return HttpResponseForbidden()

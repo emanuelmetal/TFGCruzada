@@ -168,7 +168,7 @@
                                                     <button class="btn btn-default" type="button" data-toggle="modal" data-target="#modal-online">
                                                         <i class="fa fa-search"></i></button>
                                                 </div>
-                                                <input type="text" class="form-control" placeholder="Ingrese el Artículo...">
+                                                <input type="text" id="selArticulo" class="form-control" data-provide="typeahead" placeholder="Ingrese el Artículo...">
                                                 <div class="input-group-btn">
                                                     <button class="btn btn-default" type="button"><i class="fa fa-plus"></i> Agregar</button>
                                                 </div>
@@ -428,6 +428,7 @@
 <script>
 window.ParsleyValidator.setLocale('es');
 $(function(){
+
     $("#cliente").submit(function(e){
         e.preventDefault();
 {#        if (true === $(this).parsley().isValid()) { // if form validation is successful#}
@@ -435,6 +436,14 @@ $(function(){
 {#        }#}
     });
 
+    var selArticulo = $('#selArticulo');
+    selArticulo.typeahead({
+        source: function (query, process) {
+            return $.getJSON('{% url 'venta_articulos_ajax' %}', {keyword: query}, function (result) {
+                return process(result.articulos)
+            });
+        }
+    });
 });
 </script>
 {% endblock pageLevelScripts %}
