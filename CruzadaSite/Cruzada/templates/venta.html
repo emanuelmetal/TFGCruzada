@@ -165,7 +165,7 @@
                                         <div class="col-md-8">
                                             <div class="input-group transparent">
                                                 <div class="input-group-btn">
-                                                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#modal-online">
+                                                    <button class="btn btn-default" id="nuevo_pedido" type="button" data-toggle="modal" data-target="#modal-online">
                                                         <i class="fa fa-search"></i></button>
                                                 </div>
                                                 <input type="text" id="selArticulo" class="form-control" data-provide="typeahead" placeholder="Ingrese el Artículo...">
@@ -178,7 +178,7 @@
                                 </div>
                                 <div class="row p-20">
                                     <div class="col-md-12">
-                                        <table id="products-table" class="table">
+                                        <table id="articulos_table" class="table">
                                             <thead>
                                                 <tr>
                                                     <th style="min-width:70px"><strong>Codigo</strong>
@@ -187,23 +187,24 @@
                                                     <th><strong>Color</strong></th>
                                                     <th><strong>Precio</strong></th>
                                                     <th><strong>Cantidad</strong></th>
+                                                    <th><strong>Accion</strong></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>000001</td>
-                                                    <td>Remera</td>
-                                                    <td>Medium</td>
-                                                    <td>Verde</td>
-                                                    <td>$25.20</td>
-                                                    <td>
-                                                        <select class="form-control">
-                                                            <option>1</option>
-                                                            <option>2</option>
-                                                            <option>3</option>
-                                                        </select>
-                                                    </td>
-                                                </tr>
+{#                                                <tr>#}
+{#                                                    <td>000001</td>#}
+{#                                                    <td>Remera</td>#}
+{#                                                    <td>Medium</td>#}
+{#                                                    <td>Verde</td>#}
+{#                                                    <td>$25.20</td>#}
+{#                                                    <td>#}
+{#                                                        <select class="form-control">#}
+{#                                                            <option>1</option>#}
+{#                                                            <option>2</option>#}
+{#                                                            <option>3</option>#}
+{#                                                        </select>#}
+{#                                                    </td>#}
+{#                                                </tr>#}
                                             </tbody>
                                         </table>
                                     </div>
@@ -219,47 +220,14 @@
                                                     <div class="col-md-6">
                                                         <div class="row align-right m-b-10">
                                                             <div class="col-md-8">
-                                                                 Total before Taxe:
+                                                                 Total Venta:
                                                             </div>
                                                             <div class="col-md-3 w-600">
                                                                  $86
                                                             </div>
                                                         </div>
-                                                        <div class="row align-right m-b-10">
-                                                            <div class="col-md-8">
-                                                                 Taxe:
-                                                            </div>
-                                                            <div class="col-md-3 w-600">
-                                                                 $17.20
-                                                            </div>
-                                                        </div>
-                                                        <div class="row align-right m-b-10">
-                                                            <div class="col-md-8">
-                                                                 Shipping:
-                                                            </div>
-                                                            <div class="col-md-3 w-600">
-                                                                 $19.95
-                                                            </div>
-                                                        </div>
-                                                        <div class="row align-right m-b-10">
-                                                            <div class="col-md-8">
-                                                                 Grand Total:
-                                                            </div>
-                                                            <div class="col-md-3 w-600">
-                                                                 $123.15
-                                                            </div>
-                                                        </div>
-                                                        <div class="row align-right m-b-10">
-                                                            <div class="col-md-8">
-                                                                 Total Paid:
-                                                            </div>
-                                                            <div class="col-md-3 w-600">
-                                                                 $123.15
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
@@ -418,7 +386,7 @@
 <script src="{{ STATIC_URL }}plugins/bootstrap-switch/bootstrap-switch.js"></script>
 
 <script src="{{ STATIC_URL }}plugins/bootstrap-progressbar/bootstrap-progressbar.js"></script>
-<script src="{{ STATIC_URL }}plugins/datatables/dynamic/jquery.dataTables.min.js"></script>
+<script src="{{ STATIC_URL }}plugins/datatables/dynamic/jquery.dataTables.js"></script>
 <script src="{{ STATIC_URL }}plugins/datatables/dataTables.bootstrap.js"></script>
 <script src="{{ STATIC_URL }}plugins/datatables/dataTables.tableTools.js"></script>
 <script src="{{ STATIC_URL }}plugins/parsley/i18n/es.js"></script>
@@ -428,6 +396,18 @@
 <script>
 window.ParsleyValidator.setLocale('es');
 $(function(){
+    var nuevoPedido = $("#nuevo_pedido");
+    var articulosTable = $("#articulos_table").DataTable({
+        "paging": false,
+        "ordering": false,
+        "info": false,
+        "searching": false
+    });
+    var transaccion = null;
+    var cliente = null;
+    var forma_pago = null;
+    var vendedor = null;
+    var promocion = null;
 
     $("#cliente").submit(function(e){
         e.preventDefault();
@@ -438,12 +418,83 @@ $(function(){
 
     var selArticulo = $('#selArticulo');
     selArticulo.typeahead({
+        minLength: 3,
         source: function (query, process) {
             return $.getJSON('{% url 'venta_articulos_ajax' %}', {keyword: query}, function (result) {
                 return process(result.articulos)
             });
+        },
+        matcher: function (item){
+            return true;
+        },
+        afterSelect: function (item){
+            console.log(item);
+            //cantidad: 40codigo: "r00001"color: "Azul"color_id: 1descripcion: "Remera MC lisa"id: 648name: "Remera MC lisa Azul Small"precio: "80.00"talle: "Small"talle_id: 1
+            if (item.cantidad == 0){
+                nuevoPedido.click();
+                return;
+            }
+
+            if (transaccion === null){
+
+                // generar venta
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'generar_transaccion_ajax' %}",
+                    data: {
+                        cliente_id: cliente,
+                        articulo_id: item.id,
+                        forma_pago_id: forma_pago,
+                        vendedor_id: vendedor,
+                        promocion_id: promocion
+                    },
+                    success: function(response){
+                        transaccion = response.transaccion_id;
+                    },
+                    error: function(xhr){
+                        console.log(xhr);
+                    }
+                });
+            } else {
+                //add or update ren
+            }
+            var indexes = articulosTable.rows().eq( 0 ).filter( function (rowIdx) {
+                var contains = articulosTable.cell( rowIdx, 0 ).data() === item.codigo ? true : false;
+                if (contains) {
+                    var newValue = articulosTable.cell(rowIdx, 5).data() + 1;
+                    articulosTable.cell(rowIdx, 5).data(newValue).draw();
+                }
+                return contains;
+            } );
+            if (indexes.length > 0){
+               return;
+            }
+            articulosTable.row.add([
+                    item.codigo,
+                    item.descripcion,
+                    item.talle,
+                    item.color,
+                    item.precio,
+                    1,
+                    "<a href='#' class='delete btn btn-sm btn-default'><i class='fa fa-times-circle'></i> Remover</a>"
+            ]).draw();
         }
     });
+
+
+    /* Delete a product */
+    $("#articulos_table").on('click', "a.delete" ,  function (e) {
+        e.preventDefault();
+        if (confirm("¿Está seguro que desea eliminar el artículo?") == false) {
+            return;
+        }
+        var data = articulosTable.row(this).data();
+        articulosTable.row( $(this).parents('tr') )
+        .remove()
+        .draw();
+        // alert("Deleted! Do not forget to do some ajax to sync with backend :)");
+    });
+
 });
 </script>
 {% endblock pageLevelScripts %}

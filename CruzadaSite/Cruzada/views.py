@@ -3,11 +3,14 @@ import json
 from django.http import *
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
 from django.core.urlresolvers import reverse
 from Cruzada.models import *
 from django.core.serializers.json import DjangoJSONEncoder
 import stock_dal
+import general_dal
+
 
 # Create your views here.
 def login_user(request):
@@ -61,6 +64,7 @@ def pedido_detalle(request):
 
 
 @login_required(login_url='/login/')
+@ensure_csrf_cookie
 def venta(request):
     context = {
         'ventas': True,
@@ -83,7 +87,7 @@ def pedidos(request):
 """ AJAX VIEWS  """
 
 
-def venta_articulos(request):
+def get_articulos_venta(request):
     if request.method == 'GET':
         if request.is_ajax:
             if 'keyword' in request.GET:
@@ -91,4 +95,33 @@ def venta_articulos(request):
                 result, articulos, message = stock_dal.get_stock_ajax(request.session["persona"]["uri_stock"], keyword)
                 response = json.dumps({"articulos": articulos}, cls=DjangoJSONEncoder)
                 return HttpResponse(response, content_type="application/json")
+    return HttpResponseForbidden()
+
+
+def generar_transaccion(request):
+    # expect at least 1 article
+    if request.method == 'POST':
+        if request.is_ajax:
+            # datos de transacción
+            cliente_id = request.POST["cliente_id"]
+            vendedor_id = request.POST["vendedor_id"]
+            forma_pago_id = request.POST["forma_pago_id"]
+            promocion_id = request.POST["promocion_id"]
+
+            transaccion_id = general_dal.nueva_transaccion(cliente_id, vendedor_id, forma_pago_id, promocion_id)
+
+            if transaccion_id is not None:
+                # datos de renglón si los hay
+                if "articulo_id" in request.POST:
+                    articulo_id = request.POST["articulo_id"]
+                    result = stock_dal.update_stock(request.session["persona"]["uri_stock"], -1, articulo_id)
+
+                    if result:
+                        # insert ren
+                        articulo = stock_dal.get_articulo(articulo_id)
+                        general_dal.nuevo_renglon(articulo_id, 1, articulo["precio"], transaccion_id)
+
+                        return HttpResponse(json.dumps({"transaccion_id": transaccion_id}), content_type="application/json")
+            else:
+                return HttpResponseServerError()
     return HttpResponseForbidden()

@@ -2,6 +2,10 @@ import keyword
 
 __author__ = 'emanuel'
 import MySQLdb
+config = {"host": "192.168.203.129",
+         "user": "root",
+         "passwd": "123456",
+         "db": "cruzada"}
 
 
 def get_stock_sucursal(stock_sucursal):
@@ -14,10 +18,20 @@ def get_stock_sucursal(stock_sucursal):
             "INNER JOIN Talle AS t " \
             "ON b.talle_id = t.id" % stock_sucursal
 
-    return exec_query(query)
+    return _exec_query(query)
 
 
 def get_stock_ajax(stock_sucursal, _keyword):
+    # split keyword by spaces
+    keywords = _keyword.split(" ")
+    condition = "(b.codigo LIKE '%{keyword}%' " \
+            "OR b.descripcion LIKE '%{keyword}%' " \
+            "OR c.descripcion LIKE '%{keyword}%' " \
+            "OR t.descripcion LIKE  '%{keyword}%')"
+    conditions = []
+    for kwd in keywords:
+        conditions.append(condition.format(keyword=kwd))
+
     query = "SELECT b.*, c.descripcion AS color, t.descripcion AS talle, a.cantidad, " \
             "CONCAT(b.descripcion,' ', c.descripcion, ' ', t.descripcion) AS name " \
             "FROM {table_name} AS a " \
@@ -27,20 +41,55 @@ def get_stock_ajax(stock_sucursal, _keyword):
             "ON b.color_id = c.id " \
             "INNER JOIN Talle AS t " \
             "ON b.talle_id = t.id " \
-            "WHERE b.codigo LIKE '%{keyword}%' " \
-            "OR b.descripcion LIKE '%{keyword}%' " \
-            "OR c.descripcion LIKE '%{keyword}%' " \
-            "OR t.descripcion LIKE  '%{keyword}%' ".format(keyword=_keyword, table_name=stock_sucursal)
+            "WHERE {conditions} ".format(conditions=" AND ".join([x for x in conditions]),
+                                         table_name=stock_sucursal)
 
-    return exec_query(query)
+    return _exec_query(query)
 
 
-def exec_query(query):
-    db = MySQLdb.connect(host="192.168.203.129",
-                         user="root",
-                         passwd="123456",
-                         db="cruzada",
-                         charset='utf8')
+def update_stock(table_name, cantidad, articulo_id):
+    query = "UPDATE {table_name} SET cantidad = cantidad + {cantidad} " \
+            "WHERE articulo = {articulo_id}".format(table_name=table_name,
+                                                    cantidad=cantidad,
+                                                    articulo_id=articulo_id)
+
+    return _update_query(query)
+
+
+def get_articulo(articulo_id):
+    query = "SELECT b.*, c.descripcion AS color, t.descripcion AS talle " \
+            "FROM Articulos AS b " \
+            "INNER JOIN Colores AS c " \
+            "ON b.color_id = c.id " \
+            "INNER JOIN Talle AS t " \
+            "ON b.talle_id = t.id " \
+            "WHERE b.id = {articulo_id}".format(articulo_id=articulo_id)
+
+    result, rows_list, message = _exec_query(query)
+    return rows_list[0]
+
+
+def _update_query(query):
+    db = MySQLdb.connect(**config)
+
+    cursor = db.cursor()
+    result = True
+    try:
+        cursor.execute(query)
+        db.commit()
+
+    except Exception as e:
+        message = "Error while running query: " + str(e)
+        result = False
+
+    cursor.close()
+    db.close()
+
+    return result
+
+
+def _exec_query(query):
+    db = MySQLdb.connect(**config)
 
     rows_list = []
     cursor = db.cursor()

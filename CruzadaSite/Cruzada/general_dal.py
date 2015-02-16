@@ -1,12 +1,60 @@
 __author__ = 'emanuel'
 import MySQLdb
 
+config = {"host": "192.168.203.129",
+         "user": "root",
+         "passwd": "123456",
+         "db": "cruzada"}
 
-def exec_query(query):
-    db = MySQLdb.connect(host="192.168.203.129",
-                         user="root",
-                         passwd="123456",
-                         db="cruzada")
+
+def nueva_transaccion(cliente_id, vendedor_id, forma_pago_id, promocion_id):
+    cliente_id = 'null' if cliente_id == '' else cliente_id
+    vendedor_id = 'null' if vendedor_id == '' else vendedor_id
+    forma_pago_id = 'null' if forma_pago_id == '' else forma_pago_id
+    promocion_id = 'null' if promocion_id == '' else promocion_id
+
+    query = "INSERT INTO Transacciones (fecha,vendedor_id,forma_pago_id,cliente_id,promocion_id,tipo) " \
+            "VALUES (now(),{vendedor_id}, {forma_pago_id}, {cliente_id}, {promocion_id}, 'VENTA')".format(
+        vendedor_id=vendedor_id,
+        forma_pago_id=forma_pago_id,
+        cliente_id=cliente_id,
+        promocion_id=promocion_id)
+
+    return _insert_query(query)
+
+
+def nuevo_renglon(articulo_id, cantidad, precio_unitario, cabecera_id):
+    query = "INSERT INTO TransaccionesRen (articulo_id, cantidad, precio_unitario, cabecera_id) " \
+            "VALUES ({articulo_id}, {cantidad}, {precio_unitario}, {cabecera_id})".format(
+        articulo_id=articulo_id,
+        cantidad=cantidad,
+        precio_unitario=precio_unitario,
+        cabecera_id=cabecera_id)
+
+    _insert_query(query)
+
+
+def _insert_query(query):
+    db = MySQLdb.connect(**config)
+
+    cursor = db.cursor()
+    id = None
+
+    try:
+        cursor.execute(query)
+        id = cursor.lastrowid
+        cursor.close()
+        db.commit()
+    except Exception as e:
+        pass
+
+    db.close()
+
+    return id
+
+
+def _exec_query(query):
+    db = MySQLdb.connect(**config)
 
     rows_list = []
     cursor = db.cursor()
