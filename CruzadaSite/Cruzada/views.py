@@ -125,3 +125,23 @@ def generar_transaccion(request):
             else:
                 return HttpResponseServerError()
     return HttpResponseForbidden()
+
+
+def nuevo_cliente_ajax(request):
+    if request.method == 'POST':
+        if request.is_ajax:
+            # datos del cliente
+            nombre = request.POST["nombre"] if "nombre" in request.POST else ""
+            apellido = request.POST["apellido"] if "nombre" in request.POST else ""
+            email = request.POST["email"] if "nombre" in request.POST else ""
+            direccion = request.POST["direccion"] if "nombre" in request.POST else ""
+            dni = request.POST["dni"] if "nombre" in request.POST else 0
+            cuil = request.POST["cuil"] if "nombre" in request.POST else ""
+
+            id = general_dal.nuevo_cliente(nombre,apellido,email,direccion,dni,cuil)
+
+            if id is not None:
+                return HttpResponse(json.dumps({"result": True}), content_type="application/json")
+            return HttpResponseServerError()
+
+    return HttpResponseForbidden()

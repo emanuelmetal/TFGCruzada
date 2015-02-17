@@ -21,12 +21,89 @@
                 <div class="col-md-12">
                     <div class="tabcordion">
                         <ul id="myTab" class="nav nav-tabs">
-                            <li class="active"><a href="#order_resume" data-toggle="tab">Resumen</a></li>
-                            <li><a href="#articulos" data-toggle="tab">Artículos</a></li>
+                            <li class="active"><a href="#articulos" data-toggle="tab">Artículos</a></li>
+                            <li><a href="#order_resume" data-toggle="tab">Resumen</a></li>
                             <li><a href="#entrega" data-toggle="tab">Entrega</a></li>
                         </ul>
                         <div id="myTabContent" class="tab-content">
-                            <div class="tab-pane fade active in" id="order_resume">
+                            <div class="tab-pane fade active in" id="articulos">
+                                <div class="row p-20">
+                                    <div>
+                                        <div class="col-md-4">
+
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="input-group transparent">
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-default" id="nuevo_pedido" type="button" data-toggle="modal" data-target="#modal-online">
+                                                        <i class="fa fa-search"></i></button>
+                                                </div>
+                                                <input type="text" id="selArticulo" class="form-control" data-provide="typeahead" placeholder="Ingrese el Artículo...">
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-default" type="button"><i class="fa fa-plus"></i> Agregar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row p-20">
+                                    <div class="col-md-12">
+                                        <table id="articulos_table" class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="min-width:70px"><strong>Codigo</strong>
+                                                    <th><strong>Artículo</strong></th>
+                                                    <th><strong>Talle</strong></th>
+                                                    <th><strong>Color</strong></th>
+                                                    <th><strong>Precio</strong></th>
+                                                    <th><strong>Cantidad</strong></th>
+                                                    <th><strong>Accion</strong></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+{#                                                <tr>#}
+{#                                                    <td>000001</td>#}
+{#                                                    <td>Remera</td>#}
+{#                                                    <td>Medium</td>#}
+{#                                                    <td>Verde</td>#}
+{#                                                    <td>$25.20</td>#}
+{#                                                    <td>#}
+{#                                                        <select class="form-control">#}
+{#                                                            <option>1</option>#}
+{#                                                            <option>2</option>#}
+{#                                                            <option>3</option>#}
+{#                                                        </select>#}
+{#                                                    </td>#}
+{#                                                </tr>#}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row p-20">
+                                    <div class="col-md-12">
+                                        <div class="col-md-6 col-md-offset-6">
+                                            <div class="well">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <i class="glyph-icon flaticon-shopping80 f-80"></i>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="row align-right m-b-10">
+                                                            <div class="col-md-8">
+                                                                 Total Venta:
+                                                            </div>
+                                                            <div class="col-md-3 w-600">
+                                                                 $86
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="order_resume">
                                 <div class="row p-20">
                                     <div class="col-md-6">
                                         <h3 class="m-t-0 m-b-20">Global infos</h3>
@@ -156,83 +233,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="articulos">
-                                <div class="row p-20">
-                                    <div>
-                                        <div class="col-md-4">
-
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="input-group transparent">
-                                                <div class="input-group-btn">
-                                                    <button class="btn btn-default" id="nuevo_pedido" type="button" data-toggle="modal" data-target="#modal-online">
-                                                        <i class="fa fa-search"></i></button>
-                                                </div>
-                                                <input type="text" id="selArticulo" class="form-control" data-provide="typeahead" placeholder="Ingrese el Artículo...">
-                                                <div class="input-group-btn">
-                                                    <button class="btn btn-default" type="button"><i class="fa fa-plus"></i> Agregar</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row p-20">
-                                    <div class="col-md-12">
-                                        <table id="articulos_table" class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th style="min-width:70px"><strong>Codigo</strong>
-                                                    <th><strong>Artículo</strong></th>
-                                                    <th><strong>Talle</strong></th>
-                                                    <th><strong>Color</strong></th>
-                                                    <th><strong>Precio</strong></th>
-                                                    <th><strong>Cantidad</strong></th>
-                                                    <th><strong>Accion</strong></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-{#                                                <tr>#}
-{#                                                    <td>000001</td>#}
-{#                                                    <td>Remera</td>#}
-{#                                                    <td>Medium</td>#}
-{#                                                    <td>Verde</td>#}
-{#                                                    <td>$25.20</td>#}
-{#                                                    <td>#}
-{#                                                        <select class="form-control">#}
-{#                                                            <option>1</option>#}
-{#                                                            <option>2</option>#}
-{#                                                            <option>3</option>#}
-{#                                                        </select>#}
-{#                                                    </td>#}
-{#                                                </tr>#}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="row p-20">
-                                    <div class="col-md-12">
-                                        <div class="col-md-6 col-md-offset-6">
-                                            <div class="well">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <i class="glyph-icon flaticon-shopping80 f-80"></i>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="row align-right m-b-10">
-                                                            <div class="col-md-8">
-                                                                 Total Venta:
-                                                            </div>
-                                                            <div class="col-md-3 w-600">
-                                                                 $86
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="tab-pane fade" id="entrega">
                                 <div class="row p-20">
                                     <div class="col-md-6">
@@ -260,56 +260,8 @@
                                     <div class="col-md-12">
                                         <form class="form-horizontal">
                                             <div class="col-md-6">
-                                                <h3 class="m-t-0 m-b-20">Información del cliente: </h3>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Customer Name:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong><a href="#" data-rel="tooltip" title="Edit customer">John Miller</a></strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Address:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>152, 33 Street</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">City:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>New York</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Country:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>USA</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Phone Number:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>868 584 547</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Email:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>jmiller@outlook.com</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Past Orders:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>3</strong>
-                                                    </div>
-                                                </div>
+                                                <h3 id="infoCliente" class="m-t-0 m-b-20">Información del cliente: </h3>
+
                                             </div>
                                             <div class="col-md-6">
                                                 <h3 class="m-t-0 m-b-20">Forma de Pago</h3>
@@ -403,6 +355,10 @@ $(function(){
         "info": false,
         "searching": false
     });
+    var clienteSubmit = $("#clienteSubmit");
+    var modalCliente = $("#modal-cliente");
+    var formCliente = $("#cliente");
+    var infoCliente = $("#infoCliente");
     var transaccion = null;
     var cliente = null;
     var forma_pago = null;
@@ -493,6 +449,26 @@ $(function(){
         .remove()
         .draw();
         // alert("Deleted! Do not forget to do some ajax to sync with backend :)");
+    });
+
+    clienteSubmit.click(function(){
+        if (confirm("¿Está seguro que desea agregar un Cliente?") == true){
+            var formData = formCliente.serializeObject();
+            var template = _.template($("script.template").html());
+            infoCliente.after(template(formData));
+
+{#            $.ajax({#}
+{#                type: "POST",#}
+{#                url: "{% url 'nuevo_cliente_ajax' %}",#}
+{#                data: $("#cliente").serialize(),#}
+{#                success: function(response){#}
+{#                    modalCliente.modal("hide");#}
+{#                },#}
+{#                error: function(xhr){#}
+{#                    console.log(xhr);#}
+{#                }#}
+{#            });#}
+        }
     });
 
 });

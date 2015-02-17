@@ -19,4 +19,5 @@ urlpatterns = patterns('',
     ### AJAX URLs ###
     url(r'^venta_articulos_ajax/$', 'Cruzada.views.get_articulos_venta', name='venta_articulos_ajax'),
     url(r'^generar_transaccion_ajax/$', 'Cruzada.views.generar_transaccion', name='generar_transaccion_ajax'),
+    url(r'^nuevo_cliente_ajax/$', 'Cruzada.views.nuevo_cliente_ajax', name='nuevo_cliente_ajax'),
 )

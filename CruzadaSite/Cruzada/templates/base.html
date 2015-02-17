@@ -196,6 +196,7 @@
     <script src="{{ STATIC_URL }}plugins/numerator/jquery-numerator.js"></script>
     <script src="{{ STATIC_URL }}plugins/jquery.cookie.min.js" type="text/javascript"></script>
     <script src="{{ STATIC_URL }}plugins/bootstrap3-typeahead.min.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}plugins/underscore/underscore.js" type="text/javascript"></script>
 
 
     <!-- END MANDATORY SCRIPTS -->
@@ -211,6 +212,23 @@
                 }
             });
         });
+
+        $.fn.serializeObject = function()
+        {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function() {
+                if (o[this.name] !== undefined) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
         </script>
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
     {% block pageLevelScripts %}

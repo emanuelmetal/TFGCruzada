@@ -34,6 +34,14 @@ def nuevo_renglon(articulo_id, cantidad, precio_unitario, cabecera_id):
     _insert_query(query)
 
 
+def nuevo_cliente(nombre,apellido,email,direccion,dni,cuil):
+    query = "INSERT INTO Personas (nombre,apellido,email,direccion,dni,cuil,categoria_id,sucursal_id,rol_id,user_id) " \
+            "VALUES ('{nombre}','{apellido}','{email}','{direccion}',{dni},'{cuil}',1,null,null,null) " \
+            "".format(nombre=nombre, apellido=apellido, email=email, direccion=direccion, dni=dni, cuil=cuil)
+
+    return _insert_query(query)
+
+
 def _insert_query(query):
     db = MySQLdb.connect(**config)
 
