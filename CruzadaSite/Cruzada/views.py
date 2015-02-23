@@ -98,6 +98,28 @@ def get_articulos_venta(request):
     return HttpResponseForbidden()
 
 
+def get_clientes_venta(request):
+    if request.method == 'GET':
+        if request.is_ajax:
+            if 'keyword' in request.GET:
+                keyword = request.GET["keyword"]
+                result, clientes, message = general_dal.get_cliente_ajax(keyword)
+                response = json.dumps({"clientes": clientes}, cls=DjangoJSONEncoder)
+                return HttpResponse(response, content_type="application/json")
+    return HttpResponseForbidden()
+
+
+def get_forma_pago_venta(request):
+    if request.method == 'GET':
+        if request.is_ajax:
+            if 'keyword' in request.GET:
+                keyword = request.GET["keyword"]
+                result, formasPago, message = general_dal.get_forma_pago_ajax(keyword)
+                response = json.dumps({"formasPago": formasPago}, cls=DjangoJSONEncoder)
+                return HttpResponse(response, content_type="application/json")
+    return HttpResponseForbidden()
+
+
 def generar_transaccion(request):
     # expect at least 1 article
     if request.method == 'POST':

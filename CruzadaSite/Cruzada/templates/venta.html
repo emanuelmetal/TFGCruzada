@@ -11,11 +11,19 @@
 
 {% block content %}
         <div id="main-content">
-            <div class="page-title">
-                <i class="icon-custom-left"></i>
-                <h3><img class="m-r-20" src="{{ STATIC_URL }}img/various/invoice.png" alt="invoice"><strong>Order n° 547 578 528</strong>
-                    <small>May 18, 2014 10:21</small></h3>
-                <br>
+            <div class="row">
+                <div class="col-md-8 vcenter">
+                    <div class="page-title">
+                        <i class="icon-custom-left"></i>
+                        <h3><img class="m-r-20" src="{{ STATIC_URL }}img/various/invoice.png" alt="invoice"><strong>Order n° 547 578 528</strong>
+                            <small>May 18, 2014 10:21</small></h3>
+                    </div>
+                </div><!--
+             --><div class="col-md-4 vcenter">
+
+                        <a href="ecommerce_product_view.html" class="btn btn-success m-t-10 pull-right"><i class="fa fa-save"></i></i> Guardar</a>
+
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -241,7 +249,7 @@
                                                 <button class="btn btn-default" type="button" id="nuevoCliente" data-toggle="modal" data-target="#modal-cliente">
                                                     <i class="fa fa-user"></i> Nuevo</button>
                                             </div>
-                                            <input type="text" class="form-control" placeholder="Ingrese Cliente...">
+                                            <input type="text" id="selCliente" class="form-control" data-provide="typeahead" placeholder="Ingrese Cliente...">
                                             <div class="input-group-btn">
                                                 <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
                                             </div>
@@ -249,7 +257,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="input-group transparent">
-                                            <input type="text" class="form-control" placeholder="Ingrese Medio de Pago...">
+                                            <input type="text" id="selMedioPago" class="form-control" data-provide="typeahead" placeholder="Ingrese Medio de Pago...">
                                             <div class="input-group-btn">
                                                 <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
                                             </div>
@@ -260,59 +268,15 @@
                                     <div class="col-md-12">
                                         <form class="form-horizontal">
                                             <div class="col-md-6">
-                                                <h3 id="infoCliente" class="m-t-0 m-b-20">Información del cliente: </h3>
+                                                <h3 class="m-t-0 m-b-20">Información del cliente: </h3>
+                                                <div id="infoCliente">
 
+                                                </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <h3 class="m-t-0 m-b-20">Forma de Pago</h3>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Delivery Address Name:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>Amanda Brown</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Address:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>72, Perk Avenue</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">City:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>New York</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Country:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>USA</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Phone Number:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>665 754 325</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Fax Number:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>665 754 998</strong>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="col-sm-4">Email:
-                                                    </div>
-                                                    <div class="col-sm-8">
-                                                        <strong>abown@gmail.com</strong>
-                                                    </div>
+                                                <div id="infoFormaPago">
+
                                                 </div>
                                             </div>
                                         </form>
@@ -344,7 +308,29 @@
 <script src="{{ STATIC_URL }}plugins/parsley/i18n/es.js"></script>
 <script src="{{ STATIC_URL }}plugins/parsley/parsley.min.js"></script>
 <script src="{{ STATIC_URL }}plugins/parsley/parsley.extend.js"></script>
-
+<script  type="text/template" class="formaPagoTemplate">
+    <div class="form-group">
+        <div class="col-sm-4">Forma:
+        </div>
+        <div class="col-sm-8">
+            <strong><%= nombre %></strong>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-4">Descripción:
+        </div>
+        <div class="col-sm-8">
+            <strong><%= descripcion %></strong>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-4">Recargo:
+        </div>
+        <div class="col-sm-8">
+            <strong><%= recargo * 100 %>% </strong>
+        </div>
+    </div>
+</script>
 <script>
 window.ParsleyValidator.setLocale('es');
 $(function(){
@@ -359,20 +345,26 @@ $(function(){
     var modalCliente = $("#modal-cliente");
     var formCliente = $("#cliente");
     var infoCliente = $("#infoCliente");
+    var infoFormaPago = $("#infoFormaPago");
+    var selArticulo = $('#selArticulo');
+    var selCliente = $("#selCliente");
+    var selMedioPago = $("#selMedioPago");
+    var clienteReset = $("#clienteReset");
     var transaccion = null;
     var cliente = null;
     var forma_pago = null;
     var vendedor = null;
     var promocion = null;
+    var infoCliTemplate = _.template($("script.template").html());
+    var infoFPTemplate = _.template($("script.formaPagoTemplate").html());
 
-    $("#cliente").submit(function(e){
+    formCliente.submit(function(e){
         e.preventDefault();
 {#        if (true === $(this).parsley().isValid()) { // if form validation is successful#}
 {#            submitForm();#}
 {#        }#}
     });
 
-    var selArticulo = $('#selArticulo');
     selArticulo.typeahead({
         minLength: 3,
         source: function (query, process) {
@@ -437,6 +429,35 @@ $(function(){
         }
     });
 
+    selCliente.typeahead({
+        minLength: 3,
+        source: function (query, process) {
+            return $.getJSON('{% url 'venta_clientes_ajax' %}', {keyword: query}, function (result) {
+                return process(result.clientes)
+            });
+        },
+        matcher: function (item){
+            return true;
+        },
+        afterSelect: function (item){
+            infoCliente.html(infoCliTemplate(item));
+        }
+    });
+
+    selMedioPago.typeahead({
+        minLength: 3,
+        source: function (query, process) {
+            return $.getJSON('{% url 'venta_fp_ajax' %}', {keyword: query}, function (result) {
+                return process(result.formasPago)
+            });
+        },
+        matcher: function (item){
+            return true;
+        },
+        afterSelect: function (item){
+            infoFormaPago.html(infoFPTemplate(item));
+        }
+    });
 
     /* Delete a product */
     $("#articulos_table").on('click', "a.delete" ,  function (e) {
@@ -454,8 +475,8 @@ $(function(){
     clienteSubmit.click(function(){
         if (confirm("¿Está seguro que desea agregar un Cliente?") == true){
             var formData = formCliente.serializeObject();
-            var template = _.template($("script.template").html());
-            infoCliente.after(template(formData));
+
+            infoCliente.html(infoCliTemplate(formData));
 
 {#            $.ajax({#}
 {#                type: "POST",#}
@@ -468,6 +489,9 @@ $(function(){
 {#                    console.log(xhr);#}
 {#                }#}
 {#            });#}
+            clienteReset.click();
+            modalCliente.modal("hide");
+
         }
     });
 

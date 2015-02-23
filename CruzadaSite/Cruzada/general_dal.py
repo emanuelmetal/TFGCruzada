@@ -4,7 +4,8 @@ import MySQLdb
 config = {"host": "192.168.203.129",
          "user": "root",
          "passwd": "123456",
-         "db": "cruzada"}
+         "db": "cruzada",
+         "charset": "utf8"}
 
 
 def nueva_transaccion(cliente_id, vendedor_id, forma_pago_id, promocion_id):
@@ -59,6 +60,35 @@ def _insert_query(query):
     db.close()
 
     return id
+
+
+def get_cliente_ajax(_keyword):
+    # split keyword by spaces
+    keywords = _keyword.split(" ")
+    condition = "(nombre LIKE '%{keyword}%' " \
+            "OR apellido LIKE '%{keyword}%' " \
+            "OR CAST(dni AS CHAR) = '%{keyword}%')"
+    conditions = []
+    for kwd in keywords:
+        conditions.append(condition.format(keyword=kwd))
+
+    query = "SELECT nombre, apellido, dni, email, cuil, direccion, " \
+            "CONCAT(nombre, ' ', apellido, ' ', dni, ' ', email) AS name " \
+            "FROM Personas " \
+            "WHERE categoria_id = 1 AND {conditions} ".format(conditions=" AND ".join([x for x in conditions]))
+
+    return _exec_query(query)
+
+
+def get_forma_pago_ajax(_keyword):
+
+    query = "SELECT a.descripcion, a.recargo, b.nombre, CONCAT(a.descripcion, ' - ', b.nombre) AS name " \
+            "FROM MediosDePago AS a " \
+            "INNER JOIN TipoMedioPago b " \
+            "ON a.tipo_medio_id = b.id " \
+            "WHERE descripcion LIKE '%{keyword}%' ".format(keyword=_keyword)
+
+    return _exec_query(query)
 
 
 def _exec_query(query):

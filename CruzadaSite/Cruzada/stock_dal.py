@@ -5,7 +5,8 @@ import MySQLdb
 config = {"host": "192.168.203.129",
          "user": "root",
          "passwd": "123456",
-         "db": "cruzada"}
+         "db": "cruzada",
+         "charset": "utf8"}
 
 
 def get_stock_sucursal(stock_sucursal):
