@@ -20,9 +20,7 @@
                     </div>
                 </div><!--
              --><div class="col-md-4 vcenter">
-
                         <a href="ecommerce_product_view.html" class="btn btn-success m-t-10 pull-right"><i class="fa fa-save"></i></i> Guardar</a>
-
                 </div>
             </div>
             <div class="row">
@@ -98,10 +96,22 @@
                                                     <div class="col-md-6">
                                                         <div class="row align-right m-b-10">
                                                             <div class="col-md-8">
+                                                                 Subtotal:
+                                                            </div>
+                                                            <div id="subtotal" class="col-md-3 w-600">
+
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                 Recargo:
+                                                            </div>
+                                                            <div id="recargo" class="col-md-3 w-600">
+
+                                                            </div>
+                                                            <div class="col-md-8">
                                                                  Total Venta:
                                                             </div>
-                                                            <div class="col-md-3 w-600">
-                                                                 $86
+                                                            <div id="totalVenta" class="col-md-3 w-600">
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -350,11 +360,18 @@ $(function(){
     var selCliente = $("#selCliente");
     var selMedioPago = $("#selMedioPago");
     var clienteReset = $("#clienteReset");
+    var divSubtotal = $("#subtotal");
+    var divRecargo = $("#recargo");
+    var divTotalVenta = $("#totalVenta");
     var transaccion = null;
     var cliente = null;
     var forma_pago = null;
     var vendedor = null;
     var promocion = null;
+    var subtotal = 0;
+    var recargo = 0;
+    var totalVenta = 0;
+    var indiceRecargo = 0;
     var infoCliTemplate = _.template($("script.template").html());
     var infoFPTemplate = _.template($("script.formaPagoTemplate").html());
 
@@ -386,26 +403,30 @@ $(function(){
             if (transaccion === null){
 
                 // generar venta
-                $.ajax({
-                    type: "POST",
-                    url: "{% url 'generar_transaccion_ajax' %}",
-                    data: {
-                        cliente_id: cliente,
-                        articulo_id: item.id,
-                        forma_pago_id: forma_pago,
-                        vendedor_id: vendedor,
-                        promocion_id: promocion
-                    },
-                    success: function(response){
-                        transaccion = response.transaccion_id;
-                    },
-                    error: function(xhr){
-                        console.log(xhr);
-                    }
-                });
+                transaccion = 1;
+{#                $.ajax({#}
+{#                    type: "POST",#}
+{#                    url: "{% url 'generar_transaccion_ajax' %}",#}
+{#                    data: {#}
+{#                        cliente_id: cliente,#}
+{#                        articulo_id: item.id,#}
+{#                        forma_pago_id: forma_pago,#}
+{#                        vendedor_id: vendedor,#}
+{#                        promocion_id: promocion#}
+{#                    },#}
+{#                    success: function(response){#}
+{#                        transaccion = response.transaccion_id;#}
+{#                    },#}
+{#                    error: function(xhr){#}
+{#                        console.log(xhr);#}
+{#                    }#}
+{#                });#}
             } else {
                 //add or update ren
             }
+
+            sumarVenta(parseFloat(item.precio));
+
             var indexes = articulosTable.rows().eq( 0 ).filter( function (rowIdx) {
                 var contains = articulosTable.cell( rowIdx, 0 ).data() === item.codigo ? true : false;
                 if (contains) {
@@ -456,20 +477,26 @@ $(function(){
         },
         afterSelect: function (item){
             infoFormaPago.html(infoFPTemplate(item));
+            indiceRecargo = parseFloat(item.recargo);
+            recargarVenta();
         }
     });
 
     /* Delete a product */
-    $("#articulos_table").on('click', "a.delete" ,  function (e) {
+    $("#articulos_table tbody").on('click', "tr a.delete" ,  function (e) {
         e.preventDefault();
         if (confirm("¿Está seguro que desea eliminar el artículo?") == false) {
             return;
         }
-        var data = articulosTable.row(this).data();
+        var row = articulosTable.row( $(this).parents('tr') );
+        var data = row.data();
+
         articulosTable.row( $(this).parents('tr') )
         .remove()
         .draw();
         // alert("Deleted! Do not forget to do some ajax to sync with backend :)");
+        restarVenta(data[4], data[5]);
+
     });
 
     clienteSubmit.click(function(){
@@ -494,6 +521,31 @@ $(function(){
 
         }
     });
+
+    function sumarVenta(precio){
+        subtotal += precio;
+        recargo = subtotal * indiceRecargo;
+        totalVenta = subtotal + recargo;
+        divSubtotal.html("$" + subtotal);
+        divRecargo.html("$" + recargo);
+        divTotalVenta.html("$" + totalVenta);
+    }
+
+    function restarVenta(precio, cantidad){
+        subtotal = subtotal - parseFloat(precio) * parseFloat(cantidad);
+        recargo = subtotal * indiceRecargo;
+        totalVenta = subtotal + recargo;
+        divSubtotal.html("$" + subtotal);
+        divRecargo.html("$" + recargo);
+        divTotalVenta.html("$" + totalVenta);
+    }
+
+    function recargarVenta(){
+        recargo = subtotal * indiceRecargo;
+        totalVenta = subtotal + recargo;
+        divRecargo.html("$" + recargo);
+        divTotalVenta.html("$" + totalVenta);
+    }
 
 });
 </script>
