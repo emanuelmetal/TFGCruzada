@@ -374,12 +374,25 @@ $(function(){
     var indiceRecargo = 0;
     var infoCliTemplate = _.template($("script.template").html());
     var infoFPTemplate = _.template($("script.formaPagoTemplate").html());
+    var selItem = null;
 
     formCliente.submit(function(e){
         e.preventDefault();
 {#        if (true === $(this).parsley().isValid()) { // if form validation is successful#}
 {#            submitForm();#}
 {#        }#}
+    });
+
+    selArticulo.on("keypress", function(e){
+        if(e.keyCode == 13){
+            sumarVenta(parseFloat(selItem.precio));
+            if (updateTableRow(selItem)){
+                updateRen(selItem);
+            } else {
+                addRen(selItem);
+            }
+
+        }
     });
 
     selArticulo.typeahead({
@@ -394,6 +407,7 @@ $(function(){
         },
         afterSelect: function (item){
             console.log(item);
+            selItem = item;
             //cantidad: 40codigo: "r00001"color: "Azul"color_id: 1descripcion: "Remera MC lisa"id: 648name: "Remera MC lisa Azul Small"precio: "80.00"talle: "Small"talle_id: 1
             if (item.cantidad == 0){
                 nuevoPedido.click();
@@ -403,13 +417,12 @@ $(function(){
             if (transaccion === null){
 
                 // generar venta
-                transaccion = 1;
+                transaccion = 15;
 {#                $.ajax({#}
 {#                    type: "POST",#}
 {#                    url: "{% url 'generar_transaccion_ajax' %}",#}
 {#                    data: {#}
 {#                        cliente_id: cliente,#}
-{#                        articulo_id: item.id,#}
 {#                        forma_pago_id: forma_pago,#}
 {#                        vendedor_id: vendedor,#}
 {#                        promocion_id: promocion#}
@@ -427,17 +440,14 @@ $(function(){
 
             sumarVenta(parseFloat(item.precio));
 
-            var indexes = articulosTable.rows().eq( 0 ).filter( function (rowIdx) {
-                var contains = articulosTable.cell( rowIdx, 0 ).data() === item.codigo ? true : false;
-                if (contains) {
-                    var newValue = articulosTable.cell(rowIdx, 5).data() + 1;
-                    articulosTable.cell(rowIdx, 5).data(newValue).draw();
-                }
-                return contains;
-            } );
-            if (indexes.length > 0){
-               return;
+            if (updateTableRow(item)){
+                updateRen(item);
+                return
+            } else {
+                addRen(item)
+
             }
+
             articulosTable.row.add([
                     item.codigo,
                     item.descripcion,
@@ -449,6 +459,54 @@ $(function(){
             ]).draw();
         }
     });
+
+    function updateRen(item) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'updateRen_ajax' %}",
+            data: {
+                articulo_id: item.id,
+                transaccion_id: transaccion
+            },
+            success: function(response){
+                console.log(response);
+            },
+            error: function(xhr){
+                console.log(xhr);
+            }
+        });
+    }
+
+    function addRen(item) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'addRen_ajax' %}",
+            data: {
+                articulo_id: item.id,
+                transaccion_id: transaccion
+            },
+            success: function(response){
+                console.log(response);
+            },
+            error: function(xhr){
+                console.log(xhr);
+            }
+        });
+    }
+
+    function updateTableRow(item){
+
+        var indexes = articulosTable.rows().eq( 0 ).filter( function (rowIdx) {
+            var contains = articulosTable.cell( rowIdx, 0 ).data() === item.codigo;
+            if (contains) {
+                var newValue = articulosTable.cell(rowIdx, 5).data() + 1;
+                articulosTable.cell(rowIdx, 5).data(newValue).draw();
+            }
+            return contains;
+        } );
+        return indexes.length > 0;
+
+    }
 
     selCliente.typeahead({
         minLength: 3,

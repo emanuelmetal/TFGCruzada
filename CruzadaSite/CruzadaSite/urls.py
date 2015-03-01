@@ -22,4 +22,6 @@ urlpatterns = patterns('',
     url(r'^nuevo_cliente_ajax/$', 'Cruzada.views.nuevo_cliente_ajax', name='nuevo_cliente_ajax'),
     url(r'^venta_clientes_ajax/$', 'Cruzada.views.get_clientes_venta', name='venta_clientes_ajax'),
     url(r'^venta_fp_ajax/$', 'Cruzada.views.get_forma_pago_venta', name='venta_fp_ajax'),
+    url(r'^venta_update_ren_ajax/$', 'Cruzada.views.updateRen_ajax', name='updateRen_ajax'),
+    url(r'^venta_add_ren_ajax/$', 'Cruzada.views.addRen_ajax', name='addRen_ajax'),
 )

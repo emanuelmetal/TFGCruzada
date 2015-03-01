@@ -35,31 +35,21 @@ def nuevo_renglon(articulo_id, cantidad, precio_unitario, cabecera_id):
     _insert_query(query)
 
 
+def update_renglon(articulo_id, cabecera_id):
+    query = "UPDATE TransaccionesRen SET cantidad = cantidad + 1 " \
+            "WHERE cabecera_id = {cabecera_id} AND articulo_id = {articulo_id}".format(
+        articulo_id=articulo_id,
+        cabecera_id=cabecera_id)
+
+    return _update_query(query)
+
+
 def nuevo_cliente(nombre,apellido,email,direccion,dni,cuil):
     query = "INSERT INTO Personas (nombre,apellido,email,direccion,dni,cuil,categoria_id,sucursal_id,rol_id,user_id) " \
             "VALUES ('{nombre}','{apellido}','{email}','{direccion}',{dni},'{cuil}',1,null,null,null) " \
             "".format(nombre=nombre, apellido=apellido, email=email, direccion=direccion, dni=dni, cuil=cuil)
 
     return _insert_query(query)
-
-
-def _insert_query(query):
-    db = MySQLdb.connect(**config)
-
-    cursor = db.cursor()
-    id = None
-
-    try:
-        cursor.execute(query)
-        id = cursor.lastrowid
-        cursor.close()
-        db.commit()
-    except Exception as e:
-        pass
-
-    db.close()
-
-    return id
 
 
 def get_cliente_ajax(_keyword):
@@ -90,6 +80,44 @@ def get_forma_pago_ajax(_keyword):
 
     return _exec_query(query)
 
+
+def _insert_query(query):
+    db = MySQLdb.connect(**config)
+
+    cursor = db.cursor()
+    id = None
+
+    try:
+        cursor.execute(query)
+        id = cursor.lastrowid
+        cursor.close()
+        db.commit()
+    except Exception as e:
+        pass
+
+    db.close()
+
+    return id
+
+
+def _update_query(query):
+    db = MySQLdb.connect(**config)
+
+    cursor = db.cursor()
+    id = None
+
+    try:
+        cursor.execute(query)
+        cursor.close()
+        db.commit()
+        result = True
+    except Exception as e:
+        db.rollback()
+        result = False
+
+    db.close()
+
+    return result
 
 def _exec_query(query):
     db = MySQLdb.connect(**config)

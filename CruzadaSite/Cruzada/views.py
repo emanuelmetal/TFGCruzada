@@ -134,18 +134,18 @@ def generar_transaccion(request):
 
             if transaccion_id is not None:
                 # datos de renglón si los hay
-                if "articulo_id" in request.POST:
-                    articulo_id = request.POST["articulo_id"]
-                    result = stock_dal.update_stock(request.session["persona"]["uri_stock"], -1, articulo_id)
+                # if "articulo_id" in request.POST:
+                #     articulo_id = request.POST["articulo_id"]
+                #     result = stock_dal.update_stock(request.session["persona"]["uri_stock"], -1, articulo_id)
+                #
+                #     if result:
+                #         # insert ren
+                #         articulo = stock_dal.get_articulo(articulo_id)
+                #         general_dal.nuevo_renglon(articulo_id, 1, articulo["precio"], transaccion_id)
+                #
+                return HttpResponse(json.dumps({"transaccion_id": transaccion_id}), content_type="application/json")
 
-                    if result:
-                        # insert ren
-                        articulo = stock_dal.get_articulo(articulo_id)
-                        general_dal.nuevo_renglon(articulo_id, 1, articulo["precio"], transaccion_id)
-
-                        return HttpResponse(json.dumps({"transaccion_id": transaccion_id}), content_type="application/json")
-            else:
-                return HttpResponseServerError()
+            return HttpResponseServerError()
     return HttpResponseForbidden()
 
 
@@ -167,3 +167,55 @@ def nuevo_cliente_ajax(request):
             return HttpResponseServerError()
 
     return HttpResponseForbidden()
+
+
+def addRen_ajax(request):
+    if request.method == 'POST':
+        if request.is_ajax:
+
+            if "transaccion_id" in request.POST:
+
+                transaccion_id = request.POST["transaccion_id"]
+
+                if "articulo_id" in request.POST:
+
+                    articulo_id = request.POST["articulo_id"]
+                    result = stock_dal.update_stock(request.session["persona"]["uri_stock"], -1, articulo_id)
+
+                    if result:
+                        # insert ren
+                        articulo = stock_dal.get_articulo(articulo_id)
+                        general_dal.nuevo_renglon(articulo_id, 1, articulo["precio"], transaccion_id)
+
+                return HttpResponse(json.dumps({"transaccion_id": transaccion_id}), content_type="application/json")
+
+            return HttpResponseServerError()
+    return HttpResponseForbidden()
+
+
+def updateRen_ajax(request):
+    if request.method == 'POST':
+        if request.is_ajax:
+
+            transaccion_id = request.POST["transaccion_id"]
+
+            if transaccion_id is not None:
+                # datos de renglón si los hay
+                if "articulo_id" in request.POST:
+                    articulo_id = request.POST["articulo_id"]
+                    result = True
+                    #result = stock_dal.update_stock(request.session["persona"]["uri_stock"], -1, articulo_id)
+
+                    if result:
+                        # update ren
+                        result = general_dal.update_renglon(articulo_id, transaccion_id)
+
+                        return HttpResponse(json.dumps({"result": result}), content_type="application/json")
+
+            return HttpResponseServerError()
+
+    return HttpResponseForbidden()
+
+
+def removeRen_ajax(request):
+    pass
