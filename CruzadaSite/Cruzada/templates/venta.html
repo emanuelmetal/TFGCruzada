@@ -64,6 +64,7 @@
                                                     <th><strong>Precio</strong></th>
                                                     <th><strong>Cantidad</strong></th>
                                                     <th><strong>Accion</strong></th>
+                                                    <th><strong>Id</strong></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -349,7 +350,13 @@ $(function(){
         "paging": false,
         "ordering": false,
         "info": false,
-        "searching": false
+        "searching": false,
+        "columnDefs": [
+            {
+                "targets": [ 7 ],
+                "visible": false
+            }
+        ]
     });
     var clienteSubmit = $("#clienteSubmit");
     var modalCliente = $("#modal-cliente");
@@ -384,15 +391,18 @@ $(function(){
     });
 
     selArticulo.on("keypress", function(e){
-        if(e.keyCode == 13){
+        if(e.keyCode == 13 && selItem !== null){
             sumarVenta(parseFloat(selItem.precio));
             if (updateTableRow(selItem)){
                 updateRen(selItem);
             } else {
                 addRen(selItem);
             }
-
         }
+    });
+
+    selArticulo.on("blur", function(e){
+        clearItem();
     });
 
     selArticulo.typeahead({
@@ -455,7 +465,8 @@ $(function(){
                     item.color,
                     item.precio,
                     1,
-                    "<a href='#' class='delete btn btn-sm btn-default'><i class='fa fa-times-circle'></i> Remover</a>"
+                    "<a href='#' class='delete btn btn-sm btn-default'><i class='fa fa-times-circle'></i> Remover</a>",
+                    item.id
             ]).draw();
         }
     });
@@ -549,12 +560,30 @@ $(function(){
         var row = articulosTable.row( $(this).parents('tr') );
         var data = row.data();
 
+        var precio = data[4];
+        var cantidad = data[5];
+        var id = data[7];
         articulosTable.row( $(this).parents('tr') )
         .remove()
         .draw();
         // alert("Deleted! Do not forget to do some ajax to sync with backend :)");
-        restarVenta(data[4], data[5]);
-
+        $.ajax({
+            type: "POST",
+            url: "{% url 'delRen_ajax' %}",
+            data: {
+                articulo_id: id,
+                transaccion_id: transaccion,
+                cantidad: cantidad
+            },
+            success: function(response){
+                console.log(response);
+            },
+            error: function(xhr){
+                console.log(xhr);
+            }
+        });
+        restarVenta(precio, cantidad);
+        clearItem();
     });
 
     clienteSubmit.click(function(){
@@ -603,6 +632,11 @@ $(function(){
         totalVenta = subtotal + recargo;
         divRecargo.html("$" + recargo);
         divTotalVenta.html("$" + totalVenta);
+    }
+
+    function clearItem(){
+        selItem = null;
+        selArticulo.val("");
     }
 
 });

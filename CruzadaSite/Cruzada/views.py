@@ -217,5 +217,27 @@ def updateRen_ajax(request):
     return HttpResponseForbidden()
 
 
-def removeRen_ajax(request):
-    pass
+def deleteRen_ajax(request):
+    if request.method == 'POST':
+        if request.is_ajax:
+
+            transaccion_id = request.POST["transaccion_id"]
+
+            if transaccion_id is not None:
+                # datos de renglón si los hay
+                if "articulo_id" in request.POST:
+                    articulo_id = request.POST["articulo_id"]
+                    cantidad = request.POST["cantidad"]
+
+                    result = True
+                    #result = stock_dal.update_stock(request.session["persona"]["uri_stock"], cantidad, articulo_id)
+
+                    if result:
+                        # delete ren
+                        result = general_dal.delete_renglon(articulo_id, transaccion_id)
+
+                        return HttpResponse(json.dumps({"result": result}), content_type="application/json")
+
+            return HttpResponseServerError()
+
+    return HttpResponseForbidden()

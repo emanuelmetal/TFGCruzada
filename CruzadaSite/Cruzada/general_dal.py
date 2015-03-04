@@ -44,6 +44,15 @@ def update_renglon(articulo_id, cabecera_id):
     return _update_query(query)
 
 
+def delete_renglon(articulo_id, cabecera_id):
+    query = "DELETE FROM TransaccionesRen " \
+            "WHERE cabecera_id = {cabecera_id} AND articulo_id = {articulo_id}".format(
+        articulo_id=articulo_id,
+        cabecera_id=cabecera_id)
+
+    return _update_query(query)
+
+
 def nuevo_cliente(nombre,apellido,email,direccion,dni,cuil):
     query = "INSERT INTO Personas (nombre,apellido,email,direccion,dni,cuil,categoria_id,sucursal_id,rol_id,user_id) " \
             "VALUES ('{nombre}','{apellido}','{email}','{direccion}',{dni},'{cuil}',1,null,null,null) " \
@@ -104,7 +113,6 @@ def _update_query(query):
     db = MySQLdb.connect(**config)
 
     cursor = db.cursor()
-    id = None
 
     try:
         cursor.execute(query)
