@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block pageLevelStyle   %}
+
+<link rel="stylesheet" href="{{ STATIC_URL }}plugins/datatables/dataTables.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}plugins/datatables/dataTables.tableTools.css">
+{% endblock pageLevelStyle %}
+
+
+{% block body %}
+<body data-page="products">
+{% endblock body %}
+
+
+{% block content %}
+    <div id="main-content">
+        <div class="m-b-20 clearfix">
+            <div class="page-title pull-left">
+                <h3 class="pull-left"><strong>Gestionar Ventas</strong></h3>
+            </div>
+             <div class="pull-right">
+                <a href="{% url 'venta' %}" class="btn btn-success m-t-10"><i class="fa fa-plus p-r-10"></i>Nueva Venta</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12 table-responsive">
+                                <table id="articulos-table" class="table table-tools table-hover order-column">
+                                    <thead>
+                                        <tr>
+                                            <th style="min-width:70px"><strong>Nro Venta</strong></th>
+                                            <th class="dt-center"><strong>Fecha</strong>
+                                            </th>
+                                            <th class="dt-center"><strong>Forma de Pago</strong>
+                                            </th>
+                                            <th class="dt-center"><strong>Cliente</strong>
+                                            </th>
+                                            <th class="dt-center"><strong>Estado</strong>
+                                            </th>
+                                            <th class="dt-center"><strong>Artículos</strong>
+                                            </th>
+                                            <th class="dt-center"><strong>Acciones</strong>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody >
+                                        {% for venta in lista_ventas %}
+                                        <tr>
+                                            <td class="dt-center">{{ venta.id|stringformat:"010d" }}</td>
+                                            <td class="dt-center">{{ venta.fecha }}</td>
+                                            <td class="dt-center">{{ venta.forma_pago }}</td>
+                                            <td class="dt-center">{{ venta.cliente }}</td>
+                                            <td class="dt-center">{{ venta.estado }}</td>
+                                            <td class="dt-center">{{ venta.articulos }}</td>
+{#                                            <td class="color-success">#}
+{#                                                <div class="progress">#}
+{#                                                    <div class="progress-bar progress-bar-success" data-aria-valuetransitiongoal="75">{{ articulo.stock }}</div>#}
+{#                                                </div>#}
+{#                                            </td>#}
+                                            <td class="text-center ">
+                                                <a href="{% url 'venta' %}" class="edit btn btn-sm btn-default"><i class="fa fa-pencil"></i> Editar</a>
+{#                                                <a href="#" class="delete btn btn-sm btn-default"><i class="fa fa-times-circle"></i> Remove</a>#}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+
+{% block pageLevelScripts %}
+    <script src="{{ STATIC_URL }}plugins/bootstrap-switch/bootstrap-switch.js"></script>
+    <script src="{{ STATIC_URL }}plugins/bootstrap-progressbar/bootstrap-progressbar.js"></script>
+    <script src="{{ STATIC_URL }}plugins/datatables/dynamic/jquery.dataTables.min.js"></script>
+    <script src="{{ STATIC_URL }}plugins/datatables/dataTables.bootstrap.js"></script>
+    <script src="{{ STATIC_URL }}plugins/datatables/dataTables.tableTools.js"></script>
+    <script src="{{ STATIC_URL }}plugins/datatables/table.editable.js"></script>
+    <script src="{{ STATIC_URL }}js/ecommerce.js"></script>
+{% endblock pageLevelScripts %}
