@@ -90,6 +90,25 @@ def get_forma_pago_ajax(_keyword):
     return _exec_query(query)
 
 
+def get_lista_ventas(stock_sucursal):
+    query = "SELECT t.id, t.fecha, mp.descripcion AS forma_pago, CONCAT(p.apellido, ', ', p.nombre) AS cliente, " \
+            "t.estado, sum(tr.cantidad) as articulos " \
+            "FROM Transacciones AS t " \
+            "LEFT JOIN Personas p " \
+            "ON t.cliente_id = p.id " \
+            "LEFT JOIN MediosDePago mp " \
+            "ON t.forma_pago_id = mp.id " \
+            "LEFT JOIN TransaccionesRen tr " \
+            "ON t.id = tr.cabecera_id " \
+            "INNER JOIN Almacenes a " \
+            "ON t.sucursal_id =  a.sucursal_id " \
+            "AND a.uri_stock = '{stock_sucursal}' " \
+            "GROUP BY 1,2,3,4,5 " \
+            "ORDER BY t.id DESC".format(stock_sucursal=stock_sucursal)
+
+    return _exec_query(query)
+
+
 def _insert_query(query):
     db = MySQLdb.connect(**config)
 

@@ -74,6 +74,16 @@ def venta(request):
 
 
 @login_required(login_url='/login/')
+def ventas(request):
+    result, lista_ventas, message = general_dal.get_lista_ventas(request.session["persona"]["uri_stock"])
+    context = {
+        'ventas': True,
+        'b_lista_ventas': True,
+        'lista_ventas': lista_ventas
+    }
+    return render(request, 'ventas.html', context)
+
+@login_required(login_url='/login/')
 def pedidos(request):
     lista_articulos = Articulos.objects.all()
     context = {

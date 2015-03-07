@@ -110,6 +110,13 @@
                         <a href="#"><i class="glyph-icon flaticon-shopping80"></i><span class="sidebar-text">Ventas</span>
                         <span class="fa arrow"></span></a>
                         <ul class="submenu collapse">
+                            {% if b_lista_ventas %}
+                            <li class="current">
+                            {% else %}
+                            <li>
+                            {% endif %}
+                                <a href="{% url 'ventas' %}"><span class="sidebar-text">Ventas</span></a>
+                            </li>
                             {% if nueva_venta %}
                             <li class="current">
                             {% else %}
