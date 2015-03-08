@@ -12,15 +12,16 @@
 {% block content %}
         <div id="main-content">
             <div class="row">
-                <div class="col-md-8 vcenter">
+                <div class="col-md-10 vcenter">
                     <div class="page-title">
                         <i class="icon-custom-left"></i>
                         <h3><img class="m-r-20" src="{{ STATIC_URL }}img/various/invoice.png" alt="invoice"><strong>Order n° 547 578 528</strong>
                             <small>May 18, 2014 10:21</small></h3>
                     </div>
                 </div><!--
-             --><div class="col-md-4 vcenter">
-                        <a href="ecommerce_product_view.html" class="btn btn-success m-t-10 pull-right"><i class="fa fa-save"></i></i> Guardar</a>
+             --><div class="col-md-2 vcenter">
+                    <a href="#" class="btn btn-block btn-danger m-t-10 pull-right" id="cancelarVenta"><i class="fa fa-ban"></i></i> Cancelar</a>
+                    <a href="#" class="btn btn-block btn-success m-t-10 pull-right" id="guardarVenta"><i class="fa fa-save"></i></i> Guardar</a>
                 </div>
             </div>
             <div class="row">
@@ -370,7 +371,9 @@ $(function(){
     var divSubtotal = $("#subtotal");
     var divRecargo = $("#recargo");
     var divTotalVenta = $("#totalVenta");
-    var transaccion = null;
+    var guardarVenta = $("#guardarVenta");
+    var cancelarVenta = $("#cancelarVenta");
+    var transaccion_id = {{ transaccion_id }};
     var cliente = null;
     var forma_pago = null;
     var vendedor = null;
@@ -424,10 +427,11 @@ $(function(){
                 return;
             }
 
-            if (transaccion === null){
+            if (transaccion_id === 0){
 
                 // generar venta
-                transaccion = 15;
+                transaccion_id = 15;
+                guardarTransaccion();
 {#                $.ajax({#}
 {#                    type: "POST",#}
 {#                    url: "{% url 'generar_transaccion_ajax' %}",#}
@@ -477,7 +481,7 @@ $(function(){
             url: "{% url 'updateRen_ajax' %}",
             data: {
                 articulo_id: item.id,
-                transaccion_id: transaccion
+                transaccion_id: transaccion_id
             },
             success: function(response){
                 console.log(response);
@@ -494,7 +498,7 @@ $(function(){
             url: "{% url 'addRen_ajax' %}",
             data: {
                 articulo_id: item.id,
-                transaccion_id: transaccion
+                transaccion_id: transaccion_id
             },
             success: function(response){
                 console.log(response);
@@ -531,6 +535,7 @@ $(function(){
         },
         afterSelect: function (item){
             infoCliente.html(infoCliTemplate(item));
+            cliente = item.id;
         }
     });
 
@@ -548,6 +553,7 @@ $(function(){
             infoFormaPago.html(infoFPTemplate(item));
             indiceRecargo = parseFloat(item.recargo);
             recargarVenta();
+            forma_pago = item.id;
         }
     });
 
@@ -572,7 +578,7 @@ $(function(){
             url: "{% url 'delRen_ajax' %}",
             data: {
                 articulo_id: id,
-                transaccion_id: transaccion,
+                transaccion_id: transaccion_id,
                 cantidad: cantidad
             },
             success: function(response){
@@ -588,21 +594,22 @@ $(function(){
 
     clienteSubmit.click(function(){
         if (confirm("¿Está seguro que desea agregar un Cliente?") == true){
-            var formData = formCliente.serializeObject();
+            cliente = formCliente.serializeObject();
 
-            infoCliente.html(infoCliTemplate(formData));
+            infoCliente.html(infoCliTemplate(cliente));
 
-{#            $.ajax({#}
-{#                type: "POST",#}
-{#                url: "{% url 'nuevo_cliente_ajax' %}",#}
-{#                data: $("#cliente").serialize(),#}
-{#                success: function(response){#}
-{#                    modalCliente.modal("hide");#}
-{#                },#}
-{#                error: function(xhr){#}
-{#                    console.log(xhr);#}
-{#                }#}
-{#            });#}
+            $.ajax({
+                type: "POST",
+                url: "{% url 'nuevo_cliente_ajax' %}",
+                data: $("#cliente").serialize(),
+                success: function(response){
+                    modalCliente.modal("hide");
+                    cliente = response.cliente_id;
+                },
+                error: function(xhr){
+                    console.log(xhr);
+                }
+            });
             clienteReset.click();
             modalCliente.modal("hide");
 
@@ -638,6 +645,50 @@ $(function(){
         selItem = null;
         selArticulo.val("");
     }
+
+    guardarVenta.click(function(){
+        guardarTransaccion();
+    });
+
+    cancelarVenta.click(function () {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'cancelar_transaccion_ajax' %}",
+            data: {
+                transaccion_id:transaccion_id
+            },
+            success: function(response){
+
+            },
+            error: function(xhr){
+                console.log(xhr);
+            }
+        });
+    });
+
+    function guardarTransaccion(){
+        $.ajax({
+            type: "POST",
+            url: "{% url 'guardar_transaccion_ajax' %}",
+            data: {
+                transaccion_id:transaccion_id,
+                cliente_id: cliente,
+                forma_pago_id: forma_pago,
+                vendedor_id: vendedor,
+                promocion_id: promocion
+            },
+            success: function(response){
+                if (transaccion_id === null) {
+                    transaccion_id = response.transaccion_id;
+                } else {
+                    //que hago?
+                }
+            },
+            error: function(xhr){
+                console.log(xhr);
+            }
+        });
+    };
 
 });
 </script>

@@ -9,6 +9,9 @@ config = {"host": "192.168.203.129",
 
 
 def nueva_transaccion(cliente_id, vendedor_id, forma_pago_id, promocion_id):
+
+    # TODO: agregar la sucursal que realiza la transaccion
+
     cliente_id = 'null' if cliente_id == '' else cliente_id
     vendedor_id = 'null' if vendedor_id == '' else vendedor_id
     forma_pago_id = 'null' if forma_pago_id == '' else forma_pago_id
@@ -22,6 +25,36 @@ def nueva_transaccion(cliente_id, vendedor_id, forma_pago_id, promocion_id):
         promocion_id=promocion_id)
 
     return _insert_query(query)
+
+
+def update_transaccion(stock_sucursal, transaccion_id, cliente_id, vendedor_id, forma_pago_id, promocion_id):
+
+    cliente_id = 'null' if cliente_id == '' else cliente_id
+    vendedor_id = 'null' if vendedor_id == '' else vendedor_id
+    forma_pago_id = 'null' if forma_pago_id == '' else forma_pago_id
+    promocion_id = 'null' if promocion_id == '' else promocion_id
+
+    query = "UPDATE Transacciones " \
+            "SET forma_pago_id = {forma_pago}, " \
+            "cliente_id = {cliente_id}, " \
+            "promocion_id = {promocion_id}, " \
+            "vendedor_id = {vendedor_id} " \
+            "WHERE id = {transaccion_id} " \
+            "AND sucursal_id IN (SELECT sucursal_id FROM Almacenes " \
+            "WHERE uri_stock = '{stock_sucursal}')".format(stock_sucursal=stock_sucursal,
+                                                           transaccion_id=transaccion_id,
+                                                           forma_pago=forma_pago_id,
+                                                           cliente_id=cliente_id,
+                                                           promocion_id=promocion_id,
+                                                           vendedor_id=vendedor_id)
+
+    return _update_query(query)
+
+
+def cancel_transaccion(transaccion_id):
+    query = "UPDATE Transacciones SET estado = 'CANCELADA' WHERE id = {transaccion_id}".format(transaccion_id)
+
+    return _update_query(query)
 
 
 def nuevo_renglon(articulo_id, cantidad, precio_unitario, cabecera_id):
@@ -71,7 +104,7 @@ def get_cliente_ajax(_keyword):
     for kwd in keywords:
         conditions.append(condition.format(keyword=kwd))
 
-    query = "SELECT nombre, apellido, dni, email, cuil, direccion, " \
+    query = "SELECT id, nombre, apellido, dni, email, cuil, direccion, " \
             "CONCAT(nombre, ' ', apellido, ' ', dni, ' ', email) AS name " \
             "FROM Personas " \
             "WHERE categoria_id = 1 AND {conditions} ".format(conditions=" AND ".join([x for x in conditions]))
@@ -81,7 +114,7 @@ def get_cliente_ajax(_keyword):
 
 def get_forma_pago_ajax(_keyword):
 
-    query = "SELECT a.descripcion, a.recargo, b.nombre, CONCAT(a.descripcion, ' - ', b.nombre) AS name " \
+    query = "SELECT a.id, a.descripcion, a.recargo, b.nombre, CONCAT(a.descripcion, ' - ', b.nombre) AS name " \
             "FROM MediosDePago AS a " \
             "INNER JOIN TipoMedioPago b " \
             "ON a.tipo_medio_id = b.id " \
@@ -91,8 +124,9 @@ def get_forma_pago_ajax(_keyword):
 
 
 def get_lista_ventas(stock_sucursal):
-    query = "SELECT t.id, t.fecha, mp.descripcion AS forma_pago, CONCAT(p.apellido, ', ', p.nombre) AS cliente, " \
-            "t.estado, sum(tr.cantidad) as articulos " \
+    query = "SELECT t.id, t.fecha, IFNULL(mp.descripcion, '') AS forma_pago, " \
+            "IFNULL(CONCAT(p.apellido, ', ', p.nombre),'') AS cliente, " \
+            "t.estado, IFNULL(sum(tr.cantidad),0) as articulos " \
             "FROM Transacciones AS t " \
             "LEFT JOIN Personas p " \
             "ON t.cliente_id = p.id " \
@@ -105,6 +139,50 @@ def get_lista_ventas(stock_sucursal):
             "AND a.uri_stock = '{stock_sucursal}' " \
             "GROUP BY 1,2,3,4,5 " \
             "ORDER BY t.id DESC".format(stock_sucursal=stock_sucursal)
+
+    return _exec_query(query)
+
+
+def get_venta(stock_sucursal, transaccion_id):
+    query = "SELECT * FROM Transacciones t " \
+            "INNER JOIN Almacenes a " \
+            "ON t.sucursal_id = a.sucursal_id " \
+            "AND a.uri_stock = '{stock_sucursal}'" \
+            "WHERE id = {transaccion_id} ".format(stock_sucursal=stock_sucursal,
+                                                  transaccion_id=transaccion_id)
+
+    return _exec_query(query)
+
+
+def get_renglones(transaccion_id):
+    query = "SELECT b.*, c.descripcion AS 'color', t.descripcion AS 'talle', " \
+            "a.id as renglon_id, a.cantidad, a.precio_unitario " \
+            "FROM TransaccionesRen AS a " \
+            "INNER JOIN Articulos AS b " \
+            "ON a.articulo_id = b.id " \
+            "INNER JOIN Colores AS c " \
+            "ON b.color_id = c.id " \
+            "INNER JOIN Talle AS t " \
+            "ON b.talle_id = t.id " \
+            "WHERE a.cabecera_id = {transaccion_id}".format(transaccion_id=transaccion_id)
+
+    return _exec_query(query)
+
+
+def get_cliente(cliente_id):
+    query = "SELECT nombre, apellido, direccion, email, dni, cuil " \
+            "FROM Personas " \
+            "WHERE categoria_id = 1 AND id = {cliente_id}".format(cliente_id=cliente_id)
+
+    return _exec_query(query)
+
+
+def get_forma_pago(forma_pago_id):
+    query = "SELECT a.descripcion, a.recargo, CONCAT(a.descripcion, ' - ', b.nombre) AS name, b.nombre " \
+            "FROM MediosDePago a " \
+            "INNER JOIN TipoMedioPago b " \
+            "ON a.tipo_medio_id = b.id " \
+            "WHERE a.id = {forma_pago_id}".format(forma_pago_id=forma_pago_id)
 
     return _exec_query(query)
 

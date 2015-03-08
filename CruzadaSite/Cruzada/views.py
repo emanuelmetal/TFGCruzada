@@ -68,7 +68,41 @@ def pedido_detalle(request):
 def venta(request):
     context = {
         'ventas': True,
-        'nueva_venta': True
+        'nueva_venta': True,
+        'transaccion_id': 15
+    }
+    return render(request, 'venta.html', context)
+
+
+@login_required(login_url='/login/')
+@ensure_csrf_cookie
+def venta_id(request, transaccion_id):
+
+    result, transaccion, message = general_dal.get_venta(request.session["persona"]["uri_stock"], transaccion_id)
+    if transaccion.__len__() > 0:
+        transaccion = transaccion[0]
+
+    result, renglones, message = general_dal.get_renglones(transaccion_id)
+    total_venta = 0
+    for renglon in renglones:
+        total_venta += renglon["precio_unitario"] * renglon["cantidad"]
+
+    result, cliente, message = general_dal.get_cliente(transaccion["cliente_id"])
+
+    cliente = cliente[0]
+
+    result, forma_pago, message = general_dal.get_forma_pago(transaccion["forma_pago_id"])
+
+    forma_pago = forma_pago[0]
+
+    context = {
+        'ventas': True,
+        'nueva_venta': True,
+        'transaccion': transaccion,
+        'renglones': renglones,
+        'total_venta': total_venta,
+        'cliente': cliente,
+        'forma_pago': forma_pago
     }
     return render(request, 'venta.html', context)
 
@@ -82,6 +116,7 @@ def ventas(request):
         'lista_ventas': lista_ventas
     }
     return render(request, 'ventas.html', context)
+
 
 @login_required(login_url='/login/')
 def pedidos(request):
@@ -130,17 +165,22 @@ def get_forma_pago_venta(request):
     return HttpResponseForbidden()
 
 
-def generar_transaccion(request):
+def guardar_transaccion(request):
     # expect at least 1 article
     if request.method == 'POST':
         if request.is_ajax:
             # datos de transacción
+            transaccion_id = request.POST["transaccion_id"]
             cliente_id = request.POST["cliente_id"]
             vendedor_id = request.POST["vendedor_id"]
             forma_pago_id = request.POST["forma_pago_id"]
             promocion_id = request.POST["promocion_id"]
 
-            transaccion_id = general_dal.nueva_transaccion(cliente_id, vendedor_id, forma_pago_id, promocion_id)
+            if transaccion_id == '0':
+                transaccion_id = general_dal.nueva_transaccion(cliente_id, vendedor_id, forma_pago_id, promocion_id)
+            else:
+                general_dal.update_transaccion(request.session["persona"]["uri_stock"], transaccion_id, cliente_id,
+                                               vendedor_id, forma_pago_id, promocion_id)
 
             if transaccion_id is not None:
                 # datos de renglón si los hay
@@ -154,6 +194,27 @@ def generar_transaccion(request):
                 #         general_dal.nuevo_renglon(articulo_id, 1, articulo["precio"], transaccion_id)
                 #
                 return HttpResponse(json.dumps({"transaccion_id": transaccion_id}), content_type="application/json")
+
+            return HttpResponseServerError()
+    return HttpResponseForbidden()
+
+
+def cancelar_transaccion(request):
+    # expect at least 1 article
+    if request.method == 'POST':
+        if request.is_ajax:
+            # datos de transacción
+            transaccion_id = request.POST["transaccion_id"]
+
+            if transaccion_id == '0':
+                result, renglones, message = general_dal.get_renglones(transaccion_id)
+
+                for renglon in renglones:
+                    stock_dal.update_stock(request.session["uri_stock"], renglon["cantidad"], renglon["articulo_id"])
+
+                result = general_dal.cancel_transaccion(transaccion_id)
+
+                return HttpResponse(json.dumps({"result": result}), content_type="application/json")
 
             return HttpResponseServerError()
     return HttpResponseForbidden()
@@ -173,7 +234,7 @@ def nuevo_cliente_ajax(request):
             id = general_dal.nuevo_cliente(nombre,apellido,email,direccion,dni,cuil)
 
             if id is not None:
-                return HttpResponse(json.dumps({"result": True}), content_type="application/json")
+                return HttpResponse(json.dumps({"result": True, "cliente_id": id}), content_type="application/json")
             return HttpResponseServerError()
 
     return HttpResponseForbidden()
