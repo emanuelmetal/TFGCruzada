@@ -144,7 +144,7 @@ def get_lista_ventas(stock_sucursal):
 
 
 def get_venta(stock_sucursal, transaccion_id):
-    query = "SELECT * FROM Transacciones t " \
+    query = "SELECT t.* FROM Transacciones t " \
             "INNER JOIN Almacenes a " \
             "ON t.sucursal_id = a.sucursal_id " \
             "AND a.uri_stock = '{stock_sucursal}'" \
@@ -169,8 +169,15 @@ def get_renglones(transaccion_id):
     return _exec_query(query)
 
 
+def count_renglones(transaccion_id):
+    query = "SELECT count(*) cant FROM TransaccionesRen " \
+            "WHERE cabecera_id = {transaccion_id}".format(transaccion_id=transaccion_id)
+
+    return _exec_query(query)
+
+
 def get_cliente(cliente_id):
-    query = "SELECT nombre, apellido, direccion, email, dni, cuil " \
+    query = "SELECT id, nombre, apellido, direccion, email, dni, cuil " \
             "FROM Personas " \
             "WHERE categoria_id = 1 AND id = {cliente_id}".format(cliente_id=cliente_id)
 
@@ -178,11 +185,21 @@ def get_cliente(cliente_id):
 
 
 def get_forma_pago(forma_pago_id):
-    query = "SELECT a.descripcion, a.recargo, CONCAT(a.descripcion, ' - ', b.nombre) AS name, b.nombre " \
+    query = "SELECT a.id, a.descripcion, a.recargo, CONCAT(a.descripcion, ' - ', b.nombre) AS name, b.nombre " \
             "FROM MediosDePago a " \
             "INNER JOIN TipoMedioPago b " \
             "ON a.tipo_medio_id = b.id " \
             "WHERE a.id = {forma_pago_id}".format(forma_pago_id=forma_pago_id)
+
+    return _exec_query(query)
+
+
+def finalizar_venta(stock_sucursal, transaccion_id):
+    query = "UPDATE Transacciones SET estado = 'FINALIZADA' " \
+            "WHERE id = {transaccion_id} AND sucursal_id IN " \
+            "(SELECT sucursal_id FROM Almacenes " \
+            "WHERE uri_stock = '{stock_sucursal}')".format(stock_sucursal=stock_sucursal,
+                                                            transaccion_id=transaccion_id)
 
     return _exec_query(query)
 

@@ -29,4 +29,7 @@ urlpatterns = patterns('',
     url(r'^venta_update_ren_ajax/$', 'Cruzada.views.updateRen_ajax', name='updateRen_ajax'),
     url(r'^venta_add_ren_ajax/$', 'Cruzada.views.addRen_ajax', name='addRen_ajax'),
     url(r'^venta_del_ren_ajax/$', 'Cruzada.views.deleteRen_ajax', name='delRen_ajax'),
+    url(r'^check_fin_transaccion_ajax/$', 'Cruzada.views.check_fin_transaccion_ajax',
+        name='check_fin_transaccion_ajax'),
+    url(r'^finalizar_transaccion/$', 'Cruzada.views.finalizar_transaccion_ajax', name='finalizar_transaccion_ajax'),
 )

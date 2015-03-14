@@ -83,26 +83,40 @@ def venta_id(request, transaccion_id):
         transaccion = transaccion[0]
 
     result, renglones, message = general_dal.get_renglones(transaccion_id)
-    total_venta = 0
+    sub_total = 0
     for renglon in renglones:
-        total_venta += renglon["precio_unitario"] * renglon["cantidad"]
+        sub_total += renglon["precio_unitario"] * renglon["cantidad"]
 
     result, cliente, message = general_dal.get_cliente(transaccion["cliente_id"])
 
-    cliente = cliente[0]
+    if cliente.__len__() > 0:
+        cliente_id = cliente[0]["id"]
+        #cliente_json = serialize("json", cliente, ensure_ascii=False, cls="DjangoJSONEncoder")
+        cliente_json = json.dumps(cliente[0], cls=DjangoJSONEncoder)
+    else:
+        cliente_id = "null"
+        cliente_json = "null"
 
     result, forma_pago, message = general_dal.get_forma_pago(transaccion["forma_pago_id"])
 
-    forma_pago = forma_pago[0]
+    if forma_pago.__len__() > 0:
+        forma_pago_id = forma_pago[0]["id"]
+        #forma_pago_json = serialize("json", forma_pago, ensure_ascii=False, cls="DjangoJSONEncoder")
+        forma_pago_json = json.dumps(forma_pago[0], cls=DjangoJSONEncoder)
+    else:
+        forma_pago_id = "null"
+        forma_pago_json = "null"
 
     context = {
         'ventas': True,
         'nueva_venta': True,
         'transaccion': transaccion,
         'renglones': renglones,
-        'total_venta': total_venta,
-        'cliente': cliente,
-        'forma_pago': forma_pago
+        'sub_total': sub_total,
+        'cliente_id': cliente_id,
+        'cliente_json': cliente_json,
+        'forma_pago_id': forma_pago_id,
+        'forma_pago_json': forma_pago_json
     }
     return render(request, 'venta.html', context)
 
@@ -289,6 +303,55 @@ def updateRen_ajax(request):
 
 
 def deleteRen_ajax(request):
+    if request.method == 'POST':
+        if request.is_ajax:
+
+            transaccion_id = request.POST["transaccion_id"]
+
+            if transaccion_id is not None:
+                # datos de renglón si los hay
+                if "articulo_id" in request.POST:
+                    articulo_id = request.POST["articulo_id"]
+                    cantidad = request.POST["cantidad"]
+
+                    result = True
+                    #result = stock_dal.update_stock(request.session["persona"]["uri_stock"], cantidad, articulo_id)
+
+                    if result:
+                        # delete ren
+                        result = general_dal.delete_renglon(articulo_id, transaccion_id)
+
+                        return HttpResponse(json.dumps({"result": result}), content_type="application/json")
+
+            return HttpResponseServerError()
+
+    return HttpResponseForbidden()
+
+
+def check_fin_transaccion_ajax(request):
+    if request.method == 'GET':
+        if request.is_ajax:
+            transaccion_id = request.GET["transaccion_id"]
+            if transaccion_id is not None:
+                result, transaccion, message = general_dal.get_venta(request.session["persona"]["uri_stock"], transaccion_id)
+
+                if transaccion.__len__() > 0:
+                    transaccion = transaccion[0]
+
+                result, renglones, message = general_dal.count_renglones(transaccion_id)
+
+                if transaccion["cliente_id"] is not None \
+                    and transaccion["forma_pago_id"] is not None \
+                    and renglones[0]["cant"] > 0:
+                    result = True
+                else:
+                    result = False
+
+                return HttpResponse(json.dumps({"result": result}), content_type="application/json")
+    return HttpResponseForbidden()
+
+
+def finalizar_transaccion_ajax(request):
     if request.method == 'POST':
         if request.is_ajax:
 

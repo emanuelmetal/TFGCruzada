@@ -21,7 +21,8 @@
                 </div><!--
              --><div class="col-md-2 vcenter">
                     <a href="#" class="btn btn-block btn-danger m-t-10 pull-right" id="cancelarVenta"><i class="fa fa-ban"></i></i> Cancelar</a>
-                    <a href="#" class="btn btn-block btn-success m-t-10 pull-right" id="guardarVenta"><i class="fa fa-save"></i></i> Guardar</a>
+                    <a href="#" class="btn btn-block btn-primary m-t-10 pull-right" id="guardarVenta"><i class="fa fa-save"></i></i> Guardar</a>
+                    <a href="#" class="btn btn-block btn-success m-t-10 pull-right hidden" id="finalizarVenta"><i class="fa fa-check"></i></i> Finalizar</a>
                 </div>
             </div>
             <div class="row">
@@ -69,20 +70,18 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-{#                                                <tr>#}
-{#                                                    <td>000001</td>#}
-{#                                                    <td>Remera</td>#}
-{#                                                    <td>Medium</td>#}
-{#                                                    <td>Verde</td>#}
-{#                                                    <td>$25.20</td>#}
-{#                                                    <td>#}
-{#                                                        <select class="form-control">#}
-{#                                                            <option>1</option>#}
-{#                                                            <option>2</option>#}
-{#                                                            <option>3</option>#}
-{#                                                        </select>#}
-{#                                                    </td>#}
-{#                                                </tr>#}
+                                            {% for renglon in renglones %}
+                                                <tr>
+                                                    <td>{{ renglon.codigo }}</td>
+                                                    <td>{{ renglon.descripcion }}</td>
+                                                    <td>{{ renglon.talle }}</td>
+                                                    <td>{{ renglon.color }}</td>
+                                                    <td>{{ renglon.precio }}</td>
+                                                    <td>{{ renglon.cantidad }}</td>
+                                                    <td><a href='#' class='delete btn btn-sm btn-default'><i class='fa fa-times-circle'></i> Remover</a></td>
+                                                    <td>{{ renglon.id }}</td>
+                                                </tr>
+                                            {% endfor %}
                                             </tbody>
                                         </table>
                                     </div>
@@ -373,12 +372,15 @@ $(function(){
     var divTotalVenta = $("#totalVenta");
     var guardarVenta = $("#guardarVenta");
     var cancelarVenta = $("#cancelarVenta");
-    var transaccion_id = {{ transaccion_id }};
-    var cliente = null;
-    var forma_pago = null;
+    var finalizarVenta = $("#finalizarVenta");
+    var transaccion_id = {{ transaccion.id }};
+    var cliente = {{ cliente_json|safe }};
+    var forma_pago = {{ forma_pago_json|safe }};
+    var cliente_id = {{ cliente_id }};
+    var forma_pago_id = {{ forma_pago_id }};
     var vendedor = null;
     var promocion = null;
-    var subtotal = 0;
+    var subtotal = {{ sub_total|floatformat }};
     var recargo = 0;
     var totalVenta = 0;
     var indiceRecargo = 0;
@@ -386,12 +388,24 @@ $(function(){
     var infoFPTemplate = _.template($("script.formaPagoTemplate").html());
     var selItem = null;
 
+
+    if (cliente){
+        infoCliente.html(infoCliTemplate(cliente));
+    }
+
+    if (forma_pago){
+        infoFormaPago.html(infoFPTemplate(forma_pago));
+        indiceRecargo = parseFloat(forma_pago.recargo);
+    }
+    sumarVenta(0);
     formCliente.submit(function(e){
         e.preventDefault();
 {#        if (true === $(this).parsley().isValid()) { // if form validation is successful#}
 {#            submitForm();#}
 {#        }#}
     });
+
+    checkFinTransaccion();
 
     selArticulo.on("keypress", function(e){
         if(e.keyCode == 13 && selItem !== null){
@@ -430,7 +444,7 @@ $(function(){
             if (transaccion_id === 0){
 
                 // generar venta
-                transaccion_id = 15;
+                //transaccion_id = 15;
                 guardarTransaccion();
 {#                $.ajax({#}
 {#                    type: "POST",#}
@@ -449,7 +463,7 @@ $(function(){
 {#                    }#}
 {#                });#}
             } else {
-                //add or update ren
+                checkFinTransaccion();
             }
 
             sumarVenta(parseFloat(item.precio));
@@ -535,7 +549,7 @@ $(function(){
         },
         afterSelect: function (item){
             infoCliente.html(infoCliTemplate(item));
-            cliente = item.id;
+            cliente_id = item.id;
         }
     });
 
@@ -553,7 +567,7 @@ $(function(){
             infoFormaPago.html(infoFPTemplate(item));
             indiceRecargo = parseFloat(item.recargo);
             recargarVenta();
-            forma_pago = item.id;
+            forma_pago_id = item.id;
         }
     });
 
@@ -612,7 +626,6 @@ $(function(){
             });
             clienteReset.click();
             modalCliente.modal("hide");
-
         }
     });
 
@@ -672,8 +685,8 @@ $(function(){
             url: "{% url 'guardar_transaccion_ajax' %}",
             data: {
                 transaccion_id:transaccion_id,
-                cliente_id: cliente,
-                forma_pago_id: forma_pago,
+                cliente_id: cliente_id,
+                forma_pago_id: forma_pago_id,
                 vendedor_id: vendedor,
                 promocion_id: promocion
             },
@@ -683,12 +696,54 @@ $(function(){
                 } else {
                     //que hago?
                 }
+                checkFinTransaccion();
             },
             error: function(xhr){
                 console.log(xhr);
             }
         });
     };
+
+    function checkFinTransaccion(){
+        if (transaccion_id) {
+            $.ajax({
+                type: "GET",
+                url: "{% url 'check_fin_transaccion_ajax' %}",
+                data: {
+                    transaccion_id:transaccion_id
+                },
+                success: function(response){
+
+                    if (response.result) {
+                        finalizarVenta.removeClass("hidden");
+                    }
+                },
+                error: function(xhr){
+                    console.log(xhr);
+                }
+            });
+        }
+    }
+    
+    finalizarVenta.click(function () {
+        guardarTransaccion();
+        $.ajax({
+            type: "POST",
+            url: "{% url 'check_fin_transaccion_ajax' %}",
+            data: {
+                transaccion_id:transaccion_id
+            },
+            success: function(response){
+
+                if (response.result) {
+                    finalizarVenta.removeClass("hidden");
+                }
+            },
+            error: function(xhr){
+                console.log(xhr);
+            }
+        });
+    })
 
 });
 </script>
