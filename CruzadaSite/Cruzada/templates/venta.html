@@ -15,14 +15,19 @@
                 <div class="col-md-10 vcenter">
                     <div class="page-title">
                         <i class="icon-custom-left"></i>
-                        <h3><img class="m-r-20" src="{{ STATIC_URL }}img/various/invoice.png" alt="invoice"><strong>Order n° 547 578 528</strong>
-                            <small>May 18, 2014 10:21</small></h3>
+                        <h3><img class="m-r-20" src="{{ STATIC_URL }}img/various/invoice.png" alt="invoice">
+                            {% if transaccion %}
+                            <strong id="nroTransaccion">Venta N° {{ transaccion.id|stringformat:"010d" }}</strong>
+                            <!--<small id="fechaTransaccion">{{ transaccion.fecha }}</small>--></h3>
+                            {% endif %}
                     </div>
                 </div><!--
              --><div class="col-md-2 vcenter">
+                {% if not read_only %}
                     <a href="#" class="btn btn-block btn-danger m-t-10 pull-right" id="cancelarVenta"><i class="fa fa-ban"></i></i> Cancelar</a>
                     <a href="#" class="btn btn-block btn-primary m-t-10 pull-right" id="guardarVenta"><i class="fa fa-save"></i></i> Guardar</a>
                     <a href="#" class="btn btn-block btn-success m-t-10 pull-right hidden" id="finalizarVenta"><i class="fa fa-check"></i></i> Finalizar</a>
+                {% endif %}
                 </div>
             </div>
             <div class="row">
@@ -35,6 +40,7 @@
                         </ul>
                         <div id="myTabContent" class="tab-content">
                             <div class="tab-pane fade active in" id="articulos">
+                            {% if not read_only %}
                                 <div class="row p-20">
                                     <div>
                                         <div class="col-md-4">
@@ -54,6 +60,7 @@
                                         </div>
                                     </div>
                                 </div>
+                            {% endif %}
                                 <div class="row p-20">
                                     <div class="col-md-12">
                                         <table id="articulos_table" class="table">
@@ -65,8 +72,10 @@
                                                     <th><strong>Color</strong></th>
                                                     <th><strong>Precio</strong></th>
                                                     <th><strong>Cantidad</strong></th>
+                                                    {% if not read_only %}
                                                     <th><strong>Accion</strong></th>
                                                     <th><strong>Id</strong></th>
+                                                    {% endif %}
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -78,8 +87,10 @@
                                                     <td>{{ renglon.color }}</td>
                                                     <td>{{ renglon.precio }}</td>
                                                     <td>{{ renglon.cantidad }}</td>
+                                                    {% if not read_only %}
                                                     <td><a href='#' class='delete btn btn-sm btn-default'><i class='fa fa-times-circle'></i> Remover</a></td>
                                                     <td>{{ renglon.id }}</td>
+                                                    {% endif %}
                                                 </tr>
                                             {% endfor %}
                                             </tbody>
@@ -100,19 +111,25 @@
                                                                  Subtotal:
                                                             </div>
                                                             <div id="subtotal" class="col-md-3 w-600">
-
+                                                                {% if read_only %}
+                                                                ${{ sub_total|floatformat }}
+                                                                {% endif %}
                                                             </div>
                                                             <div class="col-md-8">
                                                                  Recargo:
                                                             </div>
                                                             <div id="recargo" class="col-md-3 w-600">
-
+                                                                {% if read_only %}
+                                                                ${{ recargo|floatformat }}
+                                                                {% endif %}
                                                             </div>
                                                             <div class="col-md-8">
                                                                  Total Venta:
                                                             </div>
                                                             <div id="totalVenta" class="col-md-3 w-600">
-
+                                                                {% if read_only %}
+                                                                ${{ total_venta|floatformat }}
+                                                                {% endif %}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -253,6 +270,7 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="entrega">
+                                {% if not read_only %}
                                 <div class="row p-20">
                                     <div class="col-md-6">
                                         <div class="input-group transparent">
@@ -275,19 +293,85 @@
                                         </div>
                                     </div>
                                 </div>
+                                {% endif %}
                                 <div class="row p-20">
                                     <div class="col-md-12">
                                         <form class="form-horizontal">
                                             <div class="col-md-6">
                                                 <h3 class="m-t-0 m-b-20">Información del cliente: </h3>
                                                 <div id="infoCliente">
-
+                                                {% if read_only %}
+                                                    <div class="form-group">
+                                                        <div class="col-sm-4">Nombre:
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <strong><a href="#" data-rel="tooltip" title="Edit customer">{{ cliente_json.nombre }}</a></strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-4">Apellido:
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <strong>{{ cliente_json.apellido }}</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-4">DNI:
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <strong>{{ cliente_json.dni }}</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-4">CUIL:
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <strong>{{ cliente_json.cuil }}</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-4">Email:
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <strong>{{ cliente_json.email }}</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-4">Dirección:
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <strong>{{ cliente_json.direccion }}</strong>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <h3 class="m-t-0 m-b-20">Forma de Pago</h3>
                                                 <div id="infoFormaPago">
-
+                                                {% if read_only %}
+                                                    <div class="form-group">
+                                                        <div class="col-sm-4">Forma:
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <strong>{{ forma_pago_json.nombre }}</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-4">Descripción:
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <strong>{{ forma_pago_json.descripcion }}</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-4">Recargo:
+                                                        </div>
+                                                        <div class="col-sm-8">
+                                                            <strong>{{ ind_recargo|floatformat }}%</strong>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
                                                 </div>
                                             </div>
                                         </form>
@@ -342,6 +426,7 @@
         </div>
     </div>
 </script>
+{% if not read_only %}
 <script>
 window.ParsleyValidator.setLocale('es');
 $(function(){
@@ -373,7 +458,8 @@ $(function(){
     var guardarVenta = $("#guardarVenta");
     var cancelarVenta = $("#cancelarVenta");
     var finalizarVenta = $("#finalizarVenta");
-    var transaccion_id = {{ transaccion.id }};
+    var nroTransaccion = $("#nroTransaccion");
+    var transaccion_id = {{ transaccion_id }};
     var cliente = {{ cliente_json|safe }};
     var forma_pago = {{ forma_pago_json|safe }};
     var cliente_id = {{ cliente_id }};
@@ -444,48 +530,30 @@ $(function(){
             if (transaccion_id === 0){
 
                 // generar venta
-                //transaccion_id = 15;
-                guardarTransaccion();
-{#                $.ajax({#}
-{#                    type: "POST",#}
-{#                    url: "{% url 'generar_transaccion_ajax' %}",#}
-{#                    data: {#}
-{#                        cliente_id: cliente,#}
-{#                        forma_pago_id: forma_pago,#}
-{#                        vendedor_id: vendedor,#}
-{#                        promocion_id: promocion#}
-{#                    },#}
-{#                    success: function(response){#}
-{#                        transaccion = response.transaccion_id;#}
-{#                    },#}
-{#                    error: function(xhr){#}
-{#                        console.log(xhr);#}
-{#                    }#}
-{#                });#}
+                var deferred = guardarTransaccion();
             } else {
                 checkFinTransaccion();
             }
 
             sumarVenta(parseFloat(item.precio));
 
-            if (updateTableRow(item)){
-                updateRen(item);
-                return
-            } else {
-                addRen(item)
-
-            }
-
-            articulosTable.row.add([
-                    item.codigo,
-                    item.descripcion,
-                    item.talle,
-                    item.color,
-                    item.precio,
-                    1,
-                    "<a href='#' class='delete btn btn-sm btn-default'><i class='fa fa-times-circle'></i> Remover</a>",
-                    item.id
-            ]).draw();
+            deferred.done(function(){
+                if (updateTableRow(item)){
+                    updateRen(item);
+                } else {
+                    addRen(item);
+                    articulosTable.row.add([
+                        item.codigo,
+                        item.descripcion,
+                        item.talle,
+                        item.color,
+                        item.precio,
+                        1,
+                        "<a href='#' class='delete btn btn-sm btn-default'><i class='fa fa-times-circle'></i> Remover</a>",
+                        item.id
+                    ]).draw();
+                }
+            });
         }
     });
 
@@ -680,7 +748,7 @@ $(function(){
     });
 
     function guardarTransaccion(){
-        $.ajax({
+        return $.ajax({
             type: "POST",
             url: "{% url 'guardar_transaccion_ajax' %}",
             data: {
@@ -691,8 +759,9 @@ $(function(){
                 promocion_id: promocion
             },
             success: function(response){
-                if (transaccion_id === null) {
+                if (transaccion_id === null || transaccion_id === 0) {
                     transaccion_id = response.transaccion_id;
+                    nroTransaccion.html("Venta N° " + pad(transaccion_id, 10));
                 } else {
                     //que hago?
                 }
@@ -726,25 +795,33 @@ $(function(){
     }
     
     finalizarVenta.click(function () {
-        guardarTransaccion();
-        $.ajax({
-            type: "POST",
-            url: "{% url 'check_fin_transaccion_ajax' %}",
-            data: {
-                transaccion_id:transaccion_id
-            },
-            success: function(response){
+        var deferred = guardarTransaccion();
+        deferred.done(function () {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'check_fin_transaccion_ajax' %}",
+                data: {
+                    transaccion_id:transaccion_id
+                },
+                success: function(response){
 
-                if (response.result) {
-                    finalizarVenta.removeClass("hidden");
+                    if (response.result) {
+                        finalizarVenta.removeClass("hidden");
+                    }
+                },
+                error: function(xhr){
+                    console.log(xhr);
                 }
-            },
-            error: function(xhr){
-                console.log(xhr);
-            }
+            });
         });
-    })
+    });
+
+    function pad (str, max) {
+      str = str.toString();
+      return str.length < max ? pad("0" + str, max) : str;
+    }
 
 });
 </script>
+{% endif %}
 {% endblock pageLevelScripts %}

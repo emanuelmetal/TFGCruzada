@@ -8,7 +8,7 @@ config = {"host": "192.168.203.129",
          "charset": "utf8"}
 
 
-def nueva_transaccion(cliente_id, vendedor_id, forma_pago_id, promocion_id):
+def nueva_transaccion(cliente_id, vendedor_id, forma_pago_id, promocion_id, sucursal_id):
 
     # TODO: agregar la sucursal que realiza la transaccion
 
@@ -17,17 +17,18 @@ def nueva_transaccion(cliente_id, vendedor_id, forma_pago_id, promocion_id):
     forma_pago_id = 'null' if forma_pago_id == '' else forma_pago_id
     promocion_id = 'null' if promocion_id == '' else promocion_id
 
-    query = "INSERT INTO Transacciones (fecha,vendedor_id,forma_pago_id,cliente_id,promocion_id,tipo) " \
-            "VALUES (now(),{vendedor_id}, {forma_pago_id}, {cliente_id}, {promocion_id}, 'VENTA')".format(
+    query = "INSERT INTO Transacciones (fecha,vendedor_id,forma_pago_id,cliente_id,promocion_id,tipo, sucursal_id) " \
+            "VALUES (now(),{vendedor_id}, {forma_pago_id}, {cliente_id}, {promocion_id}, 'VENTA', {sucursal_id})".format(
         vendedor_id=vendedor_id,
         forma_pago_id=forma_pago_id,
         cliente_id=cliente_id,
-        promocion_id=promocion_id)
+        promocion_id=promocion_id,
+        sucursal_id=sucursal_id)
 
     return _insert_query(query)
 
 
-def update_transaccion(stock_sucursal, transaccion_id, cliente_id, vendedor_id, forma_pago_id, promocion_id):
+def update_transaccion(sucursal_id, transaccion_id, cliente_id, vendedor_id, forma_pago_id, promocion_id):
 
     cliente_id = 'null' if cliente_id == '' else cliente_id
     vendedor_id = 'null' if vendedor_id == '' else vendedor_id
@@ -40,13 +41,12 @@ def update_transaccion(stock_sucursal, transaccion_id, cliente_id, vendedor_id, 
             "promocion_id = {promocion_id}, " \
             "vendedor_id = {vendedor_id} " \
             "WHERE id = {transaccion_id} " \
-            "AND sucursal_id IN (SELECT sucursal_id FROM Almacenes " \
-            "WHERE uri_stock = '{stock_sucursal}')".format(stock_sucursal=stock_sucursal,
-                                                           transaccion_id=transaccion_id,
-                                                           forma_pago=forma_pago_id,
-                                                           cliente_id=cliente_id,
-                                                           promocion_id=promocion_id,
-                                                           vendedor_id=vendedor_id)
+            "AND sucursal_id = {sucursal_id}".format(sucursal_id=sucursal_id,
+                                                     transaccion_id=transaccion_id,
+                                                     forma_pago=forma_pago_id,
+                                                     cliente_id=cliente_id,
+                                                     promocion_id=promocion_id,
+                                                     vendedor_id=vendedor_id)
 
     return _update_query(query)
 
@@ -143,13 +143,10 @@ def get_lista_ventas(stock_sucursal):
     return _exec_query(query)
 
 
-def get_venta(stock_sucursal, transaccion_id):
-    query = "SELECT t.* FROM Transacciones t " \
-            "INNER JOIN Almacenes a " \
-            "ON t.sucursal_id = a.sucursal_id " \
-            "AND a.uri_stock = '{stock_sucursal}'" \
-            "WHERE id = {transaccion_id} ".format(stock_sucursal=stock_sucursal,
-                                                  transaccion_id=transaccion_id)
+def get_venta(transaccion_id, sucursal_id):
+    query = "SELECT * FROM Transacciones " \
+            "WHERE id = {transaccion_id} AND sucursal_id = {sucursal_id} ".format(transaccion_id=transaccion_id,
+                                                                                  sucursal_id=sucursal_id)
 
     return _exec_query(query)
 
@@ -194,12 +191,10 @@ def get_forma_pago(forma_pago_id):
     return _exec_query(query)
 
 
-def finalizar_venta(stock_sucursal, transaccion_id):
+def finalizar_venta(transaccion_id, sucursal_id):
     query = "UPDATE Transacciones SET estado = 'FINALIZADA' " \
-            "WHERE id = {transaccion_id} AND sucursal_id IN " \
-            "(SELECT sucursal_id FROM Almacenes " \
-            "WHERE uri_stock = '{stock_sucursal}')".format(stock_sucursal=stock_sucursal,
-                                                            transaccion_id=transaccion_id)
+            "WHERE id = {transaccion_id} AND sucursal_id = {sucursal_id} ".format(transaccion_id=transaccion_id,
+                                                                                  sucursal_id=sucursal_id)
 
     return _exec_query(query)
 

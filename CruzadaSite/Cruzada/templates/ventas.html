@@ -28,7 +28,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12 table-responsive">
-                                <table id="articulos-table" class="table table-tools table-hover order-column">
+                                <table id="ventas-table" class="table table-tools table-hover order-column">
                                     <thead>
                                         <tr>
                                             <th style="min-width:70px"><strong>Nro Venta</strong></th>
@@ -56,10 +56,10 @@
                                             <td class="dt-center">{{ venta.estado }}</td>
                                             <td class="dt-center">{{ venta.articulos }}</td>
                                             <td class="text-center ">
-                                                {% if venta.estado == 'GUARDADA' %}
-                                                <a href="{% url 'venta_id' transaccion_id=venta.id %}" class="edit btn btn-sm btn-default"><i class="fa fa-pencil"></i> Editar</a>
+                                                {% if venta.estado == 'FINALIZADA' %}
+                                                <a href="{% url 'venta_ver' transaccion_id=venta.id %}" class="edit btn btn-sm btn-default"><i class="fa fa-eye"></i> Ver</a>
                                                 {% else %}
-                                                <a href="#" class="edit btn btn-sm btn-default"><i class="fa fa-eye"></i> Ver</a>
+                                                <a href="{% url 'venta_id' transaccion_id=venta.id %}" class="edit btn btn-sm btn-default"><i class="fa fa-pencil"></i> Editar</a>
                                                 {% endif %}
                                             </td>
                                         </tr>

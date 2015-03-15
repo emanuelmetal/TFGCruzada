@@ -69,16 +69,26 @@ def venta(request):
     context = {
         'ventas': True,
         'nueva_venta': True,
-        'transaccion_id': 15
+        'transaccion_id': 0,
+        'sub_total': 0,
+        'cliente_id': 'null',
+        'cliente_json': 'null',
+        'forma_pago_id': 'null',
+        'forma_pago_json': 'null'
     }
     return render(request, 'venta.html', context)
 
 
 @login_required(login_url='/login/')
 @ensure_csrf_cookie
-def venta_id(request, transaccion_id):
+def venta_editar(request, transaccion_id):
+    read_only_path = reverse('venta_ver', kwargs={'transaccion_id': transaccion_id})
+    if request.path == read_only_path:
+        read_only = True
+    else:
+        read_only = False
 
-    result, transaccion, message = general_dal.get_venta(request.session["persona"]["uri_stock"], transaccion_id)
+    result, transaccion, message = general_dal.get_venta(request.session["persona"]["sucursal_id"], transaccion_id)
     if transaccion.__len__() > 0:
         transaccion = transaccion[0]
 
@@ -91,8 +101,10 @@ def venta_id(request, transaccion_id):
 
     if cliente.__len__() > 0:
         cliente_id = cliente[0]["id"]
-        #cliente_json = serialize("json", cliente, ensure_ascii=False, cls="DjangoJSONEncoder")
-        cliente_json = json.dumps(cliente[0], cls=DjangoJSONEncoder)
+        if read_only:
+            cliente_json = cliente[0]
+        else:
+            cliente_json = json.dumps(cliente[0], cls=DjangoJSONEncoder)
     else:
         cliente_id = "null"
         cliente_json = "null"
@@ -101,8 +113,10 @@ def venta_id(request, transaccion_id):
 
     if forma_pago.__len__() > 0:
         forma_pago_id = forma_pago[0]["id"]
-        #forma_pago_json = serialize("json", forma_pago, ensure_ascii=False, cls="DjangoJSONEncoder")
-        forma_pago_json = json.dumps(forma_pago[0], cls=DjangoJSONEncoder)
+        if read_only:
+            forma_pago_json = forma_pago[0]
+        else:
+            forma_pago_json = json.dumps(forma_pago[0], cls=DjangoJSONEncoder)
     else:
         forma_pago_id = "null"
         forma_pago_json = "null"
@@ -110,7 +124,9 @@ def venta_id(request, transaccion_id):
     context = {
         'ventas': True,
         'nueva_venta': True,
+        'read_only': read_only,
         'transaccion': transaccion,
+        'transaccion_id': transaccion_id,
         'renglones': renglones,
         'sub_total': sub_total,
         'cliente_id': cliente_id,
@@ -118,6 +134,15 @@ def venta_id(request, transaccion_id):
         'forma_pago_id': forma_pago_id,
         'forma_pago_json': forma_pago_json
     }
+
+    if read_only:
+        recargo = forma_pago_json["recargo"]
+        total_venta = sub_total + sub_total * recargo
+        recargo = sub_total * recargo
+        context["recargo"] = recargo
+        context["ind_recargo"] = forma_pago_json["recargo"] * 100
+        context["total_venta"] = total_venta
+
     return render(request, 'venta.html', context)
 
 
@@ -191,9 +216,10 @@ def guardar_transaccion(request):
             promocion_id = request.POST["promocion_id"]
 
             if transaccion_id == '0':
-                transaccion_id = general_dal.nueva_transaccion(cliente_id, vendedor_id, forma_pago_id, promocion_id)
+                transaccion_id = general_dal.nueva_transaccion(cliente_id, vendedor_id, forma_pago_id,
+                                                               promocion_id, request.session["persona"]["sucursal_id"])
             else:
-                general_dal.update_transaccion(request.session["persona"]["uri_stock"], transaccion_id, cliente_id,
+                general_dal.update_transaccion(request.session["persona"]["sucursal_id"], transaccion_id, cliente_id,
                                                vendedor_id, forma_pago_id, promocion_id)
 
             if transaccion_id is not None:
@@ -333,7 +359,7 @@ def check_fin_transaccion_ajax(request):
         if request.is_ajax:
             transaccion_id = request.GET["transaccion_id"]
             if transaccion_id is not None:
-                result, transaccion, message = general_dal.get_venta(request.session["persona"]["uri_stock"], transaccion_id)
+                result, transaccion, message = general_dal.get_venta(transaccion_id, request.session["persona"]["sucursal_id"])
 
                 if transaccion.__len__() > 0:
                     transaccion = transaccion[0]
@@ -358,19 +384,8 @@ def finalizar_transaccion_ajax(request):
             transaccion_id = request.POST["transaccion_id"]
 
             if transaccion_id is not None:
-                # datos de renglón si los hay
-                if "articulo_id" in request.POST:
-                    articulo_id = request.POST["articulo_id"]
-                    cantidad = request.POST["cantidad"]
-
-                    result = True
-                    #result = stock_dal.update_stock(request.session["persona"]["uri_stock"], cantidad, articulo_id)
-
-                    if result:
-                        # delete ren
-                        result = general_dal.delete_renglon(articulo_id, transaccion_id)
-
-                        return HttpResponse(json.dumps({"result": result}), content_type="application/json")
+                result = general_dal.finalizar_venta(transaccion_id, request.session["persona"]["sucursal_id"])
+                return HttpResponse(json.dumps({"result": result}), content_type="application/json")
 
             return HttpResponseServerError()
 
