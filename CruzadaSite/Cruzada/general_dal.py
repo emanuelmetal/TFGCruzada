@@ -52,7 +52,8 @@ def update_transaccion(sucursal_id, transaccion_id, cliente_id, vendedor_id, for
 
 
 def cancel_transaccion(transaccion_id):
-    query = "UPDATE Transacciones SET estado = 'CANCELADA' WHERE id = {transaccion_id}".format(transaccion_id)
+    query = "UPDATE Transacciones SET estado = 'CANCELADA' " \
+            "WHERE id = {transaccion_id}".format(transaccion_id=transaccion_id)
 
     return _update_query(query)
 
@@ -153,7 +154,7 @@ def get_venta(transaccion_id, sucursal_id):
 
 def get_renglones(transaccion_id):
     query = "SELECT b.*, c.descripcion AS 'color', t.descripcion AS 'talle', " \
-            "a.id as renglon_id, a.cantidad, a.precio_unitario " \
+            "a.id as renglon_id, a.cantidad, a.precio_unitario, a.articulo_id " \
             "FROM TransaccionesRen AS a " \
             "INNER JOIN Articulos AS b " \
             "ON a.articulo_id = b.id " \

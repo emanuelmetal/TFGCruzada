@@ -537,25 +537,34 @@ $(function(){
 
             sumarVenta(parseFloat(item.precio));
 
-            deferred.done(function(){
-                if (updateTableRow(item)){
-                    updateRen(item);
-                } else {
-                    addRen(item);
-                    articulosTable.row.add([
-                        item.codigo,
-                        item.descripcion,
-                        item.talle,
-                        item.color,
-                        item.precio,
-                        1,
-                        "<a href='#' class='delete btn btn-sm btn-default'><i class='fa fa-times-circle'></i> Remover</a>",
-                        item.id
-                    ]).draw();
-                }
-            });
+            if (deferred) {
+                deferred.done(function () {
+                    //wait until trasaction is created to perform this task
+                    addOrUpdate(item);
+                });
+            } else {
+                addOrUpdate(item);
+            }
         }
     });
+
+    function addOrUpdate(item){
+        if (updateTableRow(item)){
+            updateRen(item);
+        } else {
+            addRen(item);
+            articulosTable.row.add([
+                item.codigo,
+                item.descripcion,
+                item.talle,
+                item.color,
+                item.precio,
+                1,
+                "<a href='#' class='delete btn btn-sm btn-default'><i class='fa fa-times-circle'></i> Remover</a>",
+                item.id
+            ]).draw();
+        }
+    }
 
     function updateRen(item) {
         $.ajax({

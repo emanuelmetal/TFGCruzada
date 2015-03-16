@@ -88,7 +88,7 @@ def venta_editar(request, transaccion_id):
     else:
         read_only = False
 
-    result, transaccion, message = general_dal.get_venta(request.session["persona"]["sucursal_id"], transaccion_id)
+    result, transaccion, message = general_dal.get_venta(transaccion_id, request.session["persona"]["sucursal_id"])
     if transaccion.__len__() > 0:
         transaccion = transaccion[0]
 
@@ -246,11 +246,11 @@ def cancelar_transaccion(request):
             # datos de transacción
             transaccion_id = request.POST["transaccion_id"]
 
-            if transaccion_id == '0':
+            if transaccion_id != '0':
                 result, renglones, message = general_dal.get_renglones(transaccion_id)
 
                 for renglon in renglones:
-                    stock_dal.update_stock(request.session["uri_stock"], renglon["cantidad"], renglon["articulo_id"])
+                    stock_dal.update_stock(request.session["persona"]["uri_stock"], renglon["cantidad"], renglon["articulo_id"])
 
                 result = general_dal.cancel_transaccion(transaccion_id)
 
@@ -315,7 +315,7 @@ def updateRen_ajax(request):
                 if "articulo_id" in request.POST:
                     articulo_id = request.POST["articulo_id"]
                     result = True
-                    #result = stock_dal.update_stock(request.session["persona"]["uri_stock"], -1, articulo_id)
+                    result = stock_dal.update_stock(request.session["persona"]["uri_stock"], -1, articulo_id)
 
                     if result:
                         # update ren
@@ -341,7 +341,7 @@ def deleteRen_ajax(request):
                     cantidad = request.POST["cantidad"]
 
                     result = True
-                    #result = stock_dal.update_stock(request.session["persona"]["uri_stock"], cantidad, articulo_id)
+                    result = stock_dal.update_stock(request.session["persona"]["uri_stock"], cantidad, articulo_id)
 
                     if result:
                         # delete ren

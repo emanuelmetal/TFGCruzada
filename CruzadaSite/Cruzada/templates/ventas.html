@@ -58,8 +58,9 @@
                                             <td class="text-center ">
                                                 {% if venta.estado == 'FINALIZADA' %}
                                                 <a href="{% url 'venta_ver' transaccion_id=venta.id %}" class="edit btn btn-sm btn-default"><i class="fa fa-eye"></i> Ver</a>
-                                                {% else %}
+                                                {% elif venta.estado == 'GUARDADA' %}
                                                 <a href="{% url 'venta_id' transaccion_id=venta.id %}" class="edit btn btn-sm btn-default"><i class="fa fa-pencil"></i> Editar</a>
+                                                {% else %}
                                                 {% endif %}
                                             </td>
                                         </tr>
