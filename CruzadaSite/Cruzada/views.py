@@ -390,3 +390,15 @@ def finalizar_transaccion_ajax(request):
             return HttpResponseServerError()
 
     return HttpResponseForbidden()
+
+
+def check_articulo_online_ajax(request):
+    if request.method == 'GET':
+        if request.is_ajax:
+            articulo_id = request.GET["articulo_id"]
+            result = stock_dal.check_articulo_online(articulo_id, request.session["persona"]["uri_stock"])
+            return HttpResponse(json.dumps({"almacenes": result}), content_type="application/json")
+
+#            return HttpResponseServerError()
+
+    return HttpResponseForbidden()

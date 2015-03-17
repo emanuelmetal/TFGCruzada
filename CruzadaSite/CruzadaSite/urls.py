@@ -33,4 +33,5 @@ urlpatterns = patterns('',
     url(r'^check_fin_transaccion_ajax/$', 'Cruzada.views.check_fin_transaccion_ajax',
         name='check_fin_transaccion_ajax'),
     url(r'^finalizar_transaccion/$', 'Cruzada.views.finalizar_transaccion_ajax', name='finalizar_transaccion_ajax'),
+    url(r'^check_articulo_online_ajax/$', 'Cruzada.views.check_articulo_online_ajax', name='check_articulo_online_ajax'),
 )

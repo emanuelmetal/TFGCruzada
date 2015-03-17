@@ -70,6 +70,21 @@ def get_articulo(articulo_id):
     return rows_list[0]
 
 
+def check_articulo_online(articulo_id, stock_sucursal):
+    query = "SELECT uri_stock FROM Almacenes WHERE uri_stock != '{stock_sucursal}'".format(stock_sucursal=stock_sucursal)
+
+    result, almacenes, message = _exec_query(query)
+
+    almacenes_disp = []
+    for almacen in almacenes:
+        query = "SELECT articulo FROM {almacen} WHERE articulo = 648 and cantidad > 0".format(almacen=almacen["uri_stock"])
+        dummy, art, dummy = _exec_query(query)
+        if art.__len__() > 0:
+            almacenes_disp.append(almacen["uri_stock"])
+
+    return almacenes_disp
+
+
 def _update_query(query):
     db = MySQLdb.connect(**config)
 

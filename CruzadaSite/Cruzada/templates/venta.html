@@ -49,7 +49,7 @@
                                         <div class="col-md-8">
                                             <div class="input-group transparent">
                                                 <div class="input-group-btn">
-                                                    <button class="btn btn-default" id="nuevo_pedido" type="button" data-toggle="modal" data-target="#modal-online">
+                                                    <button class="btn btn-default hidden" id="nuevo_pedido" type="button" data-toggle="modal" data-target="#modal-online">
                                                         <i class="fa fa-search"></i></button>
                                                 </div>
                                                 <input type="text" id="selArticulo" class="form-control" data-provide="typeahead" placeholder="Ingrese el Artículo...">
@@ -472,6 +472,7 @@ $(function(){
     var indiceRecargo = 0;
     var infoCliTemplate = _.template($("script.template").html());
     var infoFPTemplate = _.template($("script.formaPagoTemplate").html());
+    var boTemplate = _.template($("script.boTemplate").html());
     var selItem = null;
 
 
@@ -523,7 +524,7 @@ $(function(){
             selItem = item;
             //cantidad: 40codigo: "r00001"color: "Azul"color_id: 1descripcion: "Remera MC lisa"id: 648name: "Remera MC lisa Azul Small"precio: "80.00"talle: "Small"talle_id: 1
             if (item.cantidad == 0){
-                nuevoPedido.click();
+                articuloBusquedaOnline(item.id);
                 return;
             }
 
@@ -824,6 +825,26 @@ $(function(){
             });
         });
     });
+
+    function articuloBusquedaOnline(articulo_id){
+        $.ajax({
+            type: "GET",
+            url: "{% url 'check_articulo_online_ajax' %}",
+            data: {
+                articulo_id:articulo_id
+            },
+            success: function(response){
+                console.log(response);
+                if (response.almacenes) {
+                   // $("#boContent").html(boTemplate({"sucursal":response.almacenes}));
+                }
+                nuevoPedido.click();
+            },
+            error: function(xhr){
+                console.log(xhr);
+            }
+        });
+    }
 
     function pad (str, max) {
       str = str.toString();
