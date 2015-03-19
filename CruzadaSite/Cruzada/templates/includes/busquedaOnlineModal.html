@@ -34,9 +34,7 @@
 _.each(sucursal, function(element){
 
 %>
-    <label>
-        <input type="radio" name="sucursal"><%= element %>
-    </label>
+    <button type="submit" class="btn btn-primary pedido" data-sucursal="<%= element.sucursal_id %>"><i class="fa fa-envelope"></i> Pedir  a <%= element.descripcion %></button>
 <%
     });
 %>

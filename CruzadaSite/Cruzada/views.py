@@ -402,3 +402,19 @@ def check_articulo_online_ajax(request):
 #            return HttpResponseServerError()
 
     return HttpResponseForbidden()
+
+
+def pedir_articulo_ajax(request):
+    if request.method == 'POST':
+        if request.is_ajax:
+
+            articulo = request.POST["id"]
+            sucursal_destino = request.POST["sucursal_destino"]
+
+
+            result = general_dal.nuevo_pedido(request.session["persona"]["sucursal_id"], sucursal_destino, 1)
+            return HttpResponse(json.dumps({"result": result}), content_type="application/json")
+
+            #return HttpResponseServerError()
+
+    return HttpResponseForbidden()

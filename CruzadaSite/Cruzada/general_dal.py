@@ -200,6 +200,15 @@ def finalizar_venta(transaccion_id, sucursal_id):
     return _exec_query(query)
 
 
+def nuevo_pedido(sucursal_origen, sucursal_destino, usuario_pedido):
+    query = "INSERT INTO Pedidos (suc_origen_id, suc_destino_id, estado_id, usuario_pedido) " \
+            "VALUES ({sucursal_origen}, {sucursal_destino}, " \
+            "2, {usuario_pedido})".format(sucursal_origen=sucursal_origen,
+                                          sucursal_destino=sucursal_destino,
+                                          usuario_pedido=usuario_pedido)
+    return True#_insert_query(query)
+
+
 def _insert_query(query):
     db = MySQLdb.connect(**config)
 

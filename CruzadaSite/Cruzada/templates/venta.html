@@ -474,6 +474,7 @@ $(function(){
     var infoFPTemplate = _.template($("script.formaPagoTemplate").html());
     var boTemplate = _.template($("script.boTemplate").html());
     var selItem = null;
+    var pedirArticulo = null;
 
 
     if (cliente){
@@ -524,6 +525,7 @@ $(function(){
             selItem = item;
             //cantidad: 40codigo: "r00001"color: "Azul"color_id: 1descripcion: "Remera MC lisa"id: 648name: "Remera MC lisa Azul Small"precio: "80.00"talle: "Small"talle_id: 1
             if (item.cantidad == 0){
+                pedirArticulo = item;
                 articuloBusquedaOnline(item.id);
                 return;
             }
@@ -836,7 +838,7 @@ $(function(){
             success: function(response){
                 console.log(response);
                 if (response.almacenes) {
-                   // $("#boContent").html(boTemplate({"sucursal":response.almacenes}));
+                   $("#boContent").html(boTemplate({"sucursal":response.almacenes}));
                 }
                 nuevoPedido.click();
             },
@@ -850,6 +852,28 @@ $(function(){
       str = str.toString();
       return str.length < max ? pad("0" + str, max) : str;
     }
+
+    $("#boContent").on("click", "button.pedido", function(e){
+        if(confirm("Desea pedir el artículo " + pedirArticulo.descripcion + " a esta sucursal?")){
+            //hacer un ajax con el pedido
+            data = pedirArticulo;
+            data.sucursal_destino = $(e.currentTarget).data("sucursal");
+            $.ajax({
+                type: "POST",
+                url: "{% url 'pedir_articulo_ajax' %}",
+                data: data,
+                success: function(response){
+
+                    if (response.result) {
+                        finalizarVenta.removeClass("hidden");
+                    }
+                },
+                error: function(xhr){
+                    console.log(xhr);
+                }
+            });
+        }
+    });
 
 });
 </script>

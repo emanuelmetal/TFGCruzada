@@ -71,7 +71,10 @@ def get_articulo(articulo_id):
 
 
 def check_articulo_online(articulo_id, stock_sucursal):
-    query = "SELECT uri_stock FROM Almacenes WHERE uri_stock != '{stock_sucursal}'".format(stock_sucursal=stock_sucursal)
+    query = "SELECT a.sucursal_id, s.descripcion, a.uri_stock FROM Almacenes AS a " \
+            "INNER JOIN Sucursal AS s " \
+            "ON a.sucursal_id = s.id " \
+            "WHERE uri_stock != '{stock_sucursal}'".format(stock_sucursal=stock_sucursal)
 
     result, almacenes, message = _exec_query(query)
 
@@ -80,7 +83,7 @@ def check_articulo_online(articulo_id, stock_sucursal):
         query = "SELECT articulo FROM {almacen} WHERE articulo = 648 and cantidad > 0".format(almacen=almacen["uri_stock"])
         dummy, art, dummy = _exec_query(query)
         if art.__len__() > 0:
-            almacenes_disp.append(almacen["uri_stock"])
+            almacenes_disp.append({"sucursal_id": almacen["sucursal_id"], "descripcion": almacen["descripcion"]})
 
     return almacenes_disp
 
