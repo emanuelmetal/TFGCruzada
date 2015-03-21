@@ -200,14 +200,49 @@ def finalizar_venta(transaccion_id, sucursal_id):
     return _exec_query(query)
 
 
-def nuevo_pedido(sucursal_origen, sucursal_destino, usuario_pedido):
+def upsert_pedido(sucursal_origen, sucursal_destino, usuario_pedido):
+    query = "SELECT id FROM Pedidos " \
+            "WHERE estado_id = 2 " \
+            "AND suc_destino_id = {sucursal_destino} LIMIT 1".format(sucursal_destino=sucursal_destino)
+
+    result, rows, message = _exec_query(query)
+
+    if rows.__len__() > 0:
+        id = rows[0]["id"]
+        return id
+
     query = "INSERT INTO Pedidos (suc_origen_id, suc_destino_id, estado_id, usuario_pedido) " \
             "VALUES ({sucursal_origen}, {sucursal_destino}, " \
             "2, {usuario_pedido})".format(sucursal_origen=sucursal_origen,
                                           sucursal_destino=sucursal_destino,
                                           usuario_pedido=usuario_pedido)
-    return True#_insert_query(query)
+    return _insert_query(query)
 
+
+def upsert_renglon_pedido(pedido_id, articulo_id):
+
+    if _check_ren_pedido(pedido_id, articulo_id) == 0:
+
+        query = "INSERT INTO PedidosRen (articulo_id, cantidad, pedido_id) " \
+                "VALUES ({articulo_id}, {cantidad}, {pedido_id})".format(articulo_id=articulo_id,
+                                                                   cantidad=1, pedido_id=pedido_id)
+        result = _insert_query(query)
+    else:
+        query = "UPDATE PedidosRen SET cantidad = cantidad + 1 " \
+                "WHERE pedido_id = {pedido_id} AND articulo_id = {articulo_id}".format(pedido_id=pedido_id,
+                                                                                       articulo_id=articulo_id)
+        result = _update_query(query)
+
+    return result
+
+
+def _check_ren_pedido(pedido_id, articulo_id):
+    query = "SELECT COUNT(*) c FROM PedidosRen " \
+            "WHERE pedido_id = {pedido_id} AND articulo_id = {articulo_id}".format(pedido_id=pedido_id,
+                                                                                   articulo_id=articulo_id)
+
+    dummy, rows, dummy = _exec_query(query)
+    return rows[0]["c"]
 
 def _insert_query(query):
     db = MySQLdb.connect(**config)

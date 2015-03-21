@@ -412,7 +412,11 @@ def pedir_articulo_ajax(request):
             sucursal_destino = request.POST["sucursal_destino"]
 
 
-            result = general_dal.nuevo_pedido(request.session["persona"]["sucursal_id"], sucursal_destino, 1)
+            id = general_dal.upsert_pedido(request.session["persona"]["sucursal_id"], sucursal_destino, 1)
+
+            # insertar el renglón del pedido
+            result = general_dal.upsert_renglon_pedido(id, articulo)
+            result = True
             return HttpResponse(json.dumps({"result": result}), content_type="application/json")
 
             #return HttpResponseServerError()

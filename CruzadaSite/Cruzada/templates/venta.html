@@ -783,7 +783,7 @@ $(function(){
                 console.log(xhr);
             }
         });
-    };
+    }
 
     function checkFinTransaccion(){
         if (transaccion_id) {
@@ -865,7 +865,8 @@ $(function(){
                 success: function(response){
 
                     if (response.result) {
-                        finalizarVenta.removeClass("hidden");
+                        //TODO agregar un mensaje que se creo el pedido y un timeout para cerrar el modal
+                        $("#modal-online").modal("toggle");
                     }
                 },
                 error: function(xhr){
