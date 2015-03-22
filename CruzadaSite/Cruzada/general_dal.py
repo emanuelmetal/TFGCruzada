@@ -244,6 +244,31 @@ def _check_ren_pedido(pedido_id, articulo_id):
     dummy, rows, dummy = _exec_query(query)
     return rows[0]["c"]
 
+
+def get_pedidos_propios(sucursal_id):
+    query = "SELECT p.id, p.suc_origen_id, p.suc_destino_id, s.descripcion AS destino, e.nombre AS estado " \
+            "FROM Pedidos AS p " \
+            "INNER JOIN Sucursal AS s " \
+            "ON p.suc_destino_id = s.id " \
+            "INNER JOIN PedidosEstados AS e " \
+            "ON p.estado_id = e.id " \
+            "WHERE p.suc_origen_id = {sucursal_id}".format(sucursal_id=sucursal_id)
+
+    return _exec_query(query)
+
+
+def get_pedidos_externos(sucursal_id):
+    query = "SELECT p.id, p.suc_origen_id, p.suc_destino_id, s.descripcion AS destino, e.nombre AS estado " \
+            "FROM Pedidos AS p " \
+            "INNER JOIN Sucursal AS s " \
+            "ON p.suc_destino_id = s.id " \
+            "INNER JOIN PedidosEstados AS e " \
+            "ON p.estado_id = e.id " \
+            "WHERE p.suc_origen_id != {sucursal_id}".format(sucursal_id=sucursal_id)
+
+    return _exec_query(query)
+
+
 def _insert_query(query):
     db = MySQLdb.connect(**config)
 

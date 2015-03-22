@@ -19,11 +19,15 @@
                                 <input type="radio" name="sucursal">Planeta
                             </label>
                         </div>
+                        <div class="alert alert-success fade in hidden" id="poMessage">
+{#                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>#}
+                            <strong>Se ha ha cargade el pedido del artículo exitosamente</strong>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer text-center">
-                <button type="submit" class="btn btn-primary"><i class="fa fa-envelope"></i> Pedir Artículo</button>
+{#                <button type="submit" class="btn btn-primary"><i class="fa fa-envelope"></i> Pedir Artículo</button>#}
                 <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-ban"></i> Cancelar</button>
             </div>
         </div>
@@ -34,7 +38,7 @@
 _.each(sucursal, function(element){
 
 %>
-    <button type="submit" class="btn btn-primary pedido" data-sucursal="<%= element.sucursal_id %>"><i class="fa fa-envelope"></i> Pedir  a <%= element.descripcion %></button>
+    <button type="submit" class="btn btn-primary pedido" data-sucursal="<%= element.sucursal_id %>"><i class="fa fa-envelope"></i> Pedir  a <%= element.descripcion %></button><br><br>
 <%
     });
 %>

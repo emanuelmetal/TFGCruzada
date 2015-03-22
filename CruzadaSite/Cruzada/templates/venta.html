@@ -459,6 +459,7 @@ $(function(){
     var cancelarVenta = $("#cancelarVenta");
     var finalizarVenta = $("#finalizarVenta");
     var nroTransaccion = $("#nroTransaccion");
+    var poMessage = $("#poMessage");
     var transaccion_id = {{ transaccion_id }};
     var cliente = {{ cliente_json|safe }};
     var forma_pago = {{ forma_pago_json|safe }};
@@ -865,8 +866,13 @@ $(function(){
                 success: function(response){
 
                     if (response.result) {
-                        //TODO agregar un mensaje que se creo el pedido y un timeout para cerrar el modal
-                        $("#modal-online").modal("toggle");
+
+                        poMessage.removeClass("hidden");
+                        setTimeout(function () {
+                            $("#modal-online").modal("toggle");
+                            poMessage.addClass("hidden");
+                        }, 3000);
+
                     }
                 },
                 error: function(xhr){

@@ -59,11 +59,6 @@ def articulos(request):
 
 
 @login_required(login_url='/login/')
-def pedido_detalle(request):
-    return render(request, 'pedido_detalle.html')
-
-
-@login_required(login_url='/login/')
 @ensure_csrf_cookie
 def venta(request):
     context = {
@@ -159,14 +154,22 @@ def ventas(request):
 
 @login_required(login_url='/login/')
 def pedidos(request):
-    lista_articulos = Articulos.objects.all()
+
+    result, pedidos_propios, message = general_dal.get_pedidos_propios(request.session["persona"]["sucursal_id"])
+    result, pedipos_externos, message = general_dal.get_pedidos_externos(request.session["persona"]["sucursal_id"])
+
     context = {
         'pedidos': True,
         'b_lista_pedidos': True,
-        'lista_pedidos': lista_articulos
+        'pedidos_propios': pedidos_propios,
+        'pedidos_externos':  pedipos_externos
     }
     return render(request, 'pedidos.html', context)
 
+
+@login_required(login_url='/login/')
+def pedido_detalle(request):
+    return render(request, 'pedido_detalle.html')
 
 """ AJAX VIEWS  """
 
