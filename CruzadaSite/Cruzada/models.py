@@ -68,6 +68,7 @@ class PersonasManager(models.Manager):
         result["uri_stock"] = persona.sucursal.almacenes.uri_stock
         result["sucursal_id"] = persona.sucursal.id
         result["sucursal_nombre"] = persona.sucursal.descripcion
+        result["id"] = persona.id
         return result
 
 

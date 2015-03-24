@@ -80,13 +80,43 @@ def check_articulo_online(articulo_id, stock_sucursal):
 
     almacenes_disp = []
     for almacen in almacenes:
-        query = "SELECT articulo FROM {almacen} WHERE articulo = 648 and cantidad > 0".format(almacen=almacen["uri_stock"])
+        query = "SELECT articulo FROM {almacen} " \
+                "WHERE articulo = {articulo_id} and cantidad > 5".format(almacen=almacen["uri_stock"],
+                                                                         articulo_id=articulo_id)
         dummy, art, dummy = _exec_query(query)
         if art.__len__() > 0:
             almacenes_disp.append({"sucursal_id": almacen["sucursal_id"], "descripcion": almacen["descripcion"]})
 
     return almacenes_disp
 
+
+def procesar_pedido(pedido_id, stock_sucursal):
+    query = "SELECT * FROM PedidosRen WHERE pedido_id = {pedido_id}".format(pedido_id=pedido_id)
+
+    dummy, rens, dummy2 = _exec_query(query)
+
+    for ren in rens:
+        # update stock
+        query = "UPDATE {stock_sucursal} SET cantidad = cantidad - {ren_cantidad} " \
+                "WHERE articulo = {articulo}".format(ren_cantidad=ren["cantidad"],
+                                                     articulo=ren["articulo_id"],
+                                                     stock_sucursal=stock_sucursal)
+        _update_query(query)
+
+
+def recibir_pedido(pedido_id, stock_sucursal):
+    query = "SELECT * FROM PedidosRen WHERE pedido_id = {pedido_id}".format(pedido_id=pedido_id)
+
+    dummy, rens, dummy2 = _exec_query(query)
+
+    for ren in rens:
+        # update stock
+        query = "UPDATE {stock_sucursal} SET cantidad = cantidad + {ren_cantidad} " \
+                "WHERE articulo = {articulo}".format(ren_cantidad=ren["cantidad"],
+                                                     articulo=ren["articulo_id"],
+                                                     stock_sucursal=stock_sucursal)
+
+        _update_query(query)
 
 def _update_query(query):
     db = MySQLdb.connect(**config)

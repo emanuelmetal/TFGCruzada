@@ -272,7 +272,9 @@ def get_pedidos_externos(sucursal_id):
 def get_pedido_detalle(pedido_id):
     query = "SELECT p.*, s2.descripcion as origen, s.descripcion AS destino, e.nombre AS estado, " \
             "IFNULL(CONCAT(p1.nombre, ' ', p1.apellido),'') AS usu_pedido, " \
+            "IFNULL(CONCAT(p5.nombre, ' ', p5.apellido),'') AS usu_remision, " \
             "IFNULL(CONCAT(p2.nombre, ' ', p2.apellido),'') AS usu_proceso, " \
+            "IFNULL(CONCAT(p6.nombre, ' ', p6.apellido),'') AS usu_procesado, " \
             "IFNULL(CONCAT(p3.nombre, ' ', p3.apellido),'') AS usu_entrega, " \
             "IFNULL(CONCAT(p4.nombre, ' ', p4.apellido),'') AS usu_recepcion " \
             "FROM Pedidos AS p " \
@@ -290,6 +292,10 @@ def get_pedido_detalle(pedido_id):
             "ON p.usuario_entrega = p3.id " \
             "LEFT JOIN Personas p4 " \
             "ON p.usuario_recepcion = p4.id " \
+            "LEFT JOIN Personas p5 " \
+            "ON p.usuario_remision = p5.id " \
+            "LEFT JOIN Personas p6 " \
+            "ON p.usuario_procesado = p6.id " \
             "WHERE p.id = {pedido_id}".format(pedido_id=pedido_id)
 
     return _exec_query(query)
@@ -307,6 +313,14 @@ def get_pedido_detalle_ren(pedido_id):
             "WHERE pedido_id = {pedido_id}".format(pedido_id=pedido_id)
 
     return _exec_query(query)
+
+
+def update_pedido(pedido_id, estado_id, campo_fecha, campo_usuario, usuario_id):
+    query = "UPDATE Pedidos SET estado_id = {estado_id}, {campo_fecha} = now(), {campo_usuario} = {usuario_id} " \
+            "WHERE id = {pedido_id}".format(pedido_id=pedido_id, estado_id=estado_id, campo_fecha=campo_fecha,
+                                            campo_usuario=campo_usuario, usuario_id=usuario_id)
+
+    return _update_query(query)
 
 
 def _insert_query(query):

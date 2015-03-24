@@ -94,7 +94,7 @@
                                         <td>2</td>
                                         <td>Remisión</td>
                                         <td>{{ pedido.fecha_remision }}</td>
-                                        <td>{{ pedido.usu_pedido }}</td>
+                                        <td>{{ pedido.usu_remision }}</td>
                                     </tr>
                                     {% endif %}
                                     {% if pedido.fecha_proceso != None %}
@@ -110,7 +110,7 @@
                                         <td>4</td>
                                         <td>Procesado</td>
                                         <td>{{ pedido.fecha_procesado }}</td>
-                                        <td>pedido.usu_proceso</td>
+                                        <td>{{ pedido.usu_procesado }}</td>
                                     </tr>
                                     {% endif %}
                                     {% if pedido.fecha_entrega != None %}
@@ -146,35 +146,35 @@
                                     <table id="articulos-table" class="table table-tools table-hover">
                                         <thead>
                                             <tr>
-                                                <th style="min-width:70px"><strong>Codigo</strong>
-                                                <th><strong>Artículo</strong>
+                                                <th class="dt-center" style="min-width:70px"><strong>Codigo</strong>
+                                                <th class="dt-center"><strong>Artículo</strong>
                                                 </th>
-                                                <th><strong>Talle</strong>
+                                                <th class="dt-center"><strong>Talle</strong>
                                                 </th>
-                                                <th><strong>Color</strong>
+                                                <th class="dt-center"><strong>Color</strong>
                                                 </th>
-                                                <th><strong>Cantidad</strong>
+                                                <th class="dt-center"><strong>Cantidad</strong>
                                                 </th>
-                                                {% if not propio %}
-                                                <th class="text-center"><strong>Actions</strong>
-                                                </th>
-                                                {% endif %}
+{#                                                {% if not propio and not read_only %}#}
+{#                                                <th class="dt-center"><strong>Actions</strong>#}
+{#                                                </th>#}
+{#                                                {% endif %}#}
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {% for ren in pedido_ren %}
                                             <tr>
-                                                <td>{{ ren.codigo }}</td>
-                                                <td>{{ ren.articulo }}</td>
-                                                <td>{{ ren.talle }}</td>
-                                                <td>{{ ren.color }}</td>
-                                                <td><strong>{{ ren.cantidad }}</strong></td>
-                                                {% if not propio %}
-                                                <td class="text-center ">
-                                                    <a href="#" class="edit btn btn-sm btn-default"><i class="fa fa-pencil"></i> Edit</a>
-{#                                                    <a href="#" class="delete btn btn-sm btn-default"><i class="fa fa-times-circle"></i> Remove</a>#}
-                                                </td>
-                                                {% endif %}
+                                                <td class="dt-center">{{ ren.codigo }}</td>
+                                                <td class="dt-center">{{ ren.articulo }}</td>
+                                                <td class="dt-center">{{ ren.talle }}</td>
+                                                <td class="dt-center">{{ ren.color }}</td>
+                                                <td class="dt-center"><strong>{{ ren.cantidad }}</strong></td>
+{#                                                {% if not propio and not read_only %}#}
+{#                                                <td class="dt-center">#}
+{#                                                    <a id="aceptar_articulo" href="#" class="edit btn btn-sm btn-default"><i class="fa fa-pencil"></i> Aceptar</a>#}
+{#                                                    <a id="rechazar_articulo" href="#" class="delete btn btn-sm btn-default"><i class="fa fa-times-circle"></i> Rehazar</a>#}
+{#                                                </td>#}
+{#                                                {% endif %}#}
                                             </tr>
                                             {% endfor %}
                                         </tbody>
@@ -205,7 +205,21 @@
         /* Add a placeholder to searh input */
         $('.dataTables_filter input').attr("placeholder", "Search a product...");
         acc_pedido.click(function () {
-            
+            $.ajax({
+                type: "POST",
+                url: "{% url 'siguiente_estado_ajax' %}",
+                data: {
+                    'pedido_id': {{ pedido.id }},
+                    'estado_id': {{ pedido.estado_id }}
+                },
+                success: function(response){
+                    console.log(response);
+                    window.location.reload();
+                },
+                error: function(xhr){
+                    console.log(xhr);
+                }
+            });
         })
 </script>
 {% endblock pageLevelScripts %}

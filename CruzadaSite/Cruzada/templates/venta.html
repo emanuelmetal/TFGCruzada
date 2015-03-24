@@ -745,19 +745,21 @@ $(function(){
     });
 
     cancelarVenta.click(function () {
-        $.ajax({
-            type: "POST",
-            url: "{% url 'cancelar_transaccion_ajax' %}",
-            data: {
-                transaccion_id:transaccion_id
-            },
-            success: function(response){
-
-            },
-            error: function(xhr){
-                console.log(xhr);
-            }
-        });
+        if (confirm("¿Está seguro que desea cancelar la Venta?")){
+            $.ajax({
+                type: "POST",
+                url: "{% url 'cancelar_transaccion_ajax' %}",
+                data: {
+                    transaccion_id:transaccion_id
+                },
+                success: function(response){
+                    window.location.href = '{% url 'ventas' %}';
+                },
+                error: function(xhr){
+                    console.log(xhr);
+                }
+            });
+        }
     });
 
     function guardarTransaccion(){

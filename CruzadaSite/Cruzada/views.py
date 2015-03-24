@@ -176,20 +176,27 @@ def pedido_detalle(request, pedido_id):
 
     if request.session["persona"]["sucursal_id"] == pedido["suc_origen_id"]:
         propio = True
+        accion = estados_propios_map(pedido["estado_id"])
     elif request.session["persona"]["sucursal_id"] == pedido["suc_destino_id"]:
         propio = False
+        accion = estados_externos_map(pedido["estado_id"])
     else:
         return HttpResponseForbidden()
 
     result, pedido_ren, message = general_dal.get_pedido_detalle_ren(pedido_id)
 
-    accion = estados_map(pedido["estado_id"])
+    if pedido["estado_id"] == 4:
+        read_only = False
+    else:
+        read_only = True
+
     context = {
         'pedidos': True,
         'pedido': pedido,
         'pedido_ren': pedido_ren,
         'propio': propio,
-        'accion': accion
+        'accion': accion,
+        'read_only': read_only
     }
 
     return render(request, 'pedido_detalle.html', context)
@@ -455,15 +462,36 @@ def siguiente_estado_ajax(request):
     if request.method == 'POST':
         if request.is_ajax:
 
-            articulo = request.POST["id"]
-            sucursal_destino = request.POST["sucursal_destino"]
+            pedido_id = request.POST["pedido_id"]
+            estado_id = int(request.POST["estado_id"])
 
+            if estado_id == 2:  # Nuevo
+                sig_estado = 3  # Remitido
+                campo_fecha = 'fecha_remision'
+                campo_usuario = 'usuario_remision'
+            elif estado_id == 3:  # Remitido
+                sig_estado = 4  # EnProceso
+                campo_fecha = 'fecha_proceso'
+                campo_usuario = 'usuario_proceso'
+            elif estado_id == 4:  # EnProceso
+                sig_estado = 5  # Procesado
+                campo_fecha = 'fecha_procesado'
+                campo_usuario = 'usuario_procesado'
+                # procesar pedido
+                stock_dal.procesar_pedido(pedido_id, request.session["persona"]["uri_stock"])
+            elif estado_id == 5:  # Procesado
+                sig_estado = 6  # Entregado
+                campo_fecha = 'fecha_entrega'
+                campo_usuario = 'usuario_entrega'
+            else:
+                sig_estado = 7  # Recibido
+                campo_fecha = 'fecha_recepcion'
+                campo_usuario = 'usuario_recepcion'
+                #recibir pedido
+                stock_dal.recibir_pedido(pedido_id, request.session["persona"]["uri_stock"])
 
-            id = general_dal.upsert_pedido(request.session["persona"]["sucursal_id"], sucursal_destino, 1)
-
-            # insertar el renglón del pedido
-            result = general_dal.upsert_renglon_pedido(id, articulo)
-            result = True
+            result = general_dal.update_pedido(pedido_id, sig_estado, campo_fecha,
+                                               campo_usuario, request.session["persona"]["id"])
             return HttpResponse(json.dumps({"result": result}), content_type="application/json")
 
             #return HttpResponseServerError()
@@ -474,11 +502,65 @@ def siguiente_estado_ajax(request):
 """ end of AJAX views """
 
 
-def estados_map(estado):
+def estados_propios_map(estado):
     estados = {
         '2': {  # Nuevo
             'button': "<button type='button' id='acc_pedido' class='btn btn-default'><i class='fa fa-cogs'></i> Remitir</button>"
+        },
+        '3': {  # Remitido
+            'button': ""
+        },
+        '4': {  # EnProceso
+            'button': ""
+        },
+        '5': {  # Procesado
+            'button': ""
+        },
+        '6': {  # Entregado
+            'button': "<button type='button' id='acc_pedido' class='btn btn-default'><i class='fa fa-cogs'></i> Recibir</button>"
+        },
+        '7': {  # Recibido
+            'button': ""
+        },
+        '8': {  # RechazadoDest
+            'button': "<button type='button' id='acc_pedido' class='btn btn-default'><i class='fa fa-cogs'></i> Remitir</button>"
+        },
+        '9': {  # RechazadoOrig
+            'button': "<button type='button' id='acc_pedido' class='btn btn-default'><i class='fa fa-cogs'></i> Remitir</button>"
         }
+
+    }
+
+    return estados[str(estado)]["button"]
+
+
+def estados_externos_map(estado):
+    estados = {
+        '2': {  # Nuevo
+            'button': ""
+        },
+        '3': {  # Remitido
+            'button': "<button type='button' id='acc_pedido' class='btn btn-default'><i class='fa fa-cogs'></i> Procesar</button>"
+        },
+        '4': {  # EnProceso
+            'button': "<button type='button' id='acc_pedido' class='btn btn-default'><i class='fa fa-cogs'></i> Finalizar Proceso</button>"
+        },
+        '5': {  # Procesado
+            'button': "<button type='button' id='acc_pedido' class='btn btn-default'><i class='fa fa-cogs'></i> Entregar</button>"
+        },
+        '6': {  # Entregado
+            'button': ""
+        },
+        '7': {  # Recibido
+            'button': ""
+        },
+        '8': {  # RechazadoDest
+            'button': "<button type='button' id='acc_pedido' class='btn btn-default'><i class='fa fa-cogs'></i> Remitir</button>"
+        },
+        '9': {  # RechazadoOrig
+            'button': "<button type='button' id='acc_pedido' class='btn btn-default'><i class='fa fa-cogs'></i> Remitir</button>"
+        }
+
     }
 
     return estados[str(estado)]["button"]
