@@ -13,11 +13,15 @@
 
 {% block content %}
         <div id="main-content">
-            <div class="page-title">
-                <i class="icon-custom-left"></i>
-                <h3><strong>Pedido n° 547 578 528</strong>
-                    <small>May 18, 2014 10:21</small></h3>
-                <br>
+            <div class="m-b-20 clearfix">
+                <div class="page-title pull-left">
+                    <h3><strong>Pedido n° {{ pedido.id|stringformat:"010d" }}</strong>
+                        <small>{{ pedido.fecha_creacion }}</small></h3>
+                </div>
+                <div class="pull-right">
+{#                    <a href="#" class="btn btn-success m-t-10"><i class="fa fa-plus p-r-10"></i>Nuevo Pedido</a>#}
+                    {{ accion|safe }}
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
@@ -32,7 +36,7 @@
                                         Nro de Pedido:
                                     </div>
                                     <div class="col-sm-8">
-                                        <strong>000235</strong>
+                                        <strong>{{ pedido.id|stringformat:"010d"  }}</strong>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -40,7 +44,7 @@
                                         Sucursal Origen:
                                     </div>
                                     <div class="col-sm-8">
-                                        <strong>Planeta</strong>
+                                        <strong>{{ pedido.origen }}</strong>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -48,7 +52,7 @@
                                         Sucursal Destino:
                                     </div>
                                     <div class="col-sm-8">
-                                        <strong>Gran Vía</strong>
+                                        <strong>{{ pedido.destino }}</strong>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -56,15 +60,7 @@
                                         Estado:
                                     </div>
                                     <div class="col-sm-8">
-                                        <strong>En Proceso</strong>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-4">
-                                        Observaciones:
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <strong>Client address and shipping address are different</strong>
+                                        <strong>{{ pedido.estado }}</strong>
                                     </div>
                                 </div>
                             </form>
@@ -81,31 +77,58 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Fecha Movimiento</th>
+                                        <th>Movimiento</th>
+                                        <th>Fecha</th>
                                         <th>Usuario</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>1</td>
-                                        <td>Mark</td>
-                                        <td>Otto</td>
+                                        <td>Creación</td>
+                                        <td>{{ pedido.fecha_creacion }}</td>
+                                        <td>{{ pedido.usu_pedido }}</td>
                                     </tr>
+                                    {% if pedido.fecha_remision != None %}
                                     <tr>
                                         <td>2</td>
-                                        <td>Jacob</td>
-                                        <td>Thornton</td>
+                                        <td>Remisión</td>
+                                        <td>{{ pedido.fecha_remision }}</td>
+                                        <td>{{ pedido.usu_pedido }}</td>
                                     </tr>
+                                    {% endif %}
+                                    {% if pedido.fecha_proceso != None %}
                                     <tr>
                                         <td>3</td>
-                                        <td>Larry</td>
-                                        <td>the Bird</td>
+                                        <td>En Proceso</td>
+                                        <td>{{ pedido.fecha_proceso }}</td>
+                                        <td>{{ pedido.usu_proceso }}</td>
                                     </tr>
+                                    {% endif %}
+                                    {% if pedido.fecha_procesado != None %}
                                     <tr>
                                         <td>4</td>
-                                        <td>Steve</td>
-                                        <td>Mac Queen</td>
+                                        <td>Procesado</td>
+                                        <td>{{ pedido.fecha_procesado }}</td>
+                                        <td>pedido.usu_proceso</td>
                                     </tr>
+                                    {% endif %}
+                                    {% if pedido.fecha_entrega != None %}
+                                    <tr>
+                                        <td>5</td>
+                                        <td>Entregado</td>
+                                        <td>{{ pedido.fecha_entrega }}</td>
+                                        <td>{{ pedido.usu_entrega }}</td>
+                                    </tr>
+                                    {% endif %}
+                                    {% if pedido.fecha_recepcion != None %}
+                                    <tr>
+                                        <td>6</td>
+                                        <td>Recibido</td>
+                                        <td>{{ pedido.fecha_recepcion }}</td>
+                                        <td>{{ pedido.usu_recepcion }}</td>
+                                    </tr>
+                                    {% endif %}
                                 </tbody>
                             </table>
                         </div>
@@ -130,45 +153,28 @@
                                                 </th>
                                                 <th><strong>Color</strong>
                                                 </th>
-                                                <th><strong>Precio</strong>
+                                                <th><strong>Cantidad</strong>
                                                 </th>
-                                                <th><strong>Date added</strong>
-                                                </th>
-                                                <th style="width:10%;text-align:center"><strong>Stock</strong>
-                                                </th>
-                                                <th class="text-center"><strong>Sales</strong>
-                                                </th>
-                                                <th class="text-center"><strong>Status</strong>
-                                                </th>
+                                                {% if not propio %}
                                                 <th class="text-center"><strong>Actions</strong>
                                                 </th>
+                                                {% endif %}
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for articulo in lista_articulos %}
+                                            {% for ren in pedido_ren %}
                                             <tr>
-                                                <td>{{ articulo.codigo }}</td>
-                                                <td>{{ articulo.descripcion }}</td>
-                                                <td>{{ articulo.talle }}</td>
-                                                <td>{{ articulo.color }}</td>
-                                                <td><strong>{{ articulo.precio }}</strong></td>
-                                                <td>02/03/2013</td>
-                                                <td class="color-success">
-                                                    <div class="progress">
-                                                        <div class="progress-bar progress-bar-success" data-aria-valuetransitiongoal="75">2654</div>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center">
-                                                    <div class="sparkline" data-sparkline-color="#7BB2B4"
-                                                    data-sparkline-value="[13,14,16,15,4,14,20,14,12,16,11,17,19,16]"></div>
-                                                </td>
-                                                <td class="text-center">
-                                                    <span class="label label-success w-300">Online</span>
-                                                </td>
+                                                <td>{{ ren.codigo }}</td>
+                                                <td>{{ ren.articulo }}</td>
+                                                <td>{{ ren.talle }}</td>
+                                                <td>{{ ren.color }}</td>
+                                                <td><strong>{{ ren.cantidad }}</strong></td>
+                                                {% if not propio %}
                                                 <td class="text-center ">
-                                                    <a href="ecommerce_product_view.html" class="edit btn btn-sm btn-default"><i class="fa fa-pencil"></i> Edit</a>
-                                                    <a href="#" class="delete btn btn-sm btn-default"><i class="fa fa-times-circle"></i> Remove</a>
+                                                    <a href="#" class="edit btn btn-sm btn-default"><i class="fa fa-pencil"></i> Edit</a>
+{#                                                    <a href="#" class="delete btn btn-sm btn-default"><i class="fa fa-times-circle"></i> Remove</a>#}
                                                 </td>
+                                                {% endif %}
                                             </tr>
                                             {% endfor %}
                                         </tbody>
@@ -188,6 +194,7 @@
     <script src="{{ STATIC_URL }}plugins/datatables/dataTables.tableTools.js"></script>
     <script src="{{ STATIC_URL }}plugins/datatables/table.editable.js"></script>
 <script>
+        var acc_pedido = $("#acc_pedido");
         var articulosTable = $('#articulos-table').dataTable({
             "language": {
             "url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
@@ -197,5 +204,8 @@
 
         /* Add a placeholder to searh input */
         $('.dataTables_filter input').attr("placeholder", "Search a product...");
+        acc_pedido.click(function () {
+            
+        })
 </script>
 {% endblock pageLevelScripts %}

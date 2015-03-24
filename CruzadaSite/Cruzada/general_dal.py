@@ -258,13 +258,53 @@ def get_pedidos_propios(sucursal_id):
 
 
 def get_pedidos_externos(sucursal_id):
-    query = "SELECT p.id, p.suc_origen_id, p.suc_destino_id, s.descripcion AS destino, e.nombre AS estado " \
+    query = "SELECT p.id, p.suc_origen_id, p.suc_destino_id, s.descripcion AS origen, e.nombre AS estado " \
+            "FROM Pedidos AS p " \
+            "INNER JOIN Sucursal AS s " \
+            "ON p.suc_origen_id = s.id " \
+            "INNER JOIN PedidosEstados AS e " \
+            "ON p.estado_id = e.id " \
+            "WHERE p.suc_destino_id = {sucursal_id} and p.estado_id != 2".format(sucursal_id=sucursal_id)
+
+    return _exec_query(query)
+
+
+def get_pedido_detalle(pedido_id):
+    query = "SELECT p.*, s2.descripcion as origen, s.descripcion AS destino, e.nombre AS estado, " \
+            "IFNULL(CONCAT(p1.nombre, ' ', p1.apellido),'') AS usu_pedido, " \
+            "IFNULL(CONCAT(p2.nombre, ' ', p2.apellido),'') AS usu_proceso, " \
+            "IFNULL(CONCAT(p3.nombre, ' ', p3.apellido),'') AS usu_entrega, " \
+            "IFNULL(CONCAT(p4.nombre, ' ', p4.apellido),'') AS usu_recepcion " \
             "FROM Pedidos AS p " \
             "INNER JOIN Sucursal AS s " \
             "ON p.suc_destino_id = s.id " \
+            "INNER JOIN Sucursal as s2 " \
+            "ON p.suc_origen_id = s2.id " \
             "INNER JOIN PedidosEstados AS e " \
             "ON p.estado_id = e.id " \
-            "WHERE p.suc_origen_id != {sucursal_id}".format(sucursal_id=sucursal_id)
+            "INNER JOIN Personas p1 " \
+            "ON p.usuario_pedido = p1.id " \
+            "LEFT JOIN Personas p2 " \
+            "ON p.usuario_proceso = p2.id " \
+            "LEFT JOIN Personas p3 " \
+            "ON p.usuario_entrega = p3.id " \
+            "LEFT JOIN Personas p4 " \
+            "ON p.usuario_recepcion = p4.id " \
+            "WHERE p.id = {pedido_id}".format(pedido_id=pedido_id)
+
+    return _exec_query(query)
+
+
+def get_pedido_detalle_ren(pedido_id):
+    query = "SELECT pr.*, a.codigo, a.descripcion AS articulo, c.descripcion AS 'color', t.descripcion AS 'talle' " \
+            "FROM PedidosRen AS pr " \
+            "INNER JOIN Articulos AS a " \
+            "ON pr.articulo_id = a.id " \
+            "INNER JOIN Colores AS c " \
+            "ON a.color_id = c.id " \
+            "INNER JOIN Talle AS t " \
+            "ON a.talle_id = t.id " \
+            "WHERE pedido_id = {pedido_id}".format(pedido_id=pedido_id)
 
     return _exec_query(query)
 

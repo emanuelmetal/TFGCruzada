@@ -168,8 +168,32 @@ def pedidos(request):
 
 
 @login_required(login_url='/login/')
-def pedido_detalle(request):
-    return render(request, 'pedido_detalle.html')
+def pedido_detalle(request, pedido_id):
+    result, pedido, message = general_dal.get_pedido_detalle(pedido_id)
+
+    if pedido.__len__() > 0:
+        pedido = pedido[0]
+
+    if request.session["persona"]["sucursal_id"] == pedido["suc_origen_id"]:
+        propio = True
+    elif request.session["persona"]["sucursal_id"] == pedido["suc_destino_id"]:
+        propio = False
+    else:
+        return HttpResponseForbidden()
+
+    result, pedido_ren, message = general_dal.get_pedido_detalle_ren(pedido_id)
+
+    accion = estados_map(pedido["estado_id"])
+    context = {
+        'pedidos': True,
+        'pedido': pedido,
+        'pedido_ren': pedido_ren,
+        'propio': propio,
+        'accion': accion
+    }
+
+    return render(request, 'pedido_detalle.html', context)
+
 
 """ AJAX VIEWS  """
 
@@ -425,3 +449,36 @@ def pedir_articulo_ajax(request):
             #return HttpResponseServerError()
 
     return HttpResponseForbidden()
+
+
+def siguiente_estado_ajax(request):
+    if request.method == 'POST':
+        if request.is_ajax:
+
+            articulo = request.POST["id"]
+            sucursal_destino = request.POST["sucursal_destino"]
+
+
+            id = general_dal.upsert_pedido(request.session["persona"]["sucursal_id"], sucursal_destino, 1)
+
+            # insertar el renglón del pedido
+            result = general_dal.upsert_renglon_pedido(id, articulo)
+            result = True
+            return HttpResponse(json.dumps({"result": result}), content_type="application/json")
+
+            #return HttpResponseServerError()
+
+    return HttpResponseForbidden()
+
+
+""" end of AJAX views """
+
+
+def estados_map(estado):
+    estados = {
+        '2': {  # Nuevo
+            'button': "<button type='button' id='acc_pedido' class='btn btn-default'><i class='fa fa-cogs'></i> Remitir</button>"
+        }
+    }
+
+    return estados[str(estado)]["button"]
