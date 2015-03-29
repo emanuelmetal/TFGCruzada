@@ -100,7 +100,7 @@
                     {% else %}
                     <li>
                     {% endif %}
-                        <a href="{% url 'home' %}"><i class="fa fa-home"></i><span class="sidebar-text">Dashboard</span></a>
+                        <a href="{% url 'home' %}"><i class="fa fa-home"></i><span class="sidebar-text">Inicio</span></a>
                     </li>
                     {% if ventas %}
                     <li class="active current hasSub">
@@ -165,13 +165,13 @@
                             {% endif %}
                                 <a href="{% url 'lista_pedidos' %}"><span class="sidebar-text">Lista de Pedidos</span></a>
                             </li>
-                            {% if nuevo_pedido %}
-                            <li class="current">
-                            {% else %}
-                            <li>
-                            {% endif %}
-                                <a href="#"><span class="sidebar-text">Nuevo Pedido</span></a>
-                            </li>
+{#                            {% if nuevo_pedido %}#}
+{#                            <li class="current">#}
+{#                            {% else %}#}
+{#                            <li>#}
+{#                            {% endif %}#}
+{#                                <a href="#"><span class="sidebar-text">Nuevo Pedido</span></a>#}
+{#                            </li>#}
                         </ul>
                     </li>
                 </ul>
