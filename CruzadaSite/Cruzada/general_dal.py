@@ -1,11 +1,6 @@
 __author__ = 'emanuel'
-import MySQLdb
 
-config = {"host": "192.168.203.129",
-         "user": "root",
-         "passwd": "123456",
-         "db": "cruzada",
-         "charset": "utf8"}
+from django.db import connection
 
 
 def nueva_transaccion(cliente_id, vendedor_id, forma_pago_id, promocion_id, sucursal_id):
@@ -324,47 +319,45 @@ def update_pedido(pedido_id, estado_id, campo_fecha, campo_usuario, usuario_id):
 
 
 def _insert_query(query):
-    db = MySQLdb.connect(**config)
 
-    cursor = db.cursor()
+    cursor = connection.cursor()
     id = None
 
     try:
         cursor.execute(query)
         id = cursor.lastrowid
         cursor.close()
-        db.commit()
+        connection.commit()
     except Exception as e:
         pass
 
-    db.close()
+    connection.close()
 
     return id
 
 
 def _update_query(query):
-    db = MySQLdb.connect(**config)
 
-    cursor = db.cursor()
+    cursor = connection.cursor()
 
     try:
         cursor.execute(query)
         cursor.close()
-        db.commit()
+        connection.commit()
         result = True
     except Exception as e:
-        db.rollback()
+        connection.rollback()
         result = False
 
-    db.close()
+    connection.close()
 
     return result
 
+
 def _exec_query(query):
-    db = MySQLdb.connect(**config)
 
     rows_list = []
-    cursor = db.cursor()
+    cursor = connection.cursor()
     message = ""
     result = True
     try:
@@ -381,6 +374,6 @@ def _exec_query(query):
         message = "Error while running query: " + str(e)
         result = False
 
-    db.close()
+    connection.close()
 
     return result, rows_list, message

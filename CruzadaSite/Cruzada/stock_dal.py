@@ -1,12 +1,7 @@
 import keyword
 
 __author__ = 'emanuel'
-import MySQLdb
-config = {"host": "192.168.203.129",
-         "user": "root",
-         "passwd": "123456",
-         "db": "cruzada",
-         "charset": "utf8"}
+from django.db import connection
 
 
 def get_stock_sucursal(stock_sucursal):
@@ -118,30 +113,29 @@ def recibir_pedido(pedido_id, stock_sucursal):
 
         _update_query(query)
 
-def _update_query(query):
-    db = MySQLdb.connect(**config)
 
-    cursor = db.cursor()
+def _update_query(query):
+
+    cursor = connection.cursor()
     result = True
     try:
         cursor.execute(query)
-        db.commit()
+        connection.commit()
 
     except Exception as e:
         message = "Error while running query: " + str(e)
         result = False
 
     cursor.close()
-    db.close()
+    connection.close()
 
     return result
 
 
 def _exec_query(query):
-    db = MySQLdb.connect(**config)
 
     rows_list = []
-    cursor = db.cursor()
+    cursor = connection.cursor()
     message = ""
     result = True
     try:
@@ -158,6 +152,6 @@ def _exec_query(query):
         message = "Error while running query: " + str(e)
         result = False
 
-    db.close()
+    connection.close()
 
     return result, rows_list, message
