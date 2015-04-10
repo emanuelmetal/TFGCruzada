@@ -35,7 +35,7 @@
                     <div class="tabcordion">
                         <ul id="myTab" class="nav nav-tabs">
                             <li class="active"><a href="#articulos" data-toggle="tab">Artículos</a></li>
-                            <li><a href="#order_resume" data-toggle="tab">Resumen</a></li>
+{#                            <li><a href="#order_resume" data-toggle="tab">Resumen</a></li>#}
                             <li><a href="#entrega" data-toggle="tab">Entrega</a></li>
                         </ul>
                         <div id="myTabContent" class="tab-content">
@@ -43,18 +43,18 @@
                             {% if not read_only %}
                                 <div class="row p-20">
                                     <div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
 
                                         </div>
-                                        <div class="col-md-8">
+                                        <div class="col-md-6">
                                             <div class="input-group transparent">
-                                                <div class="input-group-btn">
+{#                                                <div class="input-group-btn">#}
                                                     <button class="btn btn-default hidden" id="nuevo_pedido" type="button" data-toggle="modal" data-target="#modal-online">
                                                         <i class="fa fa-search"></i></button>
-                                                </div>
-                                                <input type="text" id="selArticulo" class="form-control" data-provide="typeahead" placeholder="Ingrese el Artículo...">
+{#                                                </div>#}
                                                 <div class="input-group-btn">
-                                                    <button class="btn btn-default" type="button"><i class="fa fa-plus"></i> Agregar</button>
+                                                    <input type="text" id="selArticulo" class="form-control" data-provide="typeahead" placeholder="Ingrese el Artículo...">
+{#                                                    <button class="btn btn-default" type="button"><i class="fa fa-plus"></i> Agregar</button>#}
                                                 </div>
                                             </div>
                                         </div>
@@ -139,156 +139,157 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="order_resume">
-                                <div class="row p-20">
-                                    <div class="col-md-6">
-                                        <h3 class="m-t-0 m-b-20">Global infos</h3>
-                                        <form class="form-horizontal p-20">
-                                            <div class="form-group">
-                                                <div class="col-sm-2">Order Number:
-                                                </div>
-                                                <div class="col-sm-7">
-                                                    <strong>547 578 528</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2">Date:
-                                                </div>
-                                                <div class="col-sm-7">
-                                                    <strong>May 18, 2014 10:21</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2">Client Name:
-                                                </div>
-                                                <div class="col-sm-7">
-                                                    <strong><a href="#" data-rel="tooltip" title="Edit customer">John Miller</a></strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2">Total Amount:
-                                                </div>
-                                                <div class="col-sm-7">
-                                                    <strong>$152.00</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2">VAT (20%):
-                                                </div>
-                                                <div class="col-sm-7">
-                                                    <strong>$30.40</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2">Item Numbers:
-                                                </div>
-                                                <div class="col-sm-7">
-                                                    <strong>4</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2">Delivery Date:
-                                                </div>
-                                                <div class="col-sm-7">
-                                                    <strong>May 25, 2014</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2">Destination:
-                                                </div>
-                                                <div class="col-sm-7">
-                                                    <strong>Miami (USA)</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-2">Actual Status:
-                                                </div>
-                                                <div class="col-sm-7">
-                                                    <strong>Waiting shipment</strong>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h3 class="m-t-0 m-b-20">Other infos</h3>
-                                        <form class="form-horizontal p-20">
-                                            <div class="form-group">
-                                                <div class="col-sm-4">
-                                                    Shipping Address:
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <strong>72, Perk Avenue, New York, USA</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-4">
-                                                    Shipping method:
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <strong>Road</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-4">
-                                                    Payment Method:
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <strong>Credit Card</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-4">
-                                                    Items:
-                                                </div>
-                                                <div class="col-sm-8 c-red">
-                                                    <strong><i class="fa fa-exclamation-triangle"></i> 1 Item is unavailable (15 days)</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-4">
-                                                    Client:
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <strong>3 past orders (hight trust level)</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-sm-4">
-                                                    Other info:
-                                                </div>
-                                                <div class="col-sm-8">
-                                                    <strong>Client address and shipping address are different</strong>
-                                                </div>
-                                            </div>
-                                            <div class="form-group m-t-60">
-                                                <div class="col-sm-8 col-sm-offset-4">
-                                                    <a class="btn btn-block btn-primary" href="#">See Invoice</a>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+{#                            <div class="tab-pane fade" id="order_resume">#}
+{#                                <div class="row p-20">#}
+{#                                    <div class="col-md-6">#}
+{#                                        <h3 class="m-t-0 m-b-20">Global infos</h3>#}
+{#                                        <form class="form-horizontal p-20">#}
+{#                                            <div class="form-group">#}
+{#                                                <div class="col-sm-2">Order Number:#}
+{#                                                </div>#}
+{#                                                <div class="col-sm-7">#}
+{#                                                    <strong>547 578 528</strong>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="form-group">#}
+{#                                                <div class="col-sm-2">Date:#}
+{#                                                </div>#}
+{#                                                <div class="col-sm-7">#}
+{#                                                    <strong>May 18, 2014 10:21</strong>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="form-group">#}
+{#                                                <div class="col-sm-2">Client Name:#}
+{#                                                </div>#}
+{#                                                <div class="col-sm-7">#}
+{#                                                    <strong><a href="#" data-rel="tooltip" title="Edit customer">John Miller</a></strong>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="form-group">#}
+{#                                                <div class="col-sm-2">Total Amount:#}
+{#                                                </div>#}
+{#                                                <div class="col-sm-7">#}
+{#                                                    <strong>$152.00</strong>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="form-group">#}
+{#                                                <div class="col-sm-2">VAT (20%):#}
+{#                                                </div>#}
+{#                                                <div class="col-sm-7">#}
+{#                                                    <strong>$30.40</strong>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="form-group">#}
+{#                                                <div class="col-sm-2">Item Numbers:#}
+{#                                                </div>#}
+{#                                                <div class="col-sm-7">#}
+{#                                                    <strong>4</strong>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="form-group">#}
+{#                                                <div class="col-sm-2">Delivery Date:#}
+{#                                                </div>#}
+{#                                                <div class="col-sm-7">#}
+{#                                                    <strong>May 25, 2014</strong>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="form-group">#}
+{#                                                <div class="col-sm-2">Destination:#}
+{#                                                </div>#}
+{#                                                <div class="col-sm-7">#}
+{#                                                    <strong>Miami (USA)</strong>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="form-group">#}
+{#                                                <div class="col-sm-2">Actual Status:#}
+{#                                                </div>#}
+{#                                                <div class="col-sm-7">#}
+{#                                                    <strong>Waiting shipment</strong>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        </form>#}
+{#                                    </div>#}
+{#                                    <div class="col-md-6">#}
+{#                                        <h3 class="m-t-0 m-b-20">Other infos</h3>#}
+{#                                        <form class="form-horizontal p-20">#}
+{#                                            <div class="form-group">#}
+{#                                                <div class="col-sm-4">#}
+{#                                                    Shipping Address:#}
+{#                                                </div>#}
+{#                                                <div class="col-sm-8">#}
+{#                                                    <strong>72, Perk Avenue, New York, USA</strong>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="form-group">#}
+{#                                                <div class="col-sm-4">#}
+{#                                                    Shipping method:#}
+{#                                                </div>#}
+{#                                                <div class="col-sm-8">#}
+{#                                                    <strong>Road</strong>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="form-group">#}
+{#                                                <div class="col-sm-4">#}
+{#                                                    Payment Method:#}
+{#                                                </div>#}
+{#                                                <div class="col-sm-8">#}
+{#                                                    <strong>Credit Card</strong>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="form-group">#}
+{#                                                <div class="col-sm-4">#}
+{#                                                    Items:#}
+{#                                                </div>#}
+{#                                                <div class="col-sm-8 c-red">#}
+{#                                                    <strong><i class="fa fa-exclamation-triangle"></i> 1 Item is unavailable (15 days)</strong>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="form-group">#}
+{#                                                <div class="col-sm-4">#}
+{#                                                    Client:#}
+{#                                                </div>#}
+{#                                                <div class="col-sm-8">#}
+{#                                                    <strong>3 past orders (hight trust level)</strong>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="form-group">#}
+{#                                                <div class="col-sm-4">#}
+{#                                                    Other info:#}
+{#                                                </div>#}
+{#                                                <div class="col-sm-8">#}
+{#                                                    <strong>Client address and shipping address are different</strong>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <div class="form-group m-t-60">#}
+{#                                                <div class="col-sm-8 col-sm-offset-4">#}
+{#                                                    <a class="btn btn-block btn-primary" href="#">See Invoice</a>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                        </form>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
                             <div class="tab-pane fade" id="entrega">
                                 {% if not read_only %}
                                 <div class="row p-20">
                                     <div class="col-md-6">
                                         <div class="input-group transparent">
+
+                                            <input type="text" id="selCliente" class="form-control" data-provide="typeahead" placeholder="Ingrese Cliente...">
                                             <div class="input-group-btn">
                                                 <button class="btn btn-default" type="button" id="nuevoCliente" data-toggle="modal" data-target="#modal-cliente">
                                                     <i class="fa fa-user"></i> Nuevo</button>
                                             </div>
-                                            <input type="text" id="selCliente" class="form-control" data-provide="typeahead" placeholder="Ingrese Cliente...">
-                                            <div class="input-group-btn">
-                                                <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
-                                            </div>
+{#                                            <div class="input-group-btn">#}
+{#                                                <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>#}
+{#                                            </div>#}
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="input-group transparent">
-                                            <input type="text" id="selMedioPago" class="form-control" data-provide="typeahead" placeholder="Ingrese Medio de Pago...">
                                             <div class="input-group-btn">
-                                                <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+                                                <input type="text" id="selMedioPago" class="form-control" data-provide="typeahead" placeholder="Ingrese Medio de Pago...">
+{#                                                <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>#}
                                             </div>
                                         </div>
                                     </div>

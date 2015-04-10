@@ -16,9 +16,9 @@
             <div class="page-title pull-left">
                 <h3 class="pull-left"><strong>Gestionar Pedidos</strong></h3>
             </div>
-            <div class="pull-right">
-                <a href="#" class="btn btn-success m-t-10"><i class="fa fa-plus p-r-10"></i>Nuevo Pedido</a>
-            </div>
+{#            <div class="pull-right">#}
+{#                <a href="#" class="btn btn-success m-t-10"><i class="fa fa-plus p-r-10"></i>Nuevo Pedido</a>#}
+{#            </div>#}
         </div>
             <div class="row">
                 <div class="col-md-12">
@@ -53,7 +53,9 @@
                                                         <span class="label label-success w-300">{{ pedido.estado }}</span>
                                                     </td>
                                                     <td class="dt-center">
-                                                        <a href="{% url 'pedido_detalle' pedido_id=pedido.id %}" class="edit btn btn-sm btn-default"><i class="fa fa-pencil"></i> Editar</a>
+                                                        {% if pedido.estado != "Recibido" %}
+                                                            <a href="{% url 'pedido_detalle' pedido_id=pedido.id %}" class="edit btn btn-sm btn-default"><i class="fa fa-pencil"></i> Editar</a>
+                                                        {% endif %}
                                                     </td>
                                                 </tr>
                                                 {% endfor %}
