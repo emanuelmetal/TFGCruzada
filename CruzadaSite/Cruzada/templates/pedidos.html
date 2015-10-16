@@ -53,7 +53,7 @@
                                                         <span class="label label-success w-300">{{ pedido.estado }}</span>
                                                     </td>
                                                     <td class="dt-center">
-                                                        {% if pedido.estado != "Recibido" %}
+                                                        {% if pedido.estado != "Recibido" and pedido.estado != "Entregado" %}
                                                             <a href="{% url 'pedido_detalle' pedido_id=pedido.id %}" class="edit btn btn-sm btn-default"><i class="fa fa-pencil"></i> Editar</a>
                                                         {% endif %}
                                                     </td>
